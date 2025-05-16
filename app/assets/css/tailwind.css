@@ -1,0 +1,65 @@
+/* stylelint-disable scss/at-rule-no-unknown, custom-property-empty-line-before */
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
+@custom-variant hover (&:hover);
+
+@theme static {
+  --color-purple-50: #f0f1ff;
+	--color-purple-100: #e4e5ff;
+	--color-purple-200: #cecfff;
+	--color-purple-300: #afafff;
+	--color-purple-400: #8a81ff;
+	--color-purple-500: #7257ff;
+	--color-purple-600: #5f29f3;
+	--color-purple-700: #5223d5;
+	--color-purple-800: #431fae;
+	--color-purple-900: #372b81;
+	--color-purple-950: #20184f;
+
+	--color-fuchsia-50: #fbf5ff;
+	--color-fuchsia-100: #f6eafd;
+	--color-fuchsia-200: #edd4fb;
+	--color-fuchsia-300: #e3b2fd;
+	--color-fuchsia-400: #d383fc;
+	--color-fuchsia-500: #c55cf5;
+	--color-fuchsia-600: #ac42da;
+	--color-fuchsia-700: #943dbb;
+	--color-fuchsia-800: #752f95;
+	--color-fuchsia-900: #602d78;
+	--color-fuchsia-950: #3e1651;
+
+	--color-blue-50: #f0f8ff;
+	--color-blue-100: #e1f1ff;
+	--color-blue-200: #bfe2ff;
+	--color-blue-300: #89cbff;
+	--color-blue-400: #47afff;
+	--color-blue-500: #259aff;
+	--color-blue-600: #007ce6;
+	--color-blue-700: #0064ba;
+	--color-blue-800: #095399;
+	--color-blue-900: #174679;
+	--color-blue-950: #082c52;
+
+	--color-gray-50: #fafafa;
+	--color-gray-100: #f5f5f5;
+	--color-gray-200: #e5e5e5;
+	--color-gray-300: #d4d4d4;
+	--color-gray-400: #a1a1a1;
+	--color-gray-500: #737373;
+	--color-gray-600: #525252;
+	--color-gray-700: #404040;
+	--color-gray-800: #262626;
+	--color-gray-900: #181819;
+	--color-gray-950: #0a0a0a;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}

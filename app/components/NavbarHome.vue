@@ -5,7 +5,7 @@ const items = ref<NavigationMenuItem[][]>([
   [
     {
       label: "Home",
-      icon: "i-lucide-home",
+      icon: "i-lucide-house",
       to: "/"
     }
   ],
@@ -24,7 +24,7 @@ const items = ref<NavigationMenuItem[][]>([
 </script>
 
 <template>
-  <header class="border-b-1 border-gray-200">
+  <header class="bg-primary">
     <UNavigationMenu :items="items" class="w-full justify-between max-w-(--ui-container) mx-auto px-4 sm:px-6 lg:px-8" />
   </header>
 </template>
