@@ -1,0 +1,36 @@
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
+export const users = sqliteTable("users", {
+  id: integer().primaryKey({ autoIncrement: true }),
+  email: text().notNull().unique(),
+  password: text(),
+  name: text().notNull(),
+  createdAt: integer().notNull(),
+  updatedAt: integer().notNull()
+});
+
+export const brands = sqliteTable("brands", {
+  id: integer().primaryKey({ autoIncrement: true }),
+  name: text().notNull(),
+  createdAt: integer().notNull(),
+  updatedAt: integer().notNull()
+});
+
+export const members = sqliteTable("members", {
+  id: integer().primaryKey(),
+  userId: integer().notNull().references(() => users.id, { onDelete: "cascade" }),
+  brandId: integer().notNull().references(() => brands.id, { onDelete: "cascade" }),
+  roleId: integer().$type<MemberRole>().notNull(),
+  createdAt: integer().notNull(),
+  updatedAt: integer().notNull()
+});
+
+export const assets = sqliteTable("assets", {
+  id: integer().primaryKey({ autoIncrement: true }),
+  name: text().notNull(),
+  description: text(),
+  data: text({ mode: "json" }).$type<BamfolioAsset["data"]>().notNull(),
+  brandId: integer().notNull().references(() => users.id, { onDelete: "cascade" }),
+  createdAt: integer().notNull(),
+  updatedAt: integer().notNull()
+});
