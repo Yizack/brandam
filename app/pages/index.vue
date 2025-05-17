@@ -10,8 +10,8 @@
         <h2 class="text-2xl font-medium mb-4">Brand Assets Manager</h2>
         <p class="text-lg mb-8"> Simplified way to manage, organize, and share your brand assets.</p>
         <div class="flex justify-center gap-4">
-          <UButton label="Get Started" color="secondary" size="lg" class="rounded-lg shadow-md" />
-          <UButton label="Learn More" color="neutral" size="lg" class="rounded-lg shadow-md" />
+          <UButton label="Get Started" color="secondary" size="xl" class="rounded-lg shadow-md" />
+          <UButton label="Learn More" color="neutral" size="xl" variant="soft" class="rounded-lg shadow-md" />
         </div>
       </div>
     </section>

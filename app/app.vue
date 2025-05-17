@@ -5,10 +5,10 @@
 <template>
   <div>
     <NuxtLoadingIndicator :throttle="0" />
-    <NuxtLayout>
-      <UApp>
+    <UApp>
+      <NuxtLayout>
         <NuxtPage />
-      </UApp>
-    </NuxtLayout>
+      </NuxtLayout>
+    </UApp>
   </div>
 </template>
