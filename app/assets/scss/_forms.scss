@@ -4,7 +4,7 @@
   border-width: 1px;
   border-style: solid;
   border-color: var(--ui-border-accented);
-  border-radius: var(--radius-lg);
+  border-radius: calc(var(--ui-radius) * 2);
   background-color: var(--ui-bg);
   outline: none;
   padding: calc(var(--spacing) * 4);
@@ -43,7 +43,7 @@
   inset-inline-start: calc(var(--spacing) * 4);
   top: calc(var(--spacing) * 1.5);
   font-size: var(--text-xs);
-  line-height: var(--tw-leading, var(--text-xs--line-height));
+  line-height: var(--text-xs--line-height);
   transition: all 0.1s;
   color: var(--ui-text-muted);
 
