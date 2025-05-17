@@ -22,12 +22,15 @@ export default defineEventHandler(async (event) => {
   if (!user) {
     throw createError({
       statusCode: ErrorCode.UNAUTHORIZED,
-      statusMessage: "invalid-credentials"
+      message: "invalid-credentials"
     });
   }
 
   if (!user.confirmed) {
-    throw createError({ statusCode: ErrorCode.UNAUTHORIZED, message: "confirmed-error" });
+    throw createError({
+      statusCode: ErrorCode.UNAUTHORIZED,
+      message: "confirmed-error"
+    });
   }
 
   const maxAge = body.remember ? 7 * 24 * 60 * 60 : 0; // if remember is true, maxAge is 7 days
