@@ -5,13 +5,20 @@ const loading = ref(false);
 
 const form = useFormState({
   email: "",
-  password: ""
+  password: "",
+  remember: false
 });
 
 const login = () => {
   loading.value = true;
-  console.info("Form submitted", form.value);
-  loading.value = false;
+  $fetch("/api/login", {
+    method: "POST",
+    body: form.value
+  }).then(() => {
+    alert("Login successful");
+  }).catch(() => {}).finally(() => {
+    loading.value = false;
+  });
 };
 </script>
 
@@ -20,9 +27,9 @@ const login = () => {
     <div class="bg-default p-8 rounded-lg shadow-md w-full max-w-xl">
       <h1 class="text-3xl font-bold text-center mb-6">BAMFolio</h1>
       <form class="mb-3" @submit.prevent="login">
-        <InputFloating v-model="form.email" class="w-full mb-3" placeholder="Email address" autocomplete="email" />
-        <InputFloating v-model="form.password" type="password" class="w-full mb-3" placeholder="Password" autocomplete="current-password" />
-        <UCheckbox label="Remember me" color="secondary" class="mb-3" />
+        <InputFloating v-model.trim="form.email" class="w-full mb-3" placeholder="Email address" autocomplete="email" required />
+        <InputFloating v-model="form.password" type="password" class="w-full mb-3" placeholder="Password" autocomplete="current-password" required />
+        <UCheckbox v-model="form.remember" label="Remember me" color="secondary" class="mb-3" />
         <ULink to="/recovery" class="text-primary hover:text-primary hover:underline font-bold">Forgot password?</ULink>
         <div class="grid my-3">
           <UButton type="submit" variant="subtle" size="xl" class="text-center justify-center rounded-lg font-bold mb-2" :disabled="loading">Sign in</UButton>

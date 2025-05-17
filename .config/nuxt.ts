@@ -26,8 +26,12 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxtjs/sitemap",
     "@nuxthub/core",
-    "@nuxt/ui"
+    "@nuxt/ui",
+    "@nuxtjs/turnstile",
+    "nuxt-auth-utils"
   ],
+
+  hub: { database: true, blob: true, cache: true, workers: true },
 
   icon: {
     mode: "svg",
@@ -47,12 +51,15 @@ export default defineNuxtConfig({
     }
   },
 
-  runtimeConfig: {},
+  runtimeConfig: {
+    secure: {
+      salt: ""
+    }
+  },
 
   colorMode: {
     preference: "light",
     fallback: "light",
-    dataValue: "bs-theme",
     storageKey: "nuxt-color-mode"
   },
 
@@ -124,5 +131,5 @@ export default defineNuxtConfig({
     fonts: false
   },
 
-  compatibilityDate: "2025-05-05"
+  compatibilityDate: "2025-05-17"
 });

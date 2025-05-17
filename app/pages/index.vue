@@ -1,7 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <main>
     <section class="bg-primary light:text-neutral-50 dark:text-neutral-800 py-20 px-10">
