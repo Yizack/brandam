@@ -1,7 +1,8 @@
 <script setup lang="ts">
-definePageMeta({ layout: false });
+definePageMeta({ layout: false, middleware: "authenticated" });
 
 const loading = ref(false);
+const route = useRoute("login");
 
 const form = useFormState({
   email: "",
@@ -15,7 +16,9 @@ const login = () => {
     method: "POST",
     body: form.value
   }).then(() => {
-    alert("Login successful");
+    const redirect = route.query.redirect?.toString();
+    const isInternalPath = redirect && redirect.startsWith("/"); // Make sure redirect is an internal path
+    navigateTo(isInternalPath ? redirect : "/app", { external: true, replace: true });
   }).catch(() => {}).finally(() => {
     loading.value = false;
   });
