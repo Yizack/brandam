@@ -53,6 +53,7 @@
     line-height: var(--tw-leading, var(--text-sm--line-height));
   }
 
+  &:is(:where(.peer):autofill ~ *),
   &:is(:where(.peer):focus ~ *) {
     top: calc(var(--spacing) * 1.5);
     color: var(--ui-primary);
