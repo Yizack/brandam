@@ -1,4 +1,13 @@
 declare global {
+  interface BamfolioUser {
+    id: number;
+    email: string;
+    password: string | null;
+    name: string;
+    confirmed: boolean;
+    createdAt: number;
+    updatedAt: number;
+  }
   interface BamfolioAsset {
     id: number;
     name: string;

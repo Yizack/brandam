@@ -1,5 +1,5 @@
 declare module "#auth-utils" {
-  interface User {
+  interface User extends BamfolioUser {
     hash?: string;
     passwordless?: boolean;
   }

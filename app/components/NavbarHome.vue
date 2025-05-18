@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { NavigationMenuItem } from "@nuxt/ui";
+import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
+
+const { loggedIn, user, clear } = useUserSession();
 
 const colorMode = useColorMode();
 const toggleColorMode = () => {
@@ -21,7 +23,7 @@ onMounted(() => {
   };
 });
 
-const items = ref<NavigationMenuItem[]>([
+const pages = ref<NavigationMenuItem[]>([
   {
     label: "Home",
     icon: "lucide:house",
@@ -38,6 +40,28 @@ const navigationUI = ref<NavigationMenuItem["ui"]>({
   link: "data-active:text-primary text-inverted hover:text-inverted data-active:after:bg-elevated data-active:before:shadow-md not-data-active:hover:before:bg-slate-50/10 before:rounded-lg",
   linkLeadingIcon: "group-data-active:text-primary not-data-active:text-inverted group-hover:text-inverted"
 });
+
+const logout = () => {
+  clear();
+  navigateTo("/", { replace: true });
+};
+
+const userMenu = ref<DropdownMenuItem[][]>([
+  [
+    {
+      label: "Settings",
+      icon: "i-lucide-cog",
+      to: "/app/settings"
+    }
+  ],
+  [
+    {
+      label: "Logout",
+      icon: "lucide:log-out",
+      onSelect: logout
+    }
+  ]
+]);
 </script>
 
 <template>
@@ -47,12 +71,12 @@ const navigationUI = ref<NavigationMenuItem["ui"]>({
         <USlideover side="left" title="BAMFolio" :close="{ color: 'primary', variant: 'outline', class: 'rounded-full' }">
           <UButton icon="lucide:menu" color="neutral" variant="subtle" class="text-primary rounded-lg shadow-md my-2" />
           <template #body>
-            <UNavigationMenu :items="items" color="primary" orientation="vertical" class="w-full" />
+            <UNavigationMenu :items="pages" color="primary" orientation="vertical" class="w-full" />
             <USeparator class="my-4" />
           </template>
         </USlideover>
       </div>
-      <UNavigationMenu :items="items" color="neutral" class="w-full md:inline hidden" :ui="navigationUI" />
+      <UNavigationMenu :items="pages" color="neutral" class="w-full md:inline hidden" :ui="navigationUI" />
       <div class="flex gap-2 py-2">
         <ClientOnly>
           <UButton :icon="colorMode.preference === 'dark' ? 'lucide:sun' : 'lucide:moon'" class="bg-transparent hover:bg-slate-50/10" @click="toggleColorMode" />
@@ -61,8 +85,13 @@ const navigationUI = ref<NavigationMenuItem["ui"]>({
           </template>
         </ClientOnly>
         <UButton icon="simple-icons:github" to="https://github.com/Yizack/bamfolio" target="_blank" class="bg-transparent hover:bg-slate-50/10" />
-        <UButton trailing to="/login" label="Sign in" color="secondary" class="rounded-lg shadow-md" />
-        <UButton icon="lucide:arrow-right" trailing to="/signup" label="Sign up" color="neutral" variant="soft" class="rounded-lg shadow-md" />
+        <template v-if="!loggedIn || !user">
+          <UButton trailing to="/login" label="Sign in" color="secondary" class="rounded-lg shadow-md" />
+          <UButton icon="lucide:arrow-right" trailing to="/signup" label="Sign up" color="neutral" variant="soft" class="rounded-lg shadow-md" />
+        </template>
+        <UDropdownMenu v-else :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }">
+          <UButton icon="lucide:user" trailing-icon="lucide:chevron-down" :label="user.email" color="secondary" class="rounded-lg shadow-md" />
+        </UDropdownMenu>
       </div>
     </div>
   </header>
