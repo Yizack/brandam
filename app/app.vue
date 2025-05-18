@@ -6,7 +6,7 @@ onBeforeMount(() => {
   $fetch = $fetch.create({
     onResponseError: ({ response }) => {
       const description = response.status === 500 ? "error_any" : response._data.message;
-      toast.add({ title: "BAMFolio", description, color: "error" });
+      toast.add({ title: SITE.name, description, color: "error" });
     }
   });
 });

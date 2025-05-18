@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "bamfolio",
+  "name": "brandam",
   "version": "1.0.0",
   "description": "Yizack nuxt template",
   "type": "module",
@@ -10,12 +10,12 @@
     "email": "yizackr@gmail.com",
     "url": "https://yizack.com"
   },
-  "homepage": "https://github.com/Yizack/bamfolio",
+  "homepage": "https://github.com/Yizack/brandam",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Yizack/bamfolio.git"
+    "url": "git+https://github.com/Yizack/brandam.git"
   },
-  "bugs": "https://github.com/Yizack/bamfolio/issues",
+  "bugs": "https://github.com/Yizack/brandam/issues",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --port=5173 --host",

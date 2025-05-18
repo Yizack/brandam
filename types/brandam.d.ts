@@ -1,5 +1,5 @@
 declare global {
-  interface BamfolioUser {
+  interface BrandamUser {
     id: number;
     email: string;
     password: string | null;
@@ -8,7 +8,7 @@ declare global {
     createdAt: number;
     updatedAt: number;
   }
-  interface BamfolioAsset {
+  interface BrandamAsset {
     id: number;
     name: string;
     description: string | null;

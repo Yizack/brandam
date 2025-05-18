@@ -31,7 +31,7 @@ export const assets = sqliteTable("assets", {
   id: integer().primaryKey({ autoIncrement: true }),
   name: text().notNull(),
   description: text(),
-  data: text({ mode: "json" }).$type<BamfolioAsset["data"]>().notNull(),
+  data: text({ mode: "json" }).$type<BrandamAsset["data"]>().notNull(),
   brandId: integer().notNull().references(() => users.id, { onDelete: "cascade" }),
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
   updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))

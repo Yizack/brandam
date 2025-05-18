@@ -11,7 +11,7 @@ defineProps<{
     <div class="rounded-md dark:bg-slate-800 bg-slate-200 p-10 shadow-lg">
       <h1 class="text-3xl font-bold">Error {{ error.statusCode }}</h1>
       <h5 class="dark:text-slate-300 text-slate-700">Sorry, an error has occured. {{ error.message || error.statusMessage || "error" }}</h5>
-      <span>Go back: <NuxtLink to="/" class="underline">site</NuxtLink></span>
+      <span>Go back: <NuxtLink to="/" class="underline">{{ SITE.domain }}</NuxtLink></span>
     </div>
   </div>
 </template>

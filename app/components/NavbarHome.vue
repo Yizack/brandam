@@ -68,7 +68,7 @@ const userMenu = ref<DropdownMenuItem[][]>([
   <header class="w-full top-0" :class="[isFixedPath ? 'fixed' : 'sticky', { 'bg-primary shadow-md': scrolled || !isFixedPath }]">
     <div class="flex gap-1 max-w-(--ui-container) mx-auto px-4 sm:px-6 lg:px-8">
       <div class="w-full md:hidden">
-        <USlideover side="left" title="BAMFolio" :close="{ color: 'primary', variant: 'outline', class: 'rounded-full' }">
+        <USlideover side="left" :title="SITE.name" :close="{ color: 'primary', variant: 'outline', class: 'rounded-full' }">
           <UButton icon="lucide:menu" color="neutral" variant="subtle" class="text-primary rounded-lg shadow-md my-2" />
           <template #body>
             <UNavigationMenu :items="pages" color="primary" orientation="vertical" class="w-full" />
@@ -84,7 +84,7 @@ const userMenu = ref<DropdownMenuItem[][]>([
             <UButton icon="lucide:circle-dashed" />
           </template>
         </ClientOnly>
-        <UButton icon="simple-icons:github" to="https://github.com/Yizack/bamfolio" target="_blank" class="bg-transparent hover:bg-slate-50/10" />
+        <UButton icon="simple-icons:github" :to="SITE.repository" target="_blank" class="bg-transparent hover:bg-slate-50/10" />
         <template v-if="!loggedIn || !user">
           <UButton trailing to="/login" label="Sign in" color="secondary" class="rounded-lg shadow-md" />
           <UButton icon="lucide:arrow-right" trailing to="/signup" label="Sign up" color="neutral" variant="soft" class="rounded-lg shadow-md" />
