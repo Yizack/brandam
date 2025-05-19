@@ -11,7 +11,7 @@ defineProps<{
   required?: boolean;
 }>();
 
-const model = defineModel<string | number>();
+const model = defineModel<string>();
 </script>
 
 <template>
@@ -19,10 +19,10 @@ const model = defineModel<string | number>();
     <Icon v-if="icon" :name="icon" class="input-icon h-5 w-5" />
     <input
       :id="id"
-      v-model="model"
+      v-model.trim="model"
+      class="from-input peer"
       :name="name"
       :type="type || 'text'"
-      class="from-input peer"
       placeholder=""
       :autocomplete="autocomplete"
       :required="required"

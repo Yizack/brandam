@@ -8,6 +8,14 @@ declare global {
     createdAt: number;
     updatedAt: number;
   }
+  interface BrandamBrand {
+    id: number;
+    name: string;
+    description: string | null;
+    slug: string;
+    createdAt: number;
+    updatedAt: number;
+  }
   interface BrandamAsset {
     id: number;
     name: string;
