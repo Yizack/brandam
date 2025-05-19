@@ -24,7 +24,7 @@ export const members = sqliteTable("members", {
   id: integer().primaryKey(),
   userId: integer().notNull().references(() => users.id, { onDelete: "cascade" }),
   brandId: integer().notNull().references(() => brands.id, { onDelete: "cascade" }),
-  roleId: integer().$type<MemberRole>().notNull(),
+  roleId: integer().$type<BrandamMember["roleId"]>().notNull(),
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
   updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))
 });

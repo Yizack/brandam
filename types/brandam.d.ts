@@ -16,6 +16,14 @@ declare global {
     createdAt: number;
     updatedAt: number;
   }
+  interface BrandamMember {
+    id: number;
+    userId: number;
+    brandId: number;
+    roleId: MemberRole;
+    createdAt: number;
+    updatedAt: number;
+  }
   interface BrandamAsset {
     id: number;
     name: string;

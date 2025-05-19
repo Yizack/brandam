@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
+import type { DropdownMenuItem, NavigationMenuItem, NavigationMenuProps } from "@nuxt/ui";
 
 const { loggedIn, user, clear } = useUserSession();
 
@@ -9,7 +9,9 @@ const toggleColorMode = () => {
 };
 
 const route = useRoute();
-const isFixedPath = computed(() => ["/"].includes(route.path));
+const fixedPaths = ["/"];
+const isFixedPath = computed(() => fixedPaths.includes(route.path));
+const isAppPath = computed(() => route.path.startsWith("/app"));
 
 const scrolled = ref(false);
 const maxScroll = 50;
@@ -23,22 +25,40 @@ onMounted(() => {
   };
 });
 
-const pages = ref<NavigationMenuItem[]>([
-  {
-    label: "Home",
-    icon: "lucide:house",
-    to: "/"
-  },
-  {
-    label: "About",
-    icon: "lucide:info",
-    to: "/about"
-  }
-]);
+const isTransparent = computed(() => isFixedPath.value && !scrolled.value);
 
-const navigationUI = ref<NavigationMenuItem["ui"]>({
-  link: "data-active:text-primary text-inverted hover:text-inverted data-active:after:bg-elevated data-active:before:shadow-md not-data-active:hover:before:bg-slate-50/10 before:rounded-lg",
-  linkLeadingIcon: "group-data-active:text-primary not-data-active:text-inverted group-hover:text-inverted"
+const pages = computed<NavigationMenuItem[]>(() => {
+  const initial: NavigationMenuItem[] = [
+    {
+      label: "Home",
+      icon: "lucide:house",
+      to: "/"
+    },
+    {
+      label: "About",
+      icon: "lucide:info",
+      to: "/about"
+    }
+  ];
+
+  const app: NavigationMenuItem[] = [
+    {
+      label: "Dashboard",
+      icon: "lucide:layout-dashboard",
+      to: "/app"
+    }
+  ];
+  return loggedIn && user.value ? app : initial;
+});
+
+const navigationUI = computed<NavigationMenuProps["ui"]>(() => {
+  const linkAdjust = isTransparent.value ? "text-inverted hover:text-inverted not-data-active:hover:before:bg-slate-50/30" : "data-active:before:bg-primary/10 text-default dark:not-data-active:hover:before:bg-slate-50/10 light:not-data-active:hover:before:bg-slate-950/10";
+  const iconAdjust = isTransparent.value ? "not-data-active:text-inverted group-hover:text-inverted" : "group-not-data-active:text-primary text-default group-not-data-active:group-hover:text-primary";
+  return {
+    list: "gap-4",
+    link: `data-active:text-primary data-active:before:shadow-md before:rounded-lg ${linkAdjust}`,
+    linkLeadingIcon: `group-data-active:text-primary ${iconAdjust}`
+  };
 });
 
 const logout = () => {
@@ -65,8 +85,8 @@ const userMenu = ref<DropdownMenuItem[][]>([
 </script>
 
 <template>
-  <header class="w-full top-0" :class="[isFixedPath ? 'fixed' : 'sticky', { 'bg-primary shadow-md': scrolled || !isFixedPath }]">
-    <div class="flex gap-1 max-w-(--ui-container) mx-auto px-4 sm:px-6 lg:px-8">
+  <header class="w-full top-0 py-2" :class="[isFixedPath ? 'fixed' : 'sticky', { 'bg-elevated shadow-md': scrolled || !isFixedPath }]">
+    <div class="flex items-center gap-1 mx-auto px-4 sm:px-6 lg:px-8" :class="{ 'max-w-(--ui-container)': !isAppPath }">
       <div class="w-full md:hidden">
         <USlideover side="left" :title="SITE.name" :close="{ color: 'primary', variant: 'outline', class: 'rounded-full' }">
           <UButton icon="lucide:menu" color="neutral" variant="subtle" class="text-primary rounded-lg shadow-md my-2" />
@@ -76,21 +96,21 @@ const userMenu = ref<DropdownMenuItem[][]>([
           </template>
         </USlideover>
       </div>
+      <ULink raw to="/" class="text-xl font-bold hover:underline me-4" :class="{ 'text-inverted': isTransparent }">{{ SITE.name }}</ULink>
       <UNavigationMenu :items="pages" color="neutral" class="w-full md:inline hidden" :ui="navigationUI" />
       <div class="flex gap-2 py-2">
         <ClientOnly>
-          <UButton :icon="colorMode.preference === 'dark' ? 'lucide:sun' : 'lucide:moon'" class="bg-transparent hover:bg-slate-50/10" @click="toggleColorMode" />
+          <UButton :icon="colorMode.preference === 'dark' ? 'lucide:sun' : 'lucide:moon'" class="bg-transparent hover:bg-slate-50/10" :class="isTransparent ? 'text-inverted' : 'text-default'" @click="toggleColorMode" />
           <template #fallback>
-            <UButton icon="lucide:circle-dashed" />
+            <UButton icon="lucide:circle-dashed" class="bg-transparent hover:bg-slate-50/10" :class="isFixedPath && !scrolled ? 'text-inverted' : 'text-default'" />
           </template>
         </ClientOnly>
-        <UButton icon="simple-icons:github" :to="SITE.repository" target="_blank" class="bg-transparent hover:bg-slate-50/10" />
         <template v-if="!loggedIn || !user">
           <UButton trailing to="/login" label="Sign in" color="secondary" class="rounded-lg shadow-md" />
-          <UButton icon="lucide:arrow-right" trailing to="/signup" label="Sign up" color="neutral" variant="soft" class="rounded-lg shadow-md" />
+          <UButton icon="lucide:arrow-right" trailing to="/signup" label="Sign up" color="neutral" variant="soft" class="rounded-lg shadow-md" :class="{ 'text-inverted bg-inverted hover:bg-inverted/75': !isFixedPath || scrolled }" />
         </template>
         <UDropdownMenu v-else :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }">
-          <UButton icon="lucide:user" trailing-icon="lucide:chevron-down" :label="user.email" color="secondary" class="rounded-lg shadow-md" />
+          <UButton icon="lucide:user" trailing-icon="lucide:chevron-down" :label="user.email" :variant="isTransparent ? 'solid' : 'soft'" color="primary" class="rounded-lg" />
         </UDropdownMenu>
       </div>
     </div>

@@ -1,9 +1,9 @@
-import type { ErrorCode } from "#shared/utils/errors";
-import type { MemberRole } from "#shared/utils/roles";
+import type { ErrorCode as _ErrorCode } from "#shared/utils/errors";
+import type { MemberRole as _MemberRole } from "#shared/utils/roles";
 
 export {};
 
 declare global {
-  type ErrorCode = typeof ErrorCode;
-  type MemberRole = typeof MemberRole;
+  type ErrorCode = _ErrorCode;
+  type MemberRole = _MemberRole;
 }

@@ -1,4 +1,4 @@
-export const enum MemberRole {
+export enum MemberRole {
   OWNER = 1,
   ADMIN = 2,
   EDITOR = 3

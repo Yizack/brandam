@@ -34,14 +34,14 @@
 .form-input-floating .from-input {
   padding-inline: calc(var(--spacing) * 4);
   padding-top: calc(var(--spacing) * 4);
-  padding-bottom: calc(var(--spacing) * 2);
+  padding-bottom: calc(var(--spacing) * 1);
   height: calc(var(--spacing) * 14);
 }
 
 .form-input-floating label {
   position: absolute;
   inset-inline-start: calc(var(--spacing) * 4);
-  top: calc(var(--spacing) * 1.5);
+  top: calc(var(--spacing) * 2);
   font-size: var(--text-xs);
   line-height: var(--text-xs--line-height);
   transition: all 0.1s;
@@ -55,9 +55,36 @@
 
   &:is(:where(.peer):autofill ~ *),
   &:is(:where(.peer):focus ~ *) {
-    top: calc(var(--spacing) * 1.5);
+    top: calc(var(--spacing) * 2);
     color: var(--ui-primary);
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
   }
+}
+
+.form-input-group {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
+.form-input-group > :first-child:not(.form-input-floating) {
+  padding: 0.5rem 1rem;
+  background-color: var(--ui-bg-elevated);
+  display: flex;
+  align-items: center;
+  border-radius: calc(var(--ui-radius) * 2) 0 0 calc(var(--ui-radius) * 2);
+  border-width: 1px;
+  border-style: solid none solid solid;
+  border-color: var(--ui-border-accented);
+}
+
+.form-input-group > .form-input-floating {
+  flex: 1;
+  width: 100%;
+}
+
+.form-input-group > .form-input-floating:last-child > .from-input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
