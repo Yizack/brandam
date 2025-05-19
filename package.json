@@ -49,11 +49,11 @@
     "nuxt-auth-utils": "^0.5.20",
     "sass": "^1.89.0",
     "stylelint": "^16.19.1",
-    "stylelint-config-standard-scss": "^15.0.0",
+    "stylelint-config-standard-scss": "^15.0.1",
     "typescript": "^5.8.3",
     "vue-tsc": "^2.2.10",
     "wrangler": "^4.15.2",
-    "zod": "^3.24.4"
+    "zod": "^3.25.4"
   },
   "packageManager": "pnpm@10.11.0"
 }
