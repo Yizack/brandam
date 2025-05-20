@@ -120,9 +120,8 @@ export default defineNuxtConfig({
   appConfig: {
     ui: {
       colors: {
-        primary: "purple",
-        secondary: "green",
-        info: "blue"
+        primary: "blue",
+        secondary: "green"
       }
     }
   },

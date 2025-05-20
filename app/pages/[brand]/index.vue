@@ -1,7 +1,10 @@
+<script setup lang="ts">
+const route = useRoute("brand");
+const { data: brand } = useFetch(`/api/brands/${route.params.brand}`);
+</script>
+
 <template>
   <main>
-    <section class="bg-primary">
-      <p>Hello World</p>
-    </section>
+    {{ brand }}
   </main>
 </template>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const { data: brands } = await useFetch("/api/brands");
 
+const toast = useToast();
+
 const loading = ref(false);
 const form = useFormState({
   name: "",
@@ -21,6 +23,7 @@ const createBrand = async () => {
   }).then(() => {
     form.reset();
     closeCreate.value = false;
+    toast.add({ title: SITE.name, description: "Your brand has been created", color: "success" });
   }).catch(() => {}).finally(() => {
     loading.value = false;
   });
@@ -32,8 +35,8 @@ const createBrand = async () => {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <BrandCard v-for="brand in brands" :key="brand.id" :brand="brand" />
       <UModal v-model:open="closeCreate" title="Create Brand" description="Get started managing your brand assets." :close="{ color: 'primary', variant: 'outline', class: 'rounded-full' }" :dismissible="false">
-        <div class="bg-muted rounded-lg border-2 border-dashed border-accented p-6 flex flex-col items-center justify-center text-center h-full cursor-pointer hover:border-secondary transition-colors">
-          <div class="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4">
+        <div class="light:bg-default dark:bg-muted rounded-lg border-2 border-dashed border-accented p-6 flex flex-col items-center justify-center text-center h-full cursor-pointer hover:border-secondary transition-colors group">
+          <div class="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4 group-hover:scale-[1.1] transition-transform">
             <Icon name="lucide:plus" size="1.5em" />
           </div>
           <h3 class="font-medium mb-1">Create new Brand</h3>

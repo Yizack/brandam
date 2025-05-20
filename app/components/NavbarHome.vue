@@ -63,7 +63,7 @@ const navigationUI = computed<NavigationMenuProps["ui"]>(() => {
 
 const logout = () => {
   clear();
-  navigateTo("/", { replace: true });
+  if (isAppPath.value) navigateTo("/", { replace: true });
 };
 
 const userMenu = ref<DropdownMenuItem[][]>([
@@ -82,10 +82,16 @@ const userMenu = ref<DropdownMenuItem[][]>([
     }
   ]
 ]);
+
+useHead({
+  bodyAttrs: {
+    class: "light:bg-primary/15"
+  }
+});
 </script>
 
 <template>
-  <header class="w-full top-0 py-2" :class="[isFixedPath ? 'fixed' : 'sticky', { 'bg-elevated shadow-md': scrolled || !isFixedPath }]">
+  <header class="w-full top-0 py-1" :class="[isFixedPath ? 'fixed' : 'sticky', { 'bg-elevated shadow-md': scrolled || !isFixedPath }]">
     <div class="flex items-center gap-1 mx-auto px-4 sm:px-6 lg:px-8" :class="{ 'max-w-(--ui-container)': !isAppPath }">
       <div class="w-full md:hidden">
         <USlideover side="left" :title="SITE.name" :close="{ color: 'primary', variant: 'outline', class: 'rounded-full' }">
@@ -96,7 +102,7 @@ const userMenu = ref<DropdownMenuItem[][]>([
           </template>
         </USlideover>
       </div>
-      <ULink raw to="/" class="text-xl font-bold hover:underline me-4" :class="{ 'text-inverted': isTransparent }">{{ SITE.name }}</ULink>
+      <ULink raw :to="isAppPath ? '/app' : '/'" class="text-xl font-bold hover:underline me-4 md:inline hidden" :class="{ 'text-inverted': isTransparent }">{{ SITE.name }}</ULink>
       <UNavigationMenu :items="pages" color="neutral" class="w-full md:inline hidden" :ui="navigationUI" />
       <div class="flex gap-2 py-2">
         <ClientOnly>
