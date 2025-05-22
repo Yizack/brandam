@@ -33,7 +33,7 @@ const applyModifiers = (event: Event) => {
 
 <template>
   <div class="form-input-floating" :class="{ 'form-input-icon': icon }">
-    <Icon v-if="icon" :name="icon" class="input-icon h-5 w-5" />
+    <Icon v-if="icon" :name="icon" class="input-icon h-5 w-5 text-primary" />
     <input
       :id="id"
       v-model="model"
