@@ -70,7 +70,7 @@ const userMenu = ref<DropdownMenuItem[][]>([
   [
     {
       label: "Settings",
-      icon: "i-lucide-cog",
+      icon: "lucide:cog",
       to: "/app/settings"
     }
   ],
@@ -91,11 +91,11 @@ useHead({
 </script>
 
 <template>
-  <header class="w-full top-0 py-1" :class="[isFixedPath ? 'fixed' : 'sticky', { 'bg-elevated shadow-md': scrolled || !isFixedPath }]">
+  <header class="w-full top-0 py-1 z-50" :class="[isFixedPath ? 'fixed' : 'sticky', { 'bg-elevated shadow-md': scrolled || !isFixedPath }]">
     <div class="flex items-center gap-1 mx-auto px-4 sm:px-6 lg:px-8" :class="{ 'max-w-(--ui-container)': !isAppPath }">
       <div class="w-full md:hidden">
         <USlideover side="left" :title="SITE.name" :close="{ color: 'primary', variant: 'outline', class: 'rounded-full' }">
-          <UButton icon="lucide:menu" color="neutral" variant="subtle" class="text-primary rounded-lg shadow-md my-2" />
+          <UButton icon="lucide:menu" color="neutral" variant="subtle" class="text-primary rounded-lg shadow my-2" />
           <template #body>
             <UNavigationMenu :items="pages" color="primary" orientation="vertical" class="w-full" />
             <USeparator class="my-4" />

@@ -35,7 +35,6 @@ declare global {
           name: string;
           size: string;
           mimetype: string;
-          [key: string]: string;
         };
       } | {
         type: "text" | "color";
