@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { InputHTMLAttributes } from "vue";
 
-defineProps<{
+const props = defineProps<{
   id?: string;
   name?: string;
   type?: InputHTMLAttributes["type"];
@@ -9,11 +9,16 @@ defineProps<{
   placeholder: string;
   autocomplete?: string;
   required?: boolean;
+  value?: string | number;
   modelModifiers?: {
     number?: boolean;
     slug?: boolean;
     trim?: boolean;
   };
+}>();
+
+const emit = defineEmits<{
+  change: [string];
 }>();
 
 const [model, modifiers] = defineModel<string | number>();
@@ -28,23 +33,25 @@ const applyModifiers = (event: Event) => {
     model.value = toSlug(model.value);
     input.value = model.value;
   }
+
+  emit("change", input.value);
+};
+
+const binds = {
+  id: props.id,
+  name: props.name,
+  type: props.type || "text",
+  placeholder: "",
+  autocomplete: props.autocomplete,
+  required: props.required
 };
 </script>
 
 <template>
   <div class="form-input-floating" :class="{ 'form-input-icon': icon }">
     <Icon v-if="icon" :name="icon" class="input-icon h-5 w-5 text-primary" />
-    <input
-      :id="id"
-      v-model="model"
-      class="from-input peer"
-      :name="name"
-      :type="type || 'text'"
-      placeholder=""
-      :autocomplete="autocomplete"
-      :required="required"
-      @change="applyModifiers"
-    >
+    <input v-if="!value" v-model="model" class="from-input peer" v-bind="binds" @change="applyModifiers">
+    <input v-else class="from-input peer" :value="value" v-bind="binds" @change="applyModifiers">
     <label :for="id" :class="{ 'pl-8': icon }">
       {{ placeholder }}
     </label>

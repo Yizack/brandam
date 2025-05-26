@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event);
 
   const params = await getValidatedRouterParams(event, z.object({
-    slug: z.string().transform(v => v.toLowerCase().trim())
+    slug: z.string().min(1).transform(v => v.toLowerCase().trim())
   }).parse);
 
   const body = await readValidatedBody(event, z.object({

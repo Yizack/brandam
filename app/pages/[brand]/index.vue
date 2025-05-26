@@ -7,17 +7,13 @@ const { data: brand } = await useFetch(`/api/brands/${route.params.brand}`, {
   lazy: import.meta.dev // TODO: remove in nuxt >3.17.4
 });
 
-const items = ref([
+const items: TabsItem[] = [
   { label: "All", value: "all", icon: "lucide:grid-2x2" },
-  { label: "Images", value: "images", icon: "lucide:images" },
-  { label: "Vectors", value: "vectors", icon: "lucide:pen-tool" },
-  { label: "Documents", value: "documents", icon: "lucide:file-text" },
-  { label: "Fonts", value: "fonts", icon: "lucide:type" },
-  { label: "Colors", value: "colors", icon: "lucide:palette" }
-] satisfies TabsItem[]);
+  ...assetTypes.map(type => ({ label: type.name.plural, value: type.value, icon: type.icon }))
+];
 
 const sectionName = computed(() => {
-  const item = items.value.find(item => item.value === filters.value.section);
+  const item = items.find(item => item.value === filters.value.section);
   return item?.label;
 });
 
