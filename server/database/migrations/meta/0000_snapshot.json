@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "657247d8-63bc-4fc8-84f4-d10703fa6476",
+  "id": "6ab5a3b8-75b1-4344-9c05-d0b63f0f1e64",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "assets": {
@@ -42,6 +42,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "integer",
@@ -59,12 +66,20 @@
           "default": "(unixepoch() * 1000)"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "assets_brand_id_idx": {
+          "name": "assets_brand_id_idx",
+          "columns": [
+            "brand_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "assets_brand_id_users_id_fk": {
-          "name": "assets_brand_id_users_id_fk",
+        "assets_brand_id_brands_id_fk": {
+          "name": "assets_brand_id_brands_id_fk",
           "tableFrom": "assets",
-          "tableTo": "users",
+          "tableTo": "brands",
           "columnsFrom": [
             "brand_id"
           ],
@@ -72,6 +87,19 @@
             "id"
           ],
           "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "assets_user_id_users_id_fk": {
+          "name": "assets_user_id_users_id_fk",
+          "tableFrom": "assets",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -189,7 +217,30 @@
           "default": "(unixepoch() * 1000)"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "members_brand_id_idx": {
+          "name": "members_brand_id_idx",
+          "columns": [
+            "brand_id"
+          ],
+          "isUnique": false
+        },
+        "members_user_id_idx": {
+          "name": "members_user_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "members_userId_brandId_unique": {
+          "name": "members_userId_brandId_unique",
+          "columns": [
+            "user_id",
+            "brand_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "members_user_id_users_id_fk": {
           "name": "members_user_id_users_id_fk",

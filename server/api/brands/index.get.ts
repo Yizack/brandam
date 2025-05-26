@@ -1,11 +1,9 @@
-import { exists } from "drizzle-orm";
-
 export default defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event);
 
   const DB = useDB();
 
-  const brand = await DB.select({
+  const brands = await DB.select({
     id: tables.brands.id,
     name: tables.brands.name,
     slug: tables.brands.slug,
@@ -14,17 +12,12 @@ export default defineEventHandler(async (event) => {
     createdAt: tables.brands.createdAt,
     members: count(tables.members.id).as("members"),
     assets: count(tables.assets.id).as("assets")
-  }).from(tables.members)
-    .innerJoin(tables.brands, eq(tables.brands.id, tables.members.brandId))
+  }).from(tables.brands)
+    .innerJoin(tables.members, eq(tables.members.brandId, tables.brands.id))
     .leftJoin(tables.assets, eq(tables.assets.brandId, tables.brands.id))
-    .where(exists(
-      DB.select().from(tables.members).where(and(
-        eq(tables.members.brandId, tables.brands.id), eq(tables.members.userId, user.id)
-      ))
-    ))
+    .where(eq(tables.members.userId, user.id))
     .groupBy(tables.brands.id)
-    .orderBy(desc(tables.brands.updatedAt))
     .all();
 
-  return brand;
+  return brands;
 });

@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const { brand, roleId } = brandResult;
-  const assets = await DB.select().from(tables.assets).where(eq(tables.assets.brandId, brand.id)).orderBy(desc(tables.assets.updatedAt)).all();
+  const assets = await DB.select().from(tables.assets).where(eq(tables.assets.brandId, brand.id)).all();
 
   return {
     ...brand,
