@@ -41,7 +41,6 @@
     "@nuxthub/core": "^0.8.27",
     "@nuxtjs/sitemap": "^7.3.0",
     "@nuxtjs/turnstile": "^1.0.0",
-    "@types/bootstrap": "^5.2.10",
     "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.43.1",
     "eslint": "^9.27.0",
