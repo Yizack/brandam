@@ -51,7 +51,7 @@ const isAdmin = computed(() => {
         </div>
         <InputFloating v-model.trim="filters.search" icon="lucide:search" placeholder="Search for assets" />
       </div>
-      <AdminBar v-if="isAdmin" v-model="brand" />
+      <AdminToolbar v-if="isAdmin" v-model="brand" />
     </div>
   </main>
 </template>

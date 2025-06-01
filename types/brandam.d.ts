@@ -32,13 +32,20 @@ declare global {
       {
         type: "file";
         metadata: {
-          name: string;
-          size: string;
+          size: number;
           mimetype: string;
         };
       } | {
-        type: "text" | "color";
-        content: string; // hex color or text
+        type: "color";
+        content: string; // hex color
+      } | {
+        type: "font";
+        content: string; // font name
+        url?: string; // optional URL for the font file
+        metadata?: {
+          size: number;
+          mimetype: string;
+        };
       };
     brandId: number;
     createdAt: number;
