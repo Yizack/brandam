@@ -1,5 +1,5 @@
 CREATE TABLE `assets` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`uuid` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`description` text,
 	`data` text NOT NULL,

@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     items: z.array(z.object({
       name: z.string().min(1).transform(v => v.trim()),
       description: z.string().optional().transform(v => v?.trim() || null),
-      type: z.enum(["color", "font", "file"]),
+      type: z.enum(["image", "vector", "document", "font", "color"]),
       content: z.string().optional()
     })).min(1)
   }).safeParse(JSON.parse(payload));

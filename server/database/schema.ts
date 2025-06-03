@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { index, integer, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 import { unixepoch } from "../utils/db";
 
@@ -34,7 +35,7 @@ export const members = sqliteTable("members", {
 ]);
 
 export const assets = sqliteTable("assets", {
-  id: integer().primaryKey({ autoIncrement: true }),
+  uuid: text().primaryKey().$default(() => randomUUID()),
   name: text().notNull(),
   description: text(),
   data: text({ mode: "json" }).$type<BrandamAsset["data"]>().notNull(),

@@ -38,18 +38,10 @@ const isAdmin = computed(() => {
 
 const assetsCount = computed(() => {
   return {
-    images: brand.value?.assets.filter((asset) => {
-      return asset.data.type === "file" && getAssetType(asset.data.metadata?.mimetype) === "image";
-    }).length || 0,
-    vectors: brand.value?.assets.filter((asset) => {
-      return asset.data.type === "file" && getAssetType(asset.data.metadata?.mimetype) === "vector";
-    }).length || 0,
-    documents: brand.value?.assets.filter((asset) => {
-      return asset.data.type === "file" && getAssetType(asset.data.metadata?.mimetype) === "document";
-    }).length || 0,
-    fonts: brand.value?.assets.filter((asset) => {
-      return asset.data.type === "font" && getAssetType(asset.data.metadata?.mimetype) === "font";
-    }).length || 0,
+    images: brand.value?.assets.filter(asset => asset.data.type === "image").length || 0,
+    vectors: brand.value?.assets.filter(asset => asset.data.type === "vector").length || 0,
+    documents: brand.value?.assets.filter(asset => asset.data.type === "document").length || 0,
+    fonts: brand.value?.assets.filter(asset => asset.data.type === "font").length || 0,
     colors: brand.value?.assets.filter(asset => asset.data.type === "color").length || 0
   };
 });
@@ -87,7 +79,7 @@ const assetsCount = computed(() => {
         <p class="text-muted-foreground text-sm">{{ assetsCount.colors }} Assets</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
-        <CardColor v-for="asset of brand.assets" :key="asset.id" :asset="asset" />
+        <CardColor v-for="asset of brand.assets" :key="asset.uuid" :asset="asset" />
       </div>
     </div>
     <AdminToolbar v-if="isAdmin" v-model="brand" />

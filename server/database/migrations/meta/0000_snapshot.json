@@ -1,18 +1,18 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "6ab5a3b8-75b1-4344-9c05-d0b63f0f1e64",
+  "id": "0a2b7e1f-c2a0-4d16-a9b2-30ed678af76a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "assets": {
       "name": "assets",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
+        "uuid": {
+          "name": "uuid",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
         "name": {
           "name": "name",

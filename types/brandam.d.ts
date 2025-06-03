@@ -25,13 +25,13 @@ declare global {
     updatedAt: number;
   }
   interface BrandamAsset {
-    id: number;
+    uuid: string;
     name: string;
     description: string | null;
     data: |
       {
-        type: "file" | "font";
-        content: string | undefined;
+        type: "image" | "vector" | "document" | "font";
+        content?: string;
         metadata?: {
           size: number;
           mimetype: string;

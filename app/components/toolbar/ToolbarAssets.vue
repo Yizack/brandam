@@ -11,7 +11,7 @@ const model = defineModel<BrandamBrand & {
 const isAssetOpen = ref(false);
 const assetStep = ref(0);
 const stepper = useTemplateRef("stepper");
-const assetType = ref<typeof assetTypes[number]["value"]>();
+const assetType = ref<BrandamAsset["data"]["type"]>();
 const isLoading = ref(false);
 
 const assetStepper: StepperItem[] = [
@@ -31,21 +31,19 @@ const form = useFormState({
   }[]
 });
 
-const selectAssetType = (type: typeof assetTypes[number]["value"]) => {
+const selectAssetType = (type: BrandamAsset["data"]["type"]) => {
   stepper.value?.next();
   assetType.value = type;
   if (form.value.items.length !== 0) return;
   switch (type) {
-    case "colors":
+    case "color":
       form.value.items.push({ name: "", description: "", type: "color", content: "#FFFFFF" });
       break;
-    case "fonts":
-      form.value.items.push({ name: "", description: "", type: "font", content: "" });
-      break;
-    case "images":
-    case "vectors":
-    case "documents":
-      form.value.items.push({ name: "", description: "", type: "file", file: undefined });
+    case "font":
+    case "image":
+    case "vector":
+    case "document":
+      form.value.items.push({ name: "", description: "", type, file: undefined });
       break;
   }
 };
@@ -113,7 +111,7 @@ const addAsset = async () => {
             </div>
           </div>
         </template>
-        <ToolbarAssetsColor v-if="assetType === 'colors'" v-model="form.items" :step="assetStep" />
+        <ToolbarAssetsColor v-if="assetType === 'color'" v-model="form.items" :step="assetStep" />
         <USeparator class="my-4" />
         <div class="grid gap-2" :class="{ 'grid-cols-2': assetStep > 0 }">
           <UButton :label="assetStep < AssetStep.REVIEW ? 'Cancel' : 'Back'" color="error" size="xl" variant="subtle" class="justify-center rounded-lg" @click="assetPrev" />
