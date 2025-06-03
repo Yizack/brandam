@@ -30,22 +30,15 @@ declare global {
     description: string | null;
     data: |
       {
-        type: "file";
-        metadata: {
-          size: number;
-          mimetype: string;
-        };
-      } | {
-        type: "color";
-        content: string; // hex color
-      } | {
-        type: "font";
-        content: string; // font name
-        url?: string; // optional URL for the font file
+        type: "file" | "font";
+        content: string | undefined;
         metadata?: {
           size: number;
           mimetype: string;
-        };
+        } | undefined;
+      } | {
+        type: "color";
+        content: string;
       };
     brandId: number;
     createdAt: number;

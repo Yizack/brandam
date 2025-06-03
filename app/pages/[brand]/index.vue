@@ -7,6 +7,16 @@ const { data: brand } = await useFetch(`/api/brands/${route.params.brand}`, {
   lazy: import.meta.dev // TODO: remove in nuxt >3.17.4
 });
 
+/*
+if (!brand.value) {
+  throw createError({
+    statusCode: 404,
+    message: "The requested brand does not exist.",
+    fatal: true
+  });
+}
+*/
+
 const items: TabsItem[] = [
   { label: "All", value: "all", icon: "lucide:grid-2x2" },
   ...assetTypes.map(type => ({ label: type.name.plural, value: type.value, icon: type.icon }))
@@ -28,8 +38,8 @@ const isAdmin = computed(() => {
 </script>
 
 <template>
-  <main>
-    <div v-if="brand" class="bg-primary">
+  <main v-if="brand">
+    <div class="bg-primary">
       <div class="flex flex-col gap-3 max-w-(--ui-container) mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div class="text-inverted flex flex-wrap gap-3 items-center justify-between">
           <div class="sm:max-w-2/3 lg:max-w-3/4">
@@ -51,7 +61,12 @@ const isAdmin = computed(() => {
         </div>
         <InputFloating v-model.trim="filters.search" icon="lucide:search" placeholder="Search for assets" />
       </div>
-      <AdminToolbar v-if="isAdmin" v-model="brand" />
     </div>
+    <div class="p-6 md:p-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mx-auto">
+        <CardColor v-for="asset of brand.assets" :key="asset.id" :asset="asset" />
+      </div>
+    </div>
+    <AdminToolbar v-if="isAdmin" v-model="brand" />
   </main>
 </template>

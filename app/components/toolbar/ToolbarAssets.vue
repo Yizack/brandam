@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { StepperItem } from "@nuxt/ui";
 
+const toast = useToast();
+
 const model = defineModel<BrandamBrand & {
   assets: BrandamAsset[];
   roleId?: BrandamMember["roleId"];
@@ -10,6 +12,8 @@ const isAssetOpen = ref(false);
 const assetStep = ref(0);
 const stepper = useTemplateRef("stepper");
 const assetType = ref<typeof assetTypes[number]["value"]>();
+const isLoading = ref(false);
+
 const assetStepper: StepperItem[] = [
   { title: "Type" },
   { title: "Details" },
@@ -18,7 +22,13 @@ const assetStepper: StepperItem[] = [
 
 const form = useFormState({
   brandId: model.value.id,
-  items: [] as { name: string, description: string, color?: string, file?: File, font?: { name: string, url: string } }[]
+  items: [] as {
+    name: string;
+    description: string;
+    type: BrandamAsset["data"]["type"];
+    content?: string;
+    file?: File;
+  }[]
 });
 
 const selectAssetType = (type: typeof assetTypes[number]["value"]) => {
@@ -27,7 +37,15 @@ const selectAssetType = (type: typeof assetTypes[number]["value"]) => {
   if (form.value.items.length !== 0) return;
   switch (type) {
     case "colors":
-      form.value.items.push({ name: "", description: "", color: "#FFFFFF" });
+      form.value.items.push({ name: "", description: "", type: "color", content: "#FFFFFF" });
+      break;
+    case "fonts":
+      form.value.items.push({ name: "", description: "", type: "font", content: "" });
+      break;
+    case "images":
+    case "vectors":
+    case "documents":
+      form.value.items.push({ name: "", description: "", type: "file", file: undefined });
       break;
   }
 };
@@ -62,9 +80,17 @@ const addAsset = async () => {
     if (!(item.file instanceof File)) continue;
     payload.append("files", item.file);
   }
+  isLoading.value = true;
   $fetch(`/api/brands/${model.value.name}/assets`, {
     method: "POST",
     body: payload
+  }).then(() => {
+    toast.add({ title: SITE.name, description: "Asset added successfully.", color: "success" });
+  }).catch(() => {}).finally(() => {
+    isLoading.value = false;
+    isAssetOpen.value = false;
+    assetStep.value = 0;
+    form.value.items = [];
   });
 };
 </script>
@@ -92,7 +118,9 @@ const addAsset = async () => {
         <div class="grid gap-2" :class="{ 'grid-cols-2': assetStep > 0 }">
           <UButton :label="assetStep < AssetStep.REVIEW ? 'Cancel' : 'Back'" color="error" size="xl" variant="subtle" class="justify-center rounded-lg" @click="assetPrev" />
           <UButton v-if="assetStep > AssetStep.TYPE && assetStep < assetStepper.length - 1" label="Continue" color="secondary" size="xl" variant="subtle" class="justify-center rounded-lg" @click="assetNext" />
-          <UButton v-if="assetStep === assetStepper.length - 1" label="Submit" size="xl" variant="subtle" type="submit" class="justify-center rounded-lg" />
+          <UButton v-if="assetStep === assetStepper.length - 1" size="xl" variant="subtle" type="submit" class="justify-center rounded-lg" :loading="isLoading">
+            <span v-if="!isLoading">Submit</span>
+          </UButton>
         </div>
       </form>
     </template>

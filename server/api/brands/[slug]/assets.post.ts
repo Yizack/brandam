@@ -15,11 +15,8 @@ export default defineEventHandler(async (event) => {
     items: z.array(z.object({
       name: z.string().min(1).transform(v => v.trim()),
       description: z.string().optional().transform(v => v?.trim() || null),
-      color: z.string().optional().transform(v => v?.trim()),
-      font: z.object({
-        name: z.string().min(1).transform(v => v.trim()),
-        url: z.string().url().optional()
-      }).optional()
+      type: z.enum(["color", "font", "file"]),
+      content: z.string().optional()
     })).min(1)
   }).safeParse(JSON.parse(payload));
 
@@ -46,21 +43,16 @@ export default defineEventHandler(async (event) => {
   }
 
   const values = items.map((item, i) => {
-    const file = files[i]!;
     return {
       name: item.name,
       description: item.description,
-      data: (item.color && !file ? {
-        type: "color",
-        content: item.color
-      } : item.font ? {
-        type: "font",
-        content: item.font.name,
-        url: item.font.url,
-        metadata: { size: file.size, mimetype: file.type }
+      data: (item.type === "color" ? {
+        type: item.type,
+        content: item.content!
       } : {
-        type: "file",
-        metadata: { size: file.size, mimetype: file.type }
+        type: item.type,
+        content: item.content,
+        metadata: files[i] ? { size: files[i].size, mimetype: files[i].type } : undefined
       }) satisfies BrandamAsset["data"],
       brandId: validation.data.brandId,
       userId: user.id
