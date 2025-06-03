@@ -28,6 +28,12 @@ const createBrand = async () => {
     loading.value = false;
   });
 };
+
+useHead({
+  bodyAttrs: {
+    class: "light:bg-primary/15"
+  }
+});
 </script>
 
 <template>

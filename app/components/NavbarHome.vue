@@ -82,12 +82,6 @@ const userMenu = ref<DropdownMenuItem[][]>([
     }
   ]
 ]);
-
-useHead({
-  bodyAttrs: {
-    class: "light:bg-primary/15"
-  }
-});
 </script>
 
 <template>

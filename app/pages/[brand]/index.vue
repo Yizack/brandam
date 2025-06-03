@@ -35,12 +35,30 @@ const filters = ref({
 const isAdmin = computed(() => {
   return brand.value?.roleId === MemberRole.ADMIN || brand.value?.roleId === MemberRole.OWNER;
 });
+
+const assetsCount = computed(() => {
+  return {
+    images: brand.value?.assets.filter((asset) => {
+      return asset.data.type === "file" && getAssetType(asset.data.metadata?.mimetype) === "image";
+    }).length || 0,
+    vectors: brand.value?.assets.filter((asset) => {
+      return asset.data.type === "file" && getAssetType(asset.data.metadata?.mimetype) === "vector";
+    }).length || 0,
+    documents: brand.value?.assets.filter((asset) => {
+      return asset.data.type === "file" && getAssetType(asset.data.metadata?.mimetype) === "document";
+    }).length || 0,
+    fonts: brand.value?.assets.filter((asset) => {
+      return asset.data.type === "font" && getAssetType(asset.data.metadata?.mimetype) === "font";
+    }).length || 0,
+    colors: brand.value?.assets.filter(asset => asset.data.type === "color").length || 0
+  };
+});
 </script>
 
 <template>
   <main v-if="brand">
     <div class="bg-primary">
-      <div class="flex flex-col gap-3 max-w-(--ui-container) mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <UContainer class="flex flex-col gap-3 py-8 px-4 sm:px-6 lg:px-8">
         <div class="text-inverted flex flex-wrap gap-3 items-center justify-between">
           <div class="sm:max-w-2/3 lg:max-w-3/4">
             <h1 class="text-4xl font-bold">{{ brand.name }}</h1>
@@ -60,10 +78,15 @@ const isAdmin = computed(() => {
           <UTabs v-model="filters.section" :items="items" color="neutral" size="xl" :ui="{ label: 'hidden md:inline' }" />
         </div>
         <InputFloating v-model.trim="filters.search" icon="lucide:search" placeholder="Search for assets" />
-      </div>
+      </UContainer>
     </div>
-    <div class="p-6 md:p-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mx-auto">
+    <div class="px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap gap-3 items-center mb-4">
+        <h2 class="text-2xl font-bold">Colors</h2>
+        <USeparator orientation="vertical" class="h-6" />
+        <p class="text-muted-foreground text-sm">{{ assetsCount.colors }} Assets</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
         <CardColor v-for="asset of brand.assets" :key="asset.id" :asset="asset" />
       </div>
     </div>
