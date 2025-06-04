@@ -3,11 +3,9 @@ import type { TabsItem } from "@nuxt/ui";
 
 const route = useRoute("brand");
 const { data: brand } = await useFetch(`/api/brands/${route.params.brand}`, {
-  key: `brands:${route.params.brand}`,
-  lazy: import.meta.dev // TODO: remove in nuxt >3.17.4
+  key: `brands:${route.params.brand}`
 });
 
-/*
 if (!brand.value) {
   throw createError({
     statusCode: 404,
@@ -15,7 +13,6 @@ if (!brand.value) {
     fatal: true
   });
 }
-*/
 
 const items: TabsItem[] = [
   { label: "All", value: "all", icon: "lucide:grid-2x2" },
@@ -72,7 +69,7 @@ const assetsCount = computed(() => {
         <InputFloating v-model.trim="filters.search" icon="lucide:search" placeholder="Search for assets" />
       </UContainer>
     </div>
-    <div class="px-4 sm:px-6 lg:px-8">
+    <div class="py-4 px-4 sm:px-6 lg:px-8">
       <div class="flex flex-wrap gap-3 items-center mb-4">
         <h2 class="text-2xl font-bold">Colors</h2>
         <USeparator orientation="vertical" class="h-6" />
