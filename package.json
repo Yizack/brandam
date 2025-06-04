@@ -46,15 +46,15 @@
     "drizzle-orm": "^0.44.1",
     "eslint": "^9.28.0",
     "mime-types": "^3.0.1",
-    "nuxt": "^3.17.4",
+    "nuxt": "^3.17.5",
     "nuxt-auth-utils": "^0.5.20",
     "sass": "^1.89.1",
     "stylelint": "^16.20.0",
     "stylelint-config-standard-scss": "^15.0.1",
     "typescript": "^5.8.3",
     "vue-tsc": "^2.2.10",
-    "wrangler": "^4.18.0",
-    "zod": "^3.25.49"
+    "wrangler": "^4.19.1",
+    "zod": "^3.25.50"
   },
   "packageManager": "pnpm@10.11.1"
 }
