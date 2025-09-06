@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DropdownMenuItem, NavigationMenuItem, NavigationMenuProps } from "@nuxt/ui";
+import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
 
 const { loggedIn, user, clear } = useUserSession();
 
@@ -46,16 +46,6 @@ const pages = computed<NavigationMenuItem[]>(() => {
   return loggedIn && user.value ? app : initial;
 });
 
-const navigationUI = computed<NavigationMenuProps["ui"]>(() => {
-  const linkAdjust = isTransparent.value ? "text-inverted hover:text-inverted not-data-active:hover:before:bg-slate-50/30" : "data-active:before:bg-primary/10 text-default dark:not-data-active:hover:before:bg-slate-50/10 light:not-data-active:hover:before:bg-slate-950/10";
-  const iconAdjust = isTransparent.value ? "not-data-active:text-inverted group-hover:text-inverted" : "group-not-data-active:text-primary text-default group-not-data-active:group-hover:text-primary";
-  return {
-    list: "gap-4",
-    link: `data-active:text-primary data-active:before:shadow-md before:rounded-lg ${linkAdjust}`,
-    linkLeadingIcon: `group-data-active:text-primary ${iconAdjust}`
-  };
-});
-
 const logout = () => {
   clear();
   if (isAppPath.value) navigateTo("/", { replace: true });
@@ -82,23 +72,22 @@ const userMenu = ref<DropdownMenuItem[][]>([
 <template>
   <UHeader
     mode="modal"
-    class="w-full top-0 py-1 z-50 border-0"
-    :class="[isFixedPath ? 'fixed' : 'sticky', scrolled || !isFixedPath ? 'bg-elevated' : 'bg-transparent']"
-    :ui="{ toggle: `bg-transparent hover:bg-slate-50/10 ${isFixedPath && !scrolled ? 'text-inverted' : 'text-default'}` }"
+    class="w-full top-0 py-1 z-50 border-0 bg-default"
   >
     <template #left>
-      <ULink raw :to="isAppPath ? '/app' : '/'" class="text-xl font-bold hover:underline me-4 md:inline hidden" :class="{ 'text-inverted': isTransparent }">{{ SITE.name }}</ULink>
+      <ULink raw :to="isAppPath ? '/app' : '/'" class="text-xl font-bold hover:underline me-4">
+        {{ SITE.name }}
+      </ULink>
     </template>
 
     <UNavigationMenu
-      :ui="navigationUI"
       :items="pages"
       color="neutral"
       class="w-full md:inline hidden"
     />
 
     <template #right>
-      <UColorModeButton class="bg-transparent hover:bg-slate-50/10" :class="isFixedPath && !scrolled ? 'text-inverted' : 'text-default'" />
+      <UColorModeButton />
 
       <template v-if="!loggedIn || !user">
         <UButton
