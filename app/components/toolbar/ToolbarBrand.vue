@@ -26,7 +26,7 @@ const onCloseBrand = () => {
 
 const editBrand = async () => {
   loading.value = true;
-  $fetch(`/api/brands/${brandForm.value.slug}`, {
+  $fetch(`/api/brands/${model.value.slug}`, {
     method: "PATCH",
     body: brandForm.value
   }).then(() => {
