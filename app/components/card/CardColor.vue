@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <UModal>
+  <UModal :title="asset.data.content" :description="asset.name">
     <div class="bg-muted rounded-lg border-2 border-accented overflow-hidden hover:shadow-md cursor-pointer h-full flex flex-col hover:scale-[1.02] transition-transform duration-200 group">
       <div class="h-35 border-b border-muted relative">
         <div class="w-full h-full absolute top-0 left-0 group-hover:brightness-25 duration-300" :style="{ backgroundColor: asset.data.content }" />

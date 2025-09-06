@@ -69,7 +69,7 @@ const assetsCount = computed(() => {
         <InputFloating v-model.trim="filters.search" icon="lucide:search" placeholder="Search for assets" />
       </UContainer>
     </div>
-    <div class="py-4 px-4 sm:px-6 lg:px-8">
+    <div class="py-10 px-4 sm:px-6 lg:px-8">
       <div class="flex flex-wrap gap-3 items-center mb-4">
         <h2 class="text-2xl font-bold">Colors</h2>
         <USeparator orientation="vertical" class="h-6" />

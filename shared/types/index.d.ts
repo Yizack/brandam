@@ -1,5 +1,5 @@
-import type { ErrorCode as _ErrorCode } from "#shared/utils/errors";
-import type { MemberRole as _MemberRole } from "#shared/utils/roles";
+import type { ErrorCode as _ErrorCode } from "../utils/errors";
+import type { MemberRole as _MemberRole } from "../utils/roles";
 import type { AssetStep as _AssetStep } from "~/utils/assets";
 
 declare global {
