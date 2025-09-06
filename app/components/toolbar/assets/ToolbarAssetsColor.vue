@@ -20,14 +20,13 @@ const removeColor = (index: number) => {
 </script>
 
 <template>
-  <div v-if="step === AssetStep.DETAILS" ref="colors">
+  <div v-if="step === AssetStep.DETAILS">
     <p class="text-sm mb-4">Add your brand colors.</p>
     <div class="flex flex-col gap-2">
       <TransitionGroup name="expand-200">
         <div v-for="(item, i) of model" :key="i" class="flex flex-col items-center gap-2">
-          <InputFloating v-model="item.name" type="text" class="w-full" placeholder="Name" />
           <UFieldGroup class="form-input-group w-full">
-            <InputFloating v-model="item.content" type="text" class="w-full" placeholder="Color" required />
+            <InputFloating id="color" v-model="item.content" type="text" class="w-full" placeholder="Color" required />
             <UPopover>
               <UButton color="neutral" variant="outline">
                 <template #leading>
@@ -40,7 +39,8 @@ const removeColor = (index: number) => {
             </UPopover>
             <UButton icon="lucide:trash-2" variant="outline" color="error" class="px-3" :ui="{ base: 'rounded-lg' }" @click="removeColor(i)" />
           </UFieldGroup>
-          <InputFloating v-model="item.description" type="text" class="w-full" placeholder="Description" />
+          <InputFloating id="name" v-model.trim="item.name" type="text" class="w-full" placeholder="Name" />
+          <InputFloating id="description" v-model.trim="item.description" type="text" class="w-full" placeholder="Description" />
           <USeparator v-if="i < model.length - 1" class="my-2" />
         </div>
       </TransitionGroup>

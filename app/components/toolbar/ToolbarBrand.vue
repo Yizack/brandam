@@ -47,10 +47,10 @@ const editBrand = async () => {
       <form @submit.prevent="editBrand">
         <InputFloating v-model.trim="brandForm.name" type="text" class="mb-3" placeholder="Brand name" required />
         <InputFloating v-model.trim="brandForm.description" type="text" class="mb-3" placeholder="Description" />
-        <div class="form-input-group">
-          <p class="text-sm">{{ SITE.domain }}/</p>
+        <UFieldGroup class="form-input-group">
+          <UBadge color="neutral" variant="outline" size="lg">{{ SITE.domain }}/</UBadge>
           <InputFloating v-model.slug="brandForm.slug" type="text" placeholder="Slug" required />
-        </div>
+        </UFieldGroup>
         <div class="grid mt-3">
           <UButton type="submit" variant="subtle" size="xl" class="justify-center rounded-lg font-bold" :disabled="loading">Edit</UButton>
         </div>

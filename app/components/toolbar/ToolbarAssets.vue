@@ -41,6 +41,8 @@ const selectAssetType = (type: BrandamAsset["data"]["type"]) => {
       break;
     case "font":
     case "image":
+      form.value.items.push({ name: "", description: "", type: "image", file: undefined });
+      break;
     case "vector":
     case "document":
       form.value.items.push({ name: "", description: "", type, file: undefined });
@@ -111,6 +113,7 @@ const addAsset = async () => {
             </div>
           </div>
         </template>
+        <ToolbarAssetsImage v-if="assetType === 'image'" v-model="form.items" :step="assetStep" />
         <ToolbarAssetsColor v-if="assetType === 'color'" v-model="form.items" :step="assetStep" />
         <USeparator class="my-4" />
         <div class="grid gap-2" :class="{ 'grid-cols-2': assetStep > 0 }">

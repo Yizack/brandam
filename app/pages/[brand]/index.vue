@@ -66,7 +66,7 @@ const assetsCount = computed(() => {
           <p class="text-inverted text-center md:hidden mb-2 font-medium">{{ sectionName }}</p>
           <UTabs v-model="filters.section" :items="items" color="neutral" size="xl" :ui="{ label: 'hidden md:inline' }" />
         </div>
-        <InputFloating v-model.trim="filters.search" icon="lucide:search" placeholder="Search for assets" />
+        <InputFloating id="search" v-model.trim="filters.search" type="search" icon="lucide:search" placeholder="Search for assets" />
       </UContainer>
     </div>
     <div class="py-10 px-4 sm:px-6 lg:px-8">

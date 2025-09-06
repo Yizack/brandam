@@ -7,7 +7,7 @@ const props = defineProps<{
   type?: InputHTMLAttributes["type"];
   icon?: string;
   placeholder: string;
-  autocomplete?: string;
+  autocomplete?: InputHTMLAttributes["autocomplete"];
   required?: boolean;
   value?: string | number;
   disabled?: boolean;
@@ -27,7 +27,6 @@ const [model, modifiers] = defineModel<string | number>();
 
 const applyModifiers = (event: Event) => {
   const input = event.target as HTMLInputElement;
-  // TODO: remove trim modifier when https://github.com/vuejs/core/pull/12654 is released
   if (modifiers.trim && typeof model.value === "string") {
     input.value = model.value.trim();
   }
@@ -52,7 +51,7 @@ const binds = {
 </script>
 
 <template>
-  <div class="form-input-floating" :class="{ 'form-input-icon': icon }">
+  <div class="form-input-floating w-full" :class="{ 'form-input-icon': icon }">
     <Icon v-if="icon" :name="icon" class="input-icon h-5 w-5 text-primary" />
     <input v-if="!value" v-model="model" class="from-input peer" v-bind="binds" @change="applyModifiers">
     <input v-else class="from-input peer" :value="value" v-bind="binds" @change="applyModifiers">
