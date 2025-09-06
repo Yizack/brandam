@@ -10,6 +10,8 @@ const props = defineProps<{
   autocomplete?: string;
   required?: boolean;
   value?: string | number;
+  disabled?: boolean;
+  readonly?: boolean;
   modelModifiers?: {
     number?: boolean;
     slug?: boolean;
@@ -43,7 +45,9 @@ const binds = {
   type: props.type || "text",
   placeholder: "",
   autocomplete: props.autocomplete,
-  required: props.required
+  required: props.required,
+  disabled: props.disabled,
+  readonly: props.readonly
 };
 </script>
 
