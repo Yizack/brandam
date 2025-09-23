@@ -45,7 +45,7 @@ jobs:
 
   test:
       runs-on: ubuntu-latest
-  
+
       steps:
         - uses: actions/checkout@v5
         - run: corepack enable
@@ -53,12 +53,12 @@ jobs:
           with:
             node-version: lts/*
             cache: pnpm
-  
+
         - name: 📦 Install dependencies
           run: pnpm install
-  
+
         # - name: 🧪 Run test suite
         #   run: pnpm test
-  
+
         - name: 🧪 Test types
           run: pnpm test:types
