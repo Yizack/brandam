@@ -33,13 +33,28 @@ const isAdmin = computed(() => {
   return brand.value?.roleId === MemberRole.ADMIN || brand.value?.roleId === MemberRole.OWNER;
 });
 
-const assetsCount = computed(() => {
+const brandAssets = computed(() => {
+  let assets = brand.value?.assets || [];
+
+  if (filters.value.section !== "all") {
+    assets = assets.filter(asset => asset.data.type === filters.value.section);
+  }
+
+  if (filters.value.search) {
+    const searchLower = filters.value.search.toLowerCase();
+    assets = assets.filter(asset => asset.name.toLowerCase().includes(searchLower));
+  }
+
+  return assets;
+});
+
+const assetsData = computed(() => {
   return {
-    images: brand.value?.assets.filter(asset => asset.data.type === "image").length || 0,
-    vectors: brand.value?.assets.filter(asset => asset.data.type === "vector").length || 0,
-    documents: brand.value?.assets.filter(asset => asset.data.type === "document").length || 0,
-    fonts: brand.value?.assets.filter(asset => asset.data.type === "font").length || 0,
-    colors: brand.value?.assets.filter(asset => asset.data.type === "color").length || 0
+    images: brandAssets.value.filter(asset => asset.data.type === "image") || [],
+    vectors: brandAssets.value.filter(asset => asset.data.type === "vector") || [],
+    documents: brandAssets.value.filter(asset => asset.data.type === "document") || [],
+    fonts: brandAssets.value.filter(asset => asset.data.type === "font") || [],
+    colors: brandAssets.value.filter(asset => asset.data.type === "color") || []
   };
 });
 </script>
@@ -69,16 +84,21 @@ const assetsCount = computed(() => {
         <InputFloating id="search" v-model.trim="filters.search" type="search" icon="lucide:search" placeholder="Search for assets" />
       </UContainer>
     </div>
-    <div class="py-10 px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-wrap gap-3 items-center mb-4">
-        <h2 class="text-2xl font-bold">Colors</h2>
-        <USeparator orientation="vertical" class="h-6" />
-        <p class="text-muted-foreground text-sm">{{ assetsCount.colors }} Assets</p>
+    <template v-for="(assets, type) in assetsData" :key="type">
+      <div v-if="assets.length" class="py-10 px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap gap-3 items-center mb-4">
+          <h2 class="text-2xl font-bold">{{ type }}</h2>
+          <USeparator orientation="vertical" class="h-6" />
+          <p class="text-muted-foreground text-sm">{{ assets.length }} Assets</p>
+        </div>
+        <div v-if="type === 'images'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+          <CardImage v-for="asset of assets" :key="asset.uuid" :asset="asset" />
+        </div>
+        <div v-if="type === 'colors'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+          <CardColor v-for="asset of assets" :key="asset.uuid" :asset="asset" />
+        </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
-        <CardColor v-for="asset of brand.assets" :key="asset.uuid" :asset="asset" />
-      </div>
-    </div>
+    </template>
     <AdminToolbar v-if="isAdmin" v-model="brand" />
   </main>
 </template>

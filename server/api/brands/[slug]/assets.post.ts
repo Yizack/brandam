@@ -59,6 +59,30 @@ export default defineEventHandler(async (event) => {
     };
   });
 
-  const asset = await DB.insert(tables.assets).values(values).returning().get();
-  return asset;
+  const assets = await DB.insert(tables.assets).values(values).returning().all();
+
+  if (!assets) {
+    throw createError({
+      statusCode: ErrorCode.INTERNAL_SERVER_ERROR,
+      message: "Failed to create assets"
+    });
+  }
+
+  if (files && files.length > 0) {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const asset = assets[i];
+
+      if (file && asset) {
+        await hubBlob().put(`/assets/${asset.uuid}`, file, {
+          contentType: file.type,
+          prefix: "uploads",
+          customMetadata: {
+            brandId: brand.id.toString(),
+            userId: user.id.toString()
+          }
+        });
+      }
+    }
+  }
 });

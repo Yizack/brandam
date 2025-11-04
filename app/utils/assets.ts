@@ -11,3 +11,7 @@ export const enum AssetStep {
   DETAILS = 1,
   REVIEW = 2
 }
+
+export const getAssetImage = (uuid: string) => {
+  return `${SITE.cdn}/uploads/assets/${uuid}`;
+};

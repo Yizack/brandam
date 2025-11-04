@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { data: brands } = await useFetch("/api/brands");
+definePageMeta({ middleware: "session" });
+
+const { data: brands, refresh } = await useFetch("/api/brands");
 
 const toast = useToast();
 
@@ -24,6 +26,7 @@ const createBrand = async () => {
     form.reset();
     closeCreate.value = false;
     toast.add({ title: SITE.name, description: "Your brand has been created", color: "success" });
+    refresh();
   }).catch(() => {}).finally(() => {
     loading.value = false;
   });
