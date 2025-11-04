@@ -1,3 +1,5 @@
+import { SITE } from "../shared/utils/site";
+
 export default defineNuxtConfig({
   // future: { compatibilityVersion: 5 },
   devtools: { enabled: true },
@@ -6,7 +8,7 @@ export default defineNuxtConfig({
     head: {
       charset: "utf-8",
       viewport: "width=device-width, initial-scale=1",
-      title: "",
+      title: SITE.name,
       htmlAttrs: {
         lang: "en"
       },
@@ -64,7 +66,9 @@ export default defineNuxtConfig({
     storageKey: "nuxt-color-mode"
   },
 
-  site: { url: "" },
+  site: {
+    url: SITE.url
+  },
 
   nitro: {
     prerender: {
@@ -133,5 +137,20 @@ export default defineNuxtConfig({
     fonts: false
   },
 
-  compatibilityDate: "2025-11-03"
+  typescript: {
+    nodeTsConfig: {
+      include: [
+        "../test/**/*",
+        "../shared/**/*.d.ts"
+      ]
+    }
+  },
+
+  compatibilityDate: "2025-11-03",
+
+  $env: {
+    test: {
+      hub: { dir: ".data/test" }
+    }
+  }
 });
