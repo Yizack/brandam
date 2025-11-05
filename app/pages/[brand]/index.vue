@@ -2,17 +2,23 @@
 import type { TabsItem } from "@nuxt/ui";
 
 const route = useRoute("brand");
-const { data: brand } = await useFetch(`/api/brands/${route.params.brand}`, {
+
+const { data } = await useFetch(`/api/brands/${route.params.brand}`, {
   key: `brands:${route.params.brand}`
 });
 
-if (!brand.value) {
+if (!data.value) {
   throw createError({
     statusCode: 404,
-    message: "The requested brand does not exist.",
-    fatal: true
+    message: "The requested brand does not exist."
   });
 }
+
+const brandStore = useBrandStore();
+brandStore.setup(data.value);
+
+const brand = computed(() => brandStore.brand);
+const assets = computed(() => brandStore.assets);
 
 const items: TabsItem[] = [
   { label: "All", value: "all", icon: "lucide:grid-2x2" },
@@ -29,34 +35,29 @@ const filters = ref({
   search: ""
 });
 
-const isAdmin = computed(() => {
-  return brand.value?.roleId === MemberRole.ADMIN || brand.value?.roleId === MemberRole.OWNER;
-});
+const isAdmin = computed(() => data.value?.roleId === MemberRole.ADMIN || data.value?.roleId === MemberRole.OWNER);
 
 const brandAssets = computed(() => {
-  let assets = brand.value?.assets || [];
+  let assetsList = assets.value;
 
   if (filters.value.section !== "all") {
-    assets = assets.filter(asset => asset.data.type === filters.value.section);
+    assetsList = assetsList.filter(asset => asset.data.type === filters.value.section);
   }
 
   if (filters.value.search) {
     const searchLower = filters.value.search.toLowerCase();
-    assets = assets.filter(asset => asset.name.toLowerCase().includes(searchLower));
+    assetsList = assetsList.filter(asset => asset.name.toLowerCase().includes(searchLower));
   }
 
-  return assets;
+  return assetsList;
 });
 
-const assetsData = computed(() => {
-  return {
-    images: brandAssets.value.filter(asset => asset.data.type === "image") || [],
-    vectors: brandAssets.value.filter(asset => asset.data.type === "vector") || [],
-    documents: brandAssets.value.filter(asset => asset.data.type === "document") || [],
-    fonts: brandAssets.value.filter(asset => asset.data.type === "font") || [],
-    colors: brandAssets.value.filter(asset => asset.data.type === "color") || []
-  };
-});
+const assetsData = computed(() =>
+  assetTypes.map(type => ({
+    type: type.name.plural,
+    values: brandAssets.value.filter(asset => asset.data.type === type.value)
+  }))
+);
 </script>
 
 <template>
@@ -69,7 +70,7 @@ const assetsData = computed(() => {
             <p v-if="brand.description" class="mt-3">{{ brand.description }}</p>
           </div>
           <div class="flex flex-wrap gap-3">
-            <p>{{ brand.assets.length }} Assets</p>
+            <p>{{ assets.length }} Assets</p>
             <USeparator color="neutral" orientation="vertical" class="h-6" />
             <ULink class="flex items-center gap-1 text-inverted hover:text-inverted/80 hover:underline">
               <Icon name="lucide:share" />
@@ -84,16 +85,18 @@ const assetsData = computed(() => {
         <InputFloating id="search" v-model.trim="filters.search" type="search" icon="lucide:search" placeholder="Search for assets" />
       </UContainer>
     </div>
-    <template v-for="(assets, type) in assetsData" :key="type">
-      <div v-if="assets.length" class="py-10 px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-wrap gap-3 items-center mb-4">
-          <h2 class="text-2xl font-bold">{{ type }}</h2>
-          <USeparator orientation="vertical" class="h-6" />
-          <p class="text-muted-foreground text-sm">{{ assets.length }} Assets</p>
+    <div class="py-10 px-4 sm:px-6 lg:px-8 flex flex-col gap-10">
+      <template v-for="(assetsByType, i) of assetsData" :key="i">
+        <div v-if="assetsByType.values.length">
+          <div class="flex flex-wrap gap-3 items-center mb-4">
+            <h2 class="text-2xl font-bold">{{ assetsByType.type }}</h2>
+            <USeparator orientation="vertical" class="h-6" />
+            <p class="text-muted-foreground text-sm">{{ assetsByType.values.length }} Assets</p>
+          </div>
+          <AssetsCard :assets="assetsByType.values" />
         </div>
-        <AssetsCard :assets="assets" :brand="brand.slug" />
-      </div>
-    </template>
-    <AdminToolbar v-if="isAdmin" v-model="brand" />
+      </template>
+    </div>
+    <AdminToolbar v-if="isAdmin" />
   </main>
 </template>

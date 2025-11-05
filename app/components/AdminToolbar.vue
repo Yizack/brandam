@@ -1,10 +1,3 @@
-<script setup lang="ts">
-const model = defineModel<BrandamBrand & {
-  assets: BrandamAsset[];
-  roleId?: BrandamMember["roleId"];
-}>({ required: true });
-</script>
-
 <template>
   <div :style="{ height: '48px' }">
     <div class="fixed w-full bottom-0 z-50 light:bg-slate-900/80 dark:bg-slate-950/80 text-white backdrop-blur-sm">
@@ -14,8 +7,8 @@ const model = defineModel<BrandamBrand & {
           <span class="font-medium">Admin Mode</span>
         </div>
         <div class="flex items-center gap-3">
-          <ToolbarBrand v-model="model" />
-          <ToolbarAssets v-model="model" />
+          <ToolbarBrand />
+          <ToolbarAssets />
         </div>
       </UContainer>
     </div>

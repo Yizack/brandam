@@ -1,1 +1,1 @@
-export { useTimeAgo } from "@vueuse/core";
+export { useTimeAgo, useMagicKeys } from "@vueuse/core";

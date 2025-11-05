@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import type { StepperItem } from "@nuxt/ui";
 
-const toast = useToast();
-
-const model = defineModel<BrandamBrand & {
-  assets: BrandamAsset[];
-  roleId?: BrandamMember["roleId"];
-}>({ required: true });
+const brandStore = useBrandStore();
 
 const isAssetOpen = ref(false);
 const assetStep = ref(0);
@@ -21,7 +16,6 @@ const assetStepper: StepperItem[] = [
 ];
 
 const form = useFormState({
-  brandId: model.value.id,
   items: [] as {
     name: string;
     description: string;
@@ -73,26 +67,30 @@ const assetNext = () => {
 };
 
 const addAsset = async () => {
-  const payload = new FormData();
-  const items = form.value.items.map(({ file, ...item }) => ({ ...item }));
-  payload.append("payload", JSON.stringify({ brandId: model.value.id, items }));
-  for (const item of form.value.items) {
-    if (!(item.file instanceof File)) continue;
-    payload.append("files", item.file);
-  }
   isLoading.value = true;
-  $fetch(`/api/brands/${model.value.name}/assets`, {
-    method: "POST",
-    body: payload
-  }).then(() => {
-    toast.add({ title: SITE.name, description: "Asset added successfully.", color: "success" });
-  }).catch(() => {}).finally(() => {
-    isLoading.value = false;
-    isAssetOpen.value = false;
-    assetStep.value = 0;
-    form.value.items = [];
-  });
+  brandStore.addAssets(form.value.items)
+    .catch(() => {})
+    .finally(() => {
+      isLoading.value = false;
+      isAssetOpen.value = false;
+      assetStep.value = 0;
+      form.value.items = [];
+    });
 };
+
+const isInitialStep = computed(() => assetStep.value < AssetStep.REVIEW);
+const isStepping = computed(() => assetStep.value > AssetStep.TYPE && assetStep.value < assetStepper.length - 1);
+const isSubmittable = computed(() => assetStep.value === assetStepper.length - 1);
+
+const { enter } = useMagicKeys();
+
+if (enter) {
+  watch(enter, (v) => {
+    if (v && isSubmittable.value) {
+      addAsset();
+    }
+  });
+}
 </script>
 
 <template>
@@ -101,7 +99,7 @@ const addAsset = async () => {
     <template #body>
       <UStepper ref="stepper" v-model="assetStep" :items="assetStepper" size="sm" class="w-full" disabled />
       <USeparator class="my-6" />
-      <form ref="assetForm" @submit.prevent="addAsset">
+      <form ref="assetForm" @submit.prevent="isSubmittable ? addAsset() : assetNext()">
         <template v-if="assetStep === AssetStep.TYPE">
           <p class="text-sm mb-4">Select the type of asset to continue.</p>
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-2">
@@ -117,9 +115,9 @@ const addAsset = async () => {
         <ToolbarAssetsColor v-if="assetType === 'color'" v-model="form.items" :step="assetStep" />
         <USeparator class="my-4" />
         <div class="grid gap-2" :class="{ 'grid-cols-2': assetStep > 0 }">
-          <UButton :label="assetStep < AssetStep.REVIEW ? 'Cancel' : 'Back'" color="error" size="xl" variant="subtle" class="justify-center rounded-lg" @click="assetPrev" />
-          <UButton v-if="assetStep > AssetStep.TYPE && assetStep < assetStepper.length - 1" label="Continue" color="secondary" size="xl" variant="subtle" class="justify-center rounded-lg" @click="assetNext" />
-          <UButton v-if="assetStep === assetStepper.length - 1" size="xl" variant="subtle" type="submit" class="justify-center rounded-lg" :loading="isLoading">
+          <UButton :label="isInitialStep ? 'Cancel' : 'Back'" color="error" size="xl" variant="subtle" class="justify-center rounded-lg" @click="assetPrev" />
+          <UButton v-if="isStepping" type="submit" label="Continue" color="secondary" size="xl" variant="subtle" class="justify-center rounded-lg" />
+          <UButton v-if="isSubmittable" type="submit" size="xl" variant="subtle" class="justify-center rounded-lg" :loading="isLoading">
             <span v-if="!isLoading">Submit</span>
           </UButton>
         </div>

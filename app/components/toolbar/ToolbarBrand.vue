@@ -1,20 +1,19 @@
 <script setup lang="ts">
-/* Brand Settings */
-const toast = useToast();
 const loading = ref(false);
 
-const model = defineModel<BrandamBrand>({ required: true });
+const brandStore = useBrandStore();
+const { brand } = storeToRefs(brandStore);
 
 const brandForm = useFormState({
-  name: model.value.name,
-  description: model.value.description || "",
-  slug: model.value.slug
+  name: brand.value.name,
+  description: brand.value.description || "",
+  slug: brand.value.slug
 });
 
 const brandHasChanges = computed(() => {
-  return brandForm.value.name !== model.value.name
-    || brandForm.value.description !== (model.value.description || "")
-    || brandForm.value.slug !== model.value.slug;
+  return brandForm.value.name !== brand.value.name
+    || brandForm.value.description !== (brand.value.description || "")
+    || brandForm.value.slug !== brand.value.slug;
 });
 
 const isBrandOpen = ref(false);
@@ -26,14 +25,9 @@ const onCloseBrand = () => {
 
 const editBrand = async () => {
   loading.value = true;
-  $fetch(`/api/brands/${model.value.slug}`, {
-    method: "PATCH",
-    body: brandForm.value
-  }).then(() => {
-    model.value = { ...model.value, ...brandForm.value };
+  brandStore.updateBrand(brandForm.value).then(() => {
     brandForm.update(brandForm.value);
     isBrandOpen.value = false;
-    toast.add({ title: SITE.name, description: "Brand settings updated", color: "success" });
   }).catch(() => {}).finally(() => {
     loading.value = false;
   });

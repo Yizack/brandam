@@ -31,7 +31,8 @@ export default defineNuxtConfig({
     "@nuxthub/core",
     "@nuxt/ui",
     "@nuxtjs/turnstile",
-    "nuxt-auth-utils"
+    "nuxt-auth-utils",
+    "@pinia/nuxt"
   ],
 
   hub: { database: true, blob: true, cache: true, workers: true },
