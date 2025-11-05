@@ -91,12 +91,7 @@ const assetsData = computed(() => {
           <USeparator orientation="vertical" class="h-6" />
           <p class="text-muted-foreground text-sm">{{ assets.length }} Assets</p>
         </div>
-        <div v-if="type === 'images'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
-          <CardImage v-for="asset of assets" :key="asset.uuid" :asset="asset" />
-        </div>
-        <div v-if="type === 'colors'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
-          <CardColor v-for="asset of assets" :key="asset.uuid" :asset="asset" />
-        </div>
+        <AssetsCard :assets="assets" :brand="brand.slug" />
       </div>
     </template>
     <AdminToolbar v-if="isAdmin" v-model="brand" />

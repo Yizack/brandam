@@ -2,8 +2,7 @@
 const toast = useToast();
 
 onBeforeMount(() => {
-  // eslint-disable-next-line no-global-assign
-  $fetch = $fetch.create({
+  globalThis.$fetch = $fetch.create({
     onResponseError: ({ response }) => {
       const description = response.status === 500 ? "error_any" : response._data.message;
       toast.add({ title: SITE.name, description, color: "error" });

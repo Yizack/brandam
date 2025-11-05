@@ -24,13 +24,14 @@ declare global {
     createdAt: number;
     updatedAt: number;
   }
+  type BrandamAssetTypes = "image" | "vector" | "document" | "font" | "color";
   interface BrandamAsset {
     uuid: string;
     name: string;
     description: string | null;
     data: |
       {
-        type: "image" | "vector" | "document" | "font";
+        type: BrandamAssetTypes;
         content?: string;
         metadata?: {
           size: number;
