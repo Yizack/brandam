@@ -3,11 +3,14 @@ export const useBrandStore = defineStore("brand", () => {
 
   const brand = ref() as Ref<BrandamBrand>;
   const assets = ref<BrandamAsset[]>([]);
+  const roleId = ref<MemberRole>();
+  const isAdmin = computed(() => roleId.value === MemberRole.ADMIN || roleId.value === MemberRole.OWNER);
 
-  const setup = (data: BrandamBrandWithAssets) => {
-    const { assets: assetsData, ...brandData } = data;
+  const setup = (data: BrandamBrandWithAssets & { roleId?: MemberRole }) => {
+    const { assets: assetsData, roleId: roleIdData, ...brandData } = data;
     brand.value = brandData;
     assets.value = assetsData;
+    roleId.value = roleIdData;
   };
 
   const updateBrand = async (data: Partial<BrandamBrand>) => {
@@ -16,16 +19,25 @@ export const useBrandStore = defineStore("brand", () => {
       body: data
     }).then(() => {
       brand.value = { ...brand.value, ...data };
-      toast.add({ title: SITE.name, description: "Brand settings updated", color: "success" });
+      toast.add({
+        title: SITE.name,
+        description: "Brand settings updated",
+        color: "success"
+      });
     });
   };
 
-  const deleteAsset = async (uuid: string) => {
-    return $fetch(`/api/brands/${brand.value.slug}/assets/${uuid}`, {
+  const deleteAsset = async (asset: BrandamAsset) => {
+    if (!confirm("Are you sure you want to delete this asset? This action cannot be undone.")) return;
+    return $fetch(`/api/brands/${brand.value.slug}/assets/${asset.uuid}`, {
       method: "DELETE"
     }).then(() => {
-      assets.value = assets.value.filter(asset => asset.uuid !== uuid);
-      toast.add({ title: "Asset Deleted", description: "The asset has been successfully deleted.", color: "success" });
+      assets.value = assets.value.filter(a => a.uuid !== asset.uuid);
+      toast.add({
+        title: SITE.name,
+        description: "The asset has been successfully deleted",
+        color: "success"
+      });
     });
   };
 
@@ -49,16 +61,37 @@ export const useBrandStore = defineStore("brand", () => {
       body: payload
     }).then((newAssets) => {
       assets.value.push(...newAssets);
-      toast.add({ title: SITE.name, description: "Asset added successfully.", color: "success" });
+      toast.add({
+        title: SITE.name,
+        description: "Asset added successfully",
+        color: "success"
+      });
+    });
+  };
+
+  const downloadAsset = (asset: BrandamAsset) => {
+    if (asset.data.type === "color" || !asset.data.metadata) return;
+    const link = document.createElement("a");
+    link.href = getAssetImage(asset.uuid);
+    link.download = asset.name + "." + getFileExtension(asset.data.metadata.mimetype);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.add({
+      title: SITE.name,
+      description: "Downloaded asset",
+      color: "success"
     });
   };
 
   return {
     brand,
     assets,
+    isAdmin,
     setup,
     updateBrand,
     deleteAsset,
-    addAssets
+    addAssets,
+    downloadAsset
   };
 });

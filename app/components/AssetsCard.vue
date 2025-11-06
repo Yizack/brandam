@@ -7,23 +7,38 @@ defineProps<{
 
 const brandStore = useBrandStore();
 
-const getItems = (uuid: string): DropdownMenuItem[][] => [
-  [
-    { label: "Download", icon: "lucide:download" },
-    { label: "Share", icon: "lucide:share-2" }
-  ],
-  [
-    {
-      label: "Delete",
-      color: "error",
-      icon: "i-lucide-trash",
+const getItems = (asset: BrandamAsset): DropdownMenuItem[][] => {
+  const dropdownItems: DropdownMenuItem[][] = [
+    [{ label: "Share", icon: "lucide:share-2" }]
+  ];
+
+  const mainItems = dropdownItems[0]!;
+
+  if (asset.data.type !== "color") {
+    mainItems.unshift({
+      label: "Download",
+      icon: "lucide:download",
       onClick: () => {
-        if (!confirm("Are you sure you want to delete this asset? This action cannot be undone.")) return;
-        brandStore.deleteAsset(uuid).catch(() => {});
+        brandStore.downloadAsset(asset);
       }
-    }
-  ]
-];
+    });
+  }
+
+  if (brandStore.isAdmin) {
+    dropdownItems.push([
+      {
+        label: "Delete",
+        color: "error",
+        icon: "i-lucide-trash",
+        onClick: () => {
+          brandStore.deleteAsset(asset).catch(() => {});
+        }
+      }
+    ]);
+  }
+
+  return dropdownItems;
+};
 
 const hoveredAsset = ref<string>();
 const dropdownAsset = ref<string>();
@@ -35,25 +50,30 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
     <div v-for="asset of assets" :key="asset.uuid">
       <UModal :title="asset.name" :description="asset.data.content">
         <div class="bg-muted rounded-lg border-2 border-accented overflow-hidden cursor-pointer h-full flex flex-col transition-transform duration-200" @mouseenter="hoveredAsset = asset.uuid" @mouseleave="hoveredAsset = undefined">
-          <div class="h-35 border-b border-muted relative">
-            <img
-              v-if="asset.data.type === 'image'"
-              :src="getAssetImage(asset.uuid)"
-              :alt="asset.name"
-              class="w-full h-full object-cover duration-300"
-              :class="{ 'brightness-25': isActive(asset.uuid) }"
-            >
-            <div
-              class="w-full h-full absolute top-0 left-0 duration-300"
-              :class="{ 'brightness-25': isActive(asset.uuid) }"
-              :style="{ backgroundColor: asset.data.content }"
-            />
-            <div v-if="isActive(asset.uuid)" class="flex w-full h-full items-center justify-center text-white duration-300 absolute top-0 left-0">
-              <p>View</p>
+          <div class="h-35 border-b border-muted relative bg-accented">
+            <div class="size-full relative">
+              <img
+                v-if="['image', 'vector'].includes(asset.data.type)"
+                :src="getAssetImage(asset.uuid)"
+                :alt="asset.name"
+                class="mx-auto center h-full"
+              >
+              <div
+                v-else
+                :style="{ backgroundColor: asset.data.content }"
+                class="size-full"
+              />
+              <div
+                class="absolute inset-0 bg-black duration-300"
+                :class="isActive(asset.uuid) ? 'opacity-75' : 'opacity-0'"
+              />
             </div>
+            <span v-if="isActive(asset.uuid)" class="absolute inset-0 flex items-center justify-center text-white font-medium">
+              View
+            </span>
             <UDropdownMenu
               v-if="isActive(asset.uuid)"
-              :items="getItems(asset.uuid)"
+              :items="getItems(asset)"
               :ui="{ content: `w-48` }"
               @update:open="dropdownAsset = $event ? asset.uuid : undefined"
             >
@@ -67,7 +87,17 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
             </UDropdownMenu>
           </div>
           <div class="py-3 px-4">
-            <h3 class="text-lg font-semibold">{{ asset.name }}</h3>
+            <div class="flex justify-between gap-2">
+              <p class="text-lg font-semibold truncate">{{ asset.name }}</p>
+              <UBadge
+                v-if="asset.data.type !== 'color' && asset.data.metadata?.mimetype"
+                color="neutral"
+                class="uppercase"
+                variant="subtle"
+              >
+                {{ getFileExtension(asset.data.metadata?.mimetype) }}
+              </UBadge>
+            </div>
             <p class="text-sm text-muted-foreground truncate">{{ asset.data.content }}</p>
           </div>
         </div>

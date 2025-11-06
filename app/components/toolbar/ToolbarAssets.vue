@@ -31,14 +31,9 @@ const selectAssetType = (type: BrandamAsset["data"]["type"]) => {
   if (form.value.items.length !== 0) return;
   switch (type) {
     case "color":
-      form.value.items.push({ name: "", description: "", type: "color", content: "#FFFFFF" });
+      form.value.items.push({ name: "", description: "", type, content: "#FFFFFF" });
       break;
-    case "font":
-    case "image":
-      form.value.items.push({ name: "", description: "", type: "image", file: undefined });
-      break;
-    case "vector":
-    case "document":
+    default:
       form.value.items.push({ name: "", description: "", type, file: undefined });
       break;
   }
@@ -111,8 +106,8 @@ if (enter) {
             </div>
           </div>
         </template>
-        <ToolbarAssetsImage v-if="assetType === 'image'" v-model="form.items" :step="assetStep" />
         <ToolbarAssetsColor v-if="assetType === 'color'" v-model="form.items" :step="assetStep" />
+        <ToolbarAssetsFiles v-else-if="assetType" v-model="form.items" :step="assetStep" :type="assetType" />
         <USeparator class="my-4" />
         <div class="grid gap-2" :class="{ 'grid-cols-2': assetStep > 0 }">
           <UButton :label="isInitialStep ? 'Cancel' : 'Back'" color="error" size="xl" variant="subtle" class="justify-center rounded-lg" @click="assetPrev" />

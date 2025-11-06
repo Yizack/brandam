@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   step: number;
+  type: Exclude<BrandamAssetTypes, "color">;
 }>();
 
 const model = defineModel<{
@@ -9,22 +10,42 @@ const model = defineModel<{
   type: string;
   file?: File;
 }[]>({ required: true });
+
+const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, { accept: string, description: string }> = {
+  image: {
+    description: "PNG, JPG or GIF",
+    accept: "image/png, image/jpeg, image/gif"
+  },
+  vector: {
+    description: "SVG, AI, EPS",
+    accept: "image/svg+xml, application/pdf, application/postscript"
+  },
+  document: {
+    description: "PDF, DOCX, TXT",
+    accept: "application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, text/plain"
+  },
+  font: {
+    description: "TTF, OTF, WOFF",
+    accept: "font/ttf, font/otf, font/woff"
+  }
+};
 </script>
 
 <template>
   <div v-if="step === AssetStep.DETAILS">
-    <p class="text-sm mb-4">Add your brand image.</p>
+    <p class="text-sm mb-4">Add your brand {{ type }}.</p>
     <div class="flex flex-col gap-2">
       <TransitionGroup name="expand-200">
         <div v-for="(item, i) of model" :key="i" class="flex flex-col items-center gap-2">
           <UFileUpload
             v-model="item.file"
             label="Drop your image here"
-            description="SVG, PNG, JPG or GIF (max. 2MB)"
+            :description="uploadConstraints[type].description"
             class="w-full rounded-lg border-2 border-dashed h-full hover:border-secondary transition-colors"
             :class="item.file ? 'border-secondary' : 'border-accented'"
             position="inside"
             layout="list"
+            :accept="uploadConstraints[type].accept"
           />
           <InputFloating id="name" v-model.trim="item.name" type="text" class="w-full" placeholder="Name" autocomplete="off" required />
           <InputFloating id="description" v-model.trim="item.description" type="text" class="w-full" placeholder="Description" autocomplete="off" />
@@ -34,7 +55,7 @@ const model = defineModel<{
     </div>
   </div>
   <div v-else-if="step === AssetStep.REVIEW">
-    <p class="text-sm mb-4">Review your brand images before submitting.</p>
+    <p class="text-sm mb-4">Review your brand {{ type }} before submitting.</p>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 items-center">
       <div v-for="(item, i) of model" :key="i" class="h-full">
         <div class="p-4 bg-muted border border-muted rounded-lg h-full">

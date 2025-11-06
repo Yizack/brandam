@@ -35,8 +35,6 @@ const filters = ref({
   search: ""
 });
 
-const isAdmin = computed(() => data.value?.roleId === MemberRole.ADMIN || data.value?.roleId === MemberRole.OWNER);
-
 const brandAssets = computed(() => {
   let assetsList = assets.value;
 
@@ -95,8 +93,9 @@ const assetsData = computed(() =>
           </div>
           <AssetsCard :assets="assetsByType.values" />
         </div>
+        <hr v-if="assetsByType.values.length && i < assetsData.length - 1" class="border-muted">
       </template>
     </div>
-    <AdminToolbar v-if="isAdmin" />
+    <AdminToolbar v-if="brandStore.isAdmin" />
   </main>
 </template>
