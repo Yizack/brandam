@@ -83,9 +83,8 @@ const { enter } = useMagicKeys();
 
 if (enter) {
   watch(enter, (v) => {
-    if (v && isSubmittable.value) {
-      addAsset();
-    }
+    if (!v && !isSubmittable.value) return;
+    addAsset();
   });
 }
 </script>

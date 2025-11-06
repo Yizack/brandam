@@ -1,15 +1,24 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   asset: BrandamAsset;
 }>();
 
 const brandStore = useBrandStore();
 
-const { copy, copied } = useClipboard();
+const assetCardUrl = `${SITE.url}/${brandStore.brand.slug}?asset=${props.asset.uuid}`;
+
+const route = useRoute("brand");
+const open = ref(route.query.asset === props.asset.uuid);
+
+watch(open, (value) => {
+  if (value) return;
+  const router = useRouter();
+  router.replace({ query: undefined });
+});
 </script>
 
 <template>
-  <UModal :title="asset.name" scrollable :ui="{ content: 'max-w-7xl' }" :close="{ variant: 'outline', class: 'rounded-full' }">
+  <UModal v-model:open="open" :title="asset.name" scrollable :ui="{ content: 'max-w-7xl' }" :close="{ variant: 'outline', class: 'rounded-full' }">
     <slot />
     <template v-if="asset.data.type !== 'color'" #actions>
       <div class="ms-auto me-8 flex gap-2">
@@ -33,52 +42,78 @@ const { copy, copied } = useClipboard();
         <div v-else class="h-48 rounded-lg" :style="{ backgroundColor: asset.data.content }" />
         <div class="text-sm space-y-4">
           <div v-if="asset.description" class="space-y-2">
-            <h3 class="font-semibold uppercase">Description</h3>
+            <h3 class="font-bold uppercase">Description</h3>
             <p>{{ asset.description }}</p>
+          </div>
+          <div v-if="asset.data.type === 'color' && asset.data.content" class="space-y-2">
+            <h3 class="font-bold uppercase">Color Values</h3>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-2 bg-muted rounded border border-accented overflow-hidden">
+                <div class="flex items-center gap-2">
+                  <span class="text-center uppercase font-medium p-2 bg-accented w-18 border-e border-e-accented">HEX</span>
+                  <span class="font-mono">{{ asset.data.content }}</span>
+                </div>
+                <CopyButton :value="asset.data.content!" />
+              </div>
+              <div class="flex items-center justify-between gap-2 bg-muted rounded border border-accented">
+                <div class="flex items-center gap-2">
+                  <span class="text-center uppercase font-medium p-2 bg-accented w-18 border-e border-e-accented">RGB</span>
+                  <span class="font-mono">{{ hexToRgb(asset.data.content) }}</span>
+                </div>
+                <CopyButton :value="hexToRgb(asset.data.content)" />
+              </div>
+              <div class="flex items-center justify-between gap-2 bg-muted rounded border border-accented">
+                <div class="flex items-center gap-2">
+                  <span class="text-center uppercase font-medium p-2 bg-accented w-18 border-e border-e-accented">CMYK</span>
+                  <span class="font-mono">{{ hexToCmyk(asset.data.content) }}</span>
+                </div>
+                <CopyButton :value="hexToCmyk(asset.data.content)" />
+              </div>
+            </div>
           </div>
           <div class="space-y-2">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               <template v-if="asset.data.type !== 'color' && asset.data.metadata">
                 <div v-if="asset.data.metadata.size">
-                  <p class="font-medium uppercase">Size</p>
+                  <p class="font-bold uppercase">Size</p>
                   <p>{{ formatFileSize(asset.data.metadata.size) }}</p>
                 </div>
                 <div v-if="asset.data.metadata.mimetype">
-                  <p class="font-medium uppercase">Format</p>
+                  <p class="font-bold uppercase">Format</p>
                   <p class="uppercase">{{ getFileExtension(asset.data.metadata.mimetype) }}</p>
                 </div>
                 <div v-if="asset.data.metadata.width && asset.data.metadata.height">
-                  <p class="font-medium uppercase">Dimensions</p>
+                  <p class="font-bold uppercase">Dimensions</p>
                   <p>{{ asset.data.metadata.width }} × {{ asset.data.metadata.height }} px</p>
                 </div>
               </template>
-              <div v-if="asset.data.type === 'color'">
-                <p class="font-medium uppercase">Color</p>
-                <div class="flex items-center gap-2">
-                  <div class="w-6 h-6 rounded border border-border" :style="{ backgroundColor: asset.data.content }" />
-                  <p class="uppercase">{{ asset.data.content }}</p>
-                </div>
-              </div>
               <div>
-                <p class="font-medium uppercase">Created</p>
-                <NuxtTime :datetime="asset.createdAt" title />
+                <p class="font-bold uppercase">Created</p>
+                <NuxtTime
+                  :datetime="asset.createdAt"
+                  year="numeric"
+                  month="long"
+                  day="numeric"
+                  hour="2-digit"
+                  minute="2-digit"
+                  title
+                />
               </div>
             </div>
           </div>
           <div class="space-y-2">
-            <h3 class="font-semibold uppercase">Asset Key</h3>
+            <h3 class="font-bold uppercase">Asset Key</h3>
             <div class="flex items-center gap-2">
-              <UInput :value="asset.uuid" class="w-full font-mono" :ui="{ trailing: 'pr-0.5' }" readonly>
+              <span class="font-mono">{{ asset.uuid }}</span>
+              <CopyButton :value="asset.uuid" />
+            </div>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-bold uppercase">Link to asset card</h3>
+            <div class="flex items-center gap-2">
+              <UInput :value="assetCardUrl" class="w-full font-mono" :ui="{ trailing: 'pr-0.5' }" readonly>
                 <template #trailing>
-                  <UTooltip text="Copy to clipboard" :content="{ side: 'top' }">
-                    <UButton
-                      :color="copied ? 'success' : 'neutral'"
-                      variant="link"
-                      :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
-                      aria-label="Copy to clipboard"
-                      @click="copy(asset.uuid)"
-                    />
-                  </UTooltip>
+                  <CopyButton :value="assetCardUrl" />
                 </template>
               </UInput>
             </div>

@@ -28,10 +28,11 @@ export const getImageDimensions = (file: File) => {
   });
 };
 
-export const formatFileSize = (bytes: number): string => {
+export const formatFileSize = (bytes: number, decimals: number = 2): string => {
   if (bytes === 0) return "0 B";
   const k = 1024;
   const sizes = ["B", "KB", "MB", "GB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${Math.round(bytes / Math.pow(k, i))} ${sizes[i]}`;
+  const value = bytes / Math.pow(k, i);
+  return `${value % 1 === 0 ? value : value.toFixed(decimals)} ${sizes[i]}`;
 };
