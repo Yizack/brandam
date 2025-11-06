@@ -35,6 +35,8 @@ declare global {
         content?: string;
         metadata?: {
           size: number;
+          width?: number;
+          height?: number;
           mimetype: string;
         } | undefined;
       } | {

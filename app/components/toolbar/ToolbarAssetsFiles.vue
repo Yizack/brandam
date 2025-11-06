@@ -9,6 +9,8 @@ const model = defineModel<{
   description: string;
   type: string;
   file?: File;
+  height?: number;
+  width?: number;
 }[]>({ required: true });
 
 const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, { accept: string, description: string }> = {
@@ -29,6 +31,19 @@ const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, { accept: s
     accept: "font/ttf, font/otf, font/woff"
   }
 };
+
+const setDimensions = (file: File | undefined, index: number) => {
+  if (!file) return;
+  getImageDimensions(file).then((dimensions) => {
+    const item = model.value[index];
+    if (item) {
+      item.width = dimensions.width;
+      item.height = dimensions.height;
+    }
+  }).catch(() => {
+    // Ignore errors
+  });
+};
 </script>
 
 <template>
@@ -46,6 +61,7 @@ const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, { accept: s
             position="inside"
             layout="list"
             :accept="uploadConstraints[type].accept"
+            @change="setDimensions(item.file, i)"
           />
           <InputFloating id="name" v-model.trim="item.name" type="text" class="w-full" placeholder="Name" autocomplete="off" required />
           <InputFloating id="description" v-model.trim="item.description" type="text" class="w-full" placeholder="Description" autocomplete="off" />

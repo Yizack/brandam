@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
 
   return {
     ...brand,
-    assets,
-    roleId: roleId ?? undefined
+    roleId: roleId ?? undefined,
+    assets
   };
 });

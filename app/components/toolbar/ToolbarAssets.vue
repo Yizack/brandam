@@ -22,6 +22,8 @@ const form = useFormState({
     type: BrandamAsset["data"]["type"];
     content?: string;
     file?: File;
+    height?: number;
+    width?: number;
   }[]
 });
 
