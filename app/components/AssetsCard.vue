@@ -9,7 +9,7 @@ const brandStore = useBrandStore();
 
 const getItems = (asset: BrandamAsset): DropdownMenuItem[][] => {
   const dropdownItems: DropdownMenuItem[][] = [
-    [{ label: "Share", icon: "lucide:share-2" }]
+    [{ label: "Share", icon: "lucide:arrow-big-right-dash" }]
   ];
 
   const mainItems = dropdownItems[0]!;
@@ -18,6 +18,7 @@ const getItems = (asset: BrandamAsset): DropdownMenuItem[][] => {
     mainItems.unshift({
       label: "Download",
       icon: "lucide:download",
+      color: "primary",
       onClick: () => {
         brandStore.downloadAsset(asset);
       }
@@ -48,7 +49,7 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
     <div v-for="asset of assets" :key="asset.uuid">
-      <UModal :title="asset.name" :description="asset.data.content">
+      <AssetsModal :asset="asset">
         <div class="bg-muted rounded-lg border-2 border-accented overflow-hidden cursor-pointer h-full flex flex-col transition-transform duration-200" @mouseenter="hoveredAsset = asset.uuid" @mouseleave="hoveredAsset = undefined">
           <div class="h-35 border-b border-muted relative bg-accented">
             <div class="size-full relative">
@@ -101,10 +102,7 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
             <p class="text-sm text-muted-foreground truncate">{{ asset.data.content }}</p>
           </div>
         </div>
-        <template #body>
-          {{ asset }}
-        </template>
-      </UModal>
+      </AssetsModal>
     </div>
   </div>
 </template>

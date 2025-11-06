@@ -25,7 +25,7 @@ const createBrand = async () => {
   }).then(() => {
     form.reset();
     closeCreate.value = false;
-    toast.add({ title: SITE.name, description: "Your brand has been created", color: "success" });
+    toast.add({ description: "Your brand has been created", color: "success" });
     refresh();
   }).catch(() => {}).finally(() => {
     loading.value = false;
@@ -43,7 +43,7 @@ useHead({
   <main class="p-6 md:p-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <BrandCard v-for="brand in brands" :key="brand.id" :brand="brand" />
-      <UModal v-model:open="closeCreate" title="Create Brand" description="Get started managing your brand assets." :close="{ color: 'primary', variant: 'outline', class: 'rounded-full' }" :dismissible="false">
+      <UModal v-model:open="closeCreate" title="Create Brand" description="Get started managing your brand assets." :close="{ variant: 'outline', class: 'rounded-full' }" :dismissible="false">
         <div class="light:bg-default dark:bg-muted rounded-lg border-2 border-dashed border-accented p-6 flex flex-col items-center justify-center text-center h-full hover:border-secondary transition-colors group">
           <div class="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4 group-hover:scale-[1.1] transition-transform">
             <Icon name="lucide:plus" size="1.5em" />

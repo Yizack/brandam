@@ -20,7 +20,6 @@ export const useBrandStore = defineStore("brand", () => {
     }).then(() => {
       brand.value = { ...brand.value, ...data };
       toast.add({
-        title: SITE.name,
         description: "Brand settings updated",
         color: "success"
       });
@@ -34,7 +33,6 @@ export const useBrandStore = defineStore("brand", () => {
     }).then(() => {
       assets.value = assets.value.filter(a => a.uuid !== asset.uuid);
       toast.add({
-        title: SITE.name,
         description: "The asset has been successfully deleted",
         color: "success"
       });
@@ -62,7 +60,6 @@ export const useBrandStore = defineStore("brand", () => {
     }).then((newAssets) => {
       assets.value.push(...newAssets);
       toast.add({
-        title: SITE.name,
         description: "Asset added successfully",
         color: "success"
       });
@@ -78,8 +75,7 @@ export const useBrandStore = defineStore("brand", () => {
     link.click();
     document.body.removeChild(link);
     toast.add({
-      title: SITE.name,
-      description: "Downloaded asset",
+      description: "Asset download started",
       color: "success"
     });
   };

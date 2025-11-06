@@ -91,7 +91,7 @@ if (enter) {
 </script>
 
 <template>
-  <UModal v-model:open="isAssetOpen" title="Add Asset" description="Add your brand asset." :close="{ color: 'primary', variant: 'outline', class: 'rounded-full' }" :dismissible="false">
+  <UModal v-model:open="isAssetOpen" title="Add Asset" description="Add your brand asset." :close="{ variant: 'outline', class: 'rounded-full' }" :dismissible="false">
     <UButton icon="lucide:plus" color="neutral" variant="soft" label="Add asset" class="rounded-lg" />
     <template #body>
       <UStepper ref="stepper" v-model="assetStep" :items="assetStepper" size="sm" class="w-full" disabled />

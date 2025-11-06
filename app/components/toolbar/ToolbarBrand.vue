@@ -35,7 +35,7 @@ const editBrand = async () => {
 </script>
 
 <template>
-  <UModal v-model:open="isBrandOpen" title="Edit Brand" description="Manage your brand settings." :close="{ color: 'primary', variant: 'outline', class: 'rounded-full' }" :dismissible="false" @close:prevent="onCloseBrand">
+  <UModal v-model:open="isBrandOpen" title="Edit Brand" description="Manage your brand settings." :close="{ variant: 'outline', class: 'rounded-full' }" :dismissible="false" @close:prevent="onCloseBrand">
     <UButton icon="lucide:cog" color="neutral" variant="soft" label="Brand Settings" class="rounded-lg" />
     <template #body>
       <form @submit.prevent="editBrand">

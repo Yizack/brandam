@@ -1,6 +1,6 @@
 import { extension } from "mime-types";
 
-export { useTimeAgo, useMagicKeys } from "@vueuse/core";
+export { useTimeAgo, useMagicKeys, useClipboard } from "@vueuse/core";
 
 export const getFileExtension = (mimetype: string): string => {
   return extension(mimetype) || "";
@@ -26,4 +26,12 @@ export const getImageDimensions = (file: File) => {
 
     img.src = url;
   });
+};
+
+export const formatFileSize = (bytes: number): string => {
+  if (bytes === 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${Math.round(bytes / Math.pow(k, i))} ${sizes[i]}`;
 };
