@@ -4,7 +4,8 @@
 
 <template>
   <div id="layout">
-    <NavbarHome />
+    <AppNavbar />
     <slot />
+    <AppFooter />
   </div>
 </template>

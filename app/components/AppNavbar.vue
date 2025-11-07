@@ -4,8 +4,6 @@ import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
 const { loggedIn, user, clear } = useUserSession();
 
 const route = useRoute();
-const fixedPaths = ["/"];
-const isFixedPath = computed(() => fixedPaths.includes(route.path));
 const isAppPath = computed(() => route.path.startsWith("/app"));
 
 const scrolled = ref(false);
@@ -19,8 +17,6 @@ onMounted(() => {
     scrolled.value = getScrolled();
   };
 });
-
-const isTransparent = computed(() => isFixedPath.value && !scrolled.value);
 
 const pages = computed<NavigationMenuItem[]>(() => {
   const initial: NavigationMenuItem[] = [
@@ -51,7 +47,7 @@ const logout = () => {
   if (isAppPath.value) navigateTo("/", { replace: true });
 };
 
-const userMenu = ref<DropdownMenuItem[][]>([
+const userMenu: DropdownMenuItem[][] = [
   [
     {
       label: "Settings",
@@ -66,13 +62,13 @@ const userMenu = ref<DropdownMenuItem[][]>([
       onSelect: logout
     }
   ]
-]);
+];
 </script>
 
 <template>
   <UHeader
     mode="modal"
-    class="w-full top-0 py-1 z-50 border-0 bg-default"
+    class="w-full top-0 py-1 z-50 border-0 backdrop-blur-sm"
   >
     <template #left>
       <ULink raw :to="isAppPath ? '/app' : '/'" class="text-xl font-bold hover:underline me-4">
@@ -83,7 +79,7 @@ const userMenu = ref<DropdownMenuItem[][]>([
     <UNavigationMenu
       :items="pages"
       color="neutral"
-      class="w-full md:inline hidden"
+      class="w-full"
     />
 
     <template #right>
@@ -107,7 +103,7 @@ const userMenu = ref<DropdownMenuItem[][]>([
         />
       </template>
       <UDropdownMenu v-else :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }">
-        <UButton icon="lucide:user" trailing-icon="lucide:chevron-down" :label="user.email" :variant="isTransparent ? 'solid' : 'soft'" color="primary" class="rounded-lg" />
+        <UButton icon="lucide:user" trailing-icon="lucide:chevron-down" :label="user.email" variant="soft" color="primary" class="rounded-lg" />
       </UDropdownMenu>
     </template>
 
@@ -117,6 +113,25 @@ const userMenu = ref<DropdownMenuItem[][]>([
         orientation="vertical"
         class="-mx-2.5"
       />
+      <template v-if="!loggedIn || !user">
+        <USeparator class="my-4" />
+        <UButton
+          label="Sign in"
+          color="neutral"
+          variant="outline"
+          to="/login"
+          class="inline-flex mb-2"
+          block
+        />
+
+        <UButton
+          label="Sign up"
+          color="neutral"
+          class="inline-flex"
+          to="/signup"
+          block
+        />
+      </template>
     </template>
   </UHeader>
 </template>
