@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "brandam",
+  "compatibility_date": "2025-11-06",
+  "main": "dist/server/index.mjs",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    {
+      "pattern": "brandam.yizack.com",
+      "custom_domain": true
+    }
+  ],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "dist/public"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "brandam",
+      "database_id": "f73c1d3a-dc8a-46f7-9c94-07fe8bbc6f5e",
+      "migrations_dir": "dist/database/migrations"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      "id": "30167240395b4e4c8b83bcd2f202835d",
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BLOB",
+      "bucket_name": "brandam"
+    }
+  ]
+}
