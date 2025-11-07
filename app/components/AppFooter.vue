@@ -42,7 +42,7 @@ const columns: FooterColumn[] = [
     class="h-px"
   />
 
-  <UFooter :ui="{ top: 'border-b border-default' }">
+  <UFooter :ui="{ top: 'border-b border-default', center: 'hidden', left: 'hidden' }">
     <template #top>
       <UContainer>
         <UFooterColumns :columns="columns">
