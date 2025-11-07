@@ -46,3 +46,14 @@ export const assets = sqliteTable("assets", {
 }, table => [
   index("assets_brand_id_idx").on(table.brandId)
 ]);
+
+export const domains = sqliteTable("domains", {
+  id: integer().primaryKey(),
+  name: text().notNull().unique(),
+  brandId: integer().notNull().references(() => brands.id, { onDelete: "cascade" }),
+  active: integer({ mode: "boolean" }).notNull().default(true),
+  createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
+  updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))
+}, table => [
+  index("domains_brand_id_idx").on(table.brandId)
+]);

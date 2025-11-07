@@ -22,6 +22,18 @@ CREATE TABLE `brands` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `brands_slug_unique` ON `brands` (`slug`);--> statement-breakpoint
+CREATE TABLE `domains` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`name` text NOT NULL,
+	`brand_id` integer NOT NULL,
+	`active` integer DEFAULT true NOT NULL,
+	`created_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
+	`updated_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
+	FOREIGN KEY (`brand_id`) REFERENCES `brands`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `domains_name_unique` ON `domains` (`name`);--> statement-breakpoint
+CREATE INDEX `domains_brand_id_idx` ON `domains` (`brand_id`);--> statement-breakpoint
 CREATE TABLE `members` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`user_id` integer NOT NULL,
