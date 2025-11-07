@@ -10,8 +10,8 @@
       }"
     >
       <template #top>
-        <HeroBackground />
-        <StarsBackground />
+        <BackgroundHero />
+        <BackgroundStars />
       </template>
     </UPageHero>
   </main>

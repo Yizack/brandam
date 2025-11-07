@@ -91,7 +91,7 @@ if (enter) {
 
 <template>
   <UModal v-model:open="isAssetOpen" title="Add Asset" description="Add your brand asset." :close="{ variant: 'outline', class: 'rounded-full' }" :dismissible="false">
-    <UButton icon="lucide:plus" color="neutral" variant="soft" label="Add asset" class="rounded-lg" />
+    <UButton icon="lucide:plus" color="primary" variant="soft" label="Add asset" class="rounded-lg" />
     <template #body>
       <UStepper ref="stepper" v-model="assetStep" :items="assetStepper" size="sm" class="w-full" disabled />
       <USeparator class="my-6" />
@@ -107,8 +107,8 @@ if (enter) {
             </div>
           </div>
         </template>
-        <ToolbarAssetsColor v-if="assetType === 'color'" v-model="form.items" :step="assetStep" />
-        <ToolbarAssetsFiles v-else-if="assetType" v-model="form.items" :step="assetStep" :type="assetType" />
+        <BrandsAssetStepColor v-if="assetType === 'color'" v-model="form.items" :step="assetStep" />
+        <BrandsAssetStepFiles v-else-if="assetType" v-model="form.items" :step="assetStep" :type="assetType" />
         <USeparator class="my-4" />
         <div class="grid gap-2" :class="{ 'grid-cols-2': assetStep > 0 }">
           <UButton :label="isInitialStep ? 'Cancel' : 'Back'" color="error" size="xl" variant="subtle" class="justify-center rounded-lg" @click="assetPrev" />

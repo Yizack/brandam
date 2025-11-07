@@ -1,6 +1,6 @@
 <template>
   <div id="layout">
-    <AppNavbar />
+    <SiteNavbar />
     <slot />
   </div>
 </template>

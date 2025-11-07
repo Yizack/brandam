@@ -91,11 +91,13 @@ const assetsData = computed(() =>
             <USeparator orientation="vertical" class="h-6" />
             <p class="text-muted-foreground text-sm">{{ assetsByType.values.length }} Assets</p>
           </div>
-          <AssetsCard :assets="assetsByType.values" />
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+            <BrandsAssetCard v-for="asset of assetsByType.values" :key="asset.uuid" :asset="asset" />
+          </div>
         </div>
         <hr v-if="assetsByType.values.length && i < assetsData.length - 1" class="border-muted">
       </template>
     </div>
-    <AdminToolbar v-if="brandStore.isAdmin" />
+    <BrandsToolbar v-if="brandStore.isAdmin" />
   </main>
 </template>
