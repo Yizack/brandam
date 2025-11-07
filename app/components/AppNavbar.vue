@@ -68,7 +68,7 @@ const userMenu: DropdownMenuItem[][] = [
 <template>
   <UHeader
     mode="modal"
-    class="w-full top-0 py-1 z-50 border-0 backdrop-blur-sm"
+    class="w-full top-0 py-1 z-50 border-0 backdrop-blur-sm border-b border-default"
   >
     <template #left>
       <ULink raw :to="isAppPath ? '/app' : '/'" class="text-xl font-bold hover:underline me-4">
