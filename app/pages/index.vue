@@ -1,22 +1,3 @@
-<script setup lang="ts">
-import type { ButtonProps } from "@nuxt/ui";
-
-const links: ButtonProps[] = [
-  {
-    label: "Get started",
-    to: "/docs/getting-started",
-    icon: "i-lucide-square-play"
-  },
-  {
-    label: "Learn more",
-    to: "/docs/getting-started/theme/design-system",
-    color: "neutral",
-    variant: "subtle",
-    trailingIcon: "i-lucide-arrow-right"
-  }
-];
-</script>
-
 <template>
   <main>
     <UPageHero
@@ -27,10 +8,10 @@ const links: ButtonProps[] = [
         container: 'md:pt-18 lg:pt-20',
         title: 'max-w-3xl mx-auto',
       }"
-      :links="links"
     >
       <template #top>
         <HeroBackground />
+        <StarsBackground />
       </template>
     </UPageHero>
   </main>

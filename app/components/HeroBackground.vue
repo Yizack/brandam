@@ -1,26 +1,11 @@
 <script setup lang="ts">
 const { isLoading } = useLoadingIndicator();
-
-const appear = ref(false);
-const appeared = ref(false);
-
-onMounted(() => {
-  nextTick(() => {
-    appear.value = true;
-    setTimeout(() => {
-      appeared.value = true;
-    }, 1000);
-  });
-});
 </script>
 
 <template>
   <div
-    class="absolute w-full -top-px transition-all text-primary shrink-0"
-    :class="[
-      isLoading ? 'animate-pulse' : (appear ? '' : 'opacity-0'),
-      appeared ? 'duration-400': 'duration-1000',
-    ]"
+    class="absolute w-full -top-px transition-all text-primary shrink-0 -z-1"
+    :class="{ 'animate-pulse': isLoading }"
   >
     <svg
       viewBox="0 0 1440 181"
