@@ -8,8 +8,8 @@
             <span class="font-bold text-lg">Admin Mode</span>
           </div>
           <div class="flex items-center gap-3">
-            <BrandsSettings />
-            <BrandsAddAsset />
+            <BrandsSettingsButton />
+            <BrandsAssetButton />
           </div>
         </UContainer>
       </div>
