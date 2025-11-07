@@ -26,7 +26,7 @@ const login = () => {
 </script>
 
 <template>
-  <main class="flex items-center justify-center min-h-screen bg-primary px-4">
+  <main class="flex items-center justify-center h-dvh bg-primary px-4">
     <div class="bg-default p-8 rounded-lg shadow-md w-full max-w-xl">
       <h1 class="text-3xl font-bold text-center mb-6">{{ SITE.name }}</h1>
       <form class="mb-3" @submit.prevent="login">
