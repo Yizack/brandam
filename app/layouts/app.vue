@@ -2,6 +2,5 @@
   <div id="layout">
     <AppNavbar />
     <slot />
-    <LazyAppFooter hydrate-on-visible />
   </div>
 </template>
