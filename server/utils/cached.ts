@@ -1,6 +1,6 @@
 import type { H3Event } from "h3";
 
-export const getSlugFromHost = defineCachedFunction(async (event: H3Event, hostname: string) => {
+export const getSlugFromHostname = defineCachedFunction(async (event: H3Event, hostname: string) => {
   const DB = useDB();
   const brand = await DB.select({
     slug: tables.brands.slug
@@ -22,7 +22,7 @@ export const getSlugFromHost = defineCachedFunction(async (event: H3Event, hostn
 }, {
   maxAge: 60 * 60 * 24, // 1 day
   group: "functions",
-  name: "getSlugFromHost",
+  name: "getSlugFromHostname",
   swr: false,
-  getKey: (event: H3Event, host: string) => host
+  getKey: (event: H3Event, hostname: string) => hostname
 });

@@ -8,10 +8,11 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const siteHost = SITE.url.replace(/^https?:\/\//, "").replace(/\/$/, "");
-  if (host === siteHost || host.includes("localhost")) return;
+  const hostname = host.split(":")[0];
 
-  const slug = await getSlugFromHost(event, host);
+  if (DISALLOWED_HOSTNAMES.includes(hostname)) return;
+
+  const slug = await getSlugFromHostname(event, hostname);
 
   return sendRedirect(event, `/${slug}`, 302);
 });
