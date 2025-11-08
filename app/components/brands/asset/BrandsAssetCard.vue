@@ -20,9 +20,7 @@ const getItems = (asset: BrandamAsset): DropdownMenuItem[][] => {
       label: "Download",
       icon: "lucide:download",
       color: "primary",
-      onClick: () => {
-        brandStore.downloadAsset(asset);
-      }
+      onSelect: () => brandStore.downloadAsset(asset)
     });
   }
 
@@ -32,9 +30,7 @@ const getItems = (asset: BrandamAsset): DropdownMenuItem[][] => {
         label: "Delete",
         color: "error",
         icon: "i-lucide-trash",
-        onClick: () => {
-          brandStore.deleteAsset(asset).catch(() => {});
-        }
+        onSelect: () => brandStore.deleteAsset(asset).catch(() => {})
       }
     ]);
   }

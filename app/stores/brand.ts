@@ -67,14 +67,21 @@ export const useBrandStore = defineStore("brand", () => {
     });
   };
 
-  const downloadAsset = (asset: BrandamAsset) => {
+  const downloadAsset = async (asset: BrandamAsset) => {
     if (asset.data.type === "color" || !asset.data.metadata) return;
+
+    const { default: mime } = await import("mime");
+    const extension = mime.getExtension(asset.data.metadata.mimetype);
+
     const link = document.createElement("a");
+
     link.href = getAssetImage(asset.uuid);
-    link.download = asset.name + "." + getFileExtension(asset.data.metadata.mimetype);
+    link.download = [asset.name, extension].filter(Boolean).join(".");
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
     toast.add({
       description: "Asset download started",
       color: "success"

@@ -86,7 +86,7 @@ watch(open, (value) => {
                 </div>
                 <div v-if="asset.data.metadata.width && asset.data.metadata.height">
                   <p class="font-bold uppercase">Dimensions</p>
-                  <p>{{ asset.data.metadata.width }} × {{ asset.data.metadata.height }} px</p>
+                  <p>{{ asset.data.metadata.width }} x {{ asset.data.metadata.height }} px</p>
                 </div>
               </template>
               <div>
