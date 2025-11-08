@@ -29,14 +29,34 @@ const login = () => {
   <main class="flex items-center justify-center h-dvh bg-primary px-4">
     <div class="bg-default p-8 rounded-lg shadow-md w-full max-w-xl">
       <h1 class="text-3xl font-bold text-center mb-6">{{ SITE.name }}</h1>
-      <form class="mb-3" @submit.prevent="login">
-        <InputFloating v-model.trim="form.email" type="email" class="mb-3" placeholder="Email address" autocomplete="email" required />
-        <InputFloating v-model="form.password" type="password" class="mb-3" placeholder="Password" autocomplete="current-password" required />
-        <UCheckbox v-model="form.remember" label="Remember me" color="secondary" class="mb-3" />
-        <ULink to="/recovery" class="text-primary hover:text-primary hover:underline font-bold">Forgot password?</ULink>
-        <div class="grid my-3">
-          <UButton type="submit" variant="subtle" size="xl" class="text-center justify-center rounded-lg font-bold mb-2" :disabled="loading">Sign in</UButton>
-          <UButton icon="logos:google-icon" variant="subtle" color="neutral" type="submit" size="xl" class="text-center justify-center rounded-lg font-bold" :disabled="loading">Sign in with Google</UButton>
+      <form class="mb-3 space-y-3" @submit.prevent="login">
+        <InputFloating v-model.trim="form.email" type="email" placeholder="Email address" autocomplete="email" required />
+        <InputFloating v-model="form.password" type="password" placeholder="Password" autocomplete="current-password" required />
+        <UCheckbox v-model="form.remember" label="Remember me" color="secondary" />
+        <p>
+          <ULink to="/recovery" class="text-primary hover:text-primary hover:underline font-bold">Forgot password?</ULink>
+        </p>
+        <div class="space-y-2">
+          <UButton
+            label="Sign in"
+            type="submit"
+            variant="subtle"
+            size="xl"
+            class="rounded-lg font-bold"
+            :disabled="loading"
+            block
+          />
+          <UButton
+            label="Sign in with Google"
+            icon="logos:google-icon"
+            variant="subtle"
+            color="neutral"
+            type="button"
+            size="xl"
+            class="rounded-lg font-bold"
+            :disabled="loading"
+            block
+          />
         </div>
       </form>
       <p>No account? <ULink to="/signup" class="text-primary hover:text-primary hover:underline font-bold">Sign up</ULink></p>

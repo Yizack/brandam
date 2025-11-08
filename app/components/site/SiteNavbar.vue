@@ -91,14 +91,14 @@ const userMenu: DropdownMenuItem[][] = [
           color="neutral"
           variant="outline"
           to="/login"
-          class="hidden lg:inline-flex"
+          class="hidden lg:inline-flex rounded-lg"
         />
 
         <UButton
           label="Sign up"
           color="neutral"
           trailing-icon="i-lucide-arrow-right"
-          class="hidden lg:inline-flex"
+          class="hidden lg:inline-flex rounded-lg"
           to="/signup"
         />
       </template>
@@ -115,22 +115,26 @@ const userMenu: DropdownMenuItem[][] = [
       />
       <template v-if="!loggedIn || !user">
         <USeparator class="my-4" />
-        <UButton
-          label="Sign in"
-          color="neutral"
-          variant="outline"
-          to="/login"
-          class="inline-flex mb-2"
-          block
-        />
+        <div class="space-y-2">
+          <UButton
+            label="Sign in"
+            color="neutral"
+            variant="outline"
+            to="/login"
+            size="xl"
+            class="rounded-lg"
+            block
+          />
 
-        <UButton
-          label="Sign up"
-          color="neutral"
-          class="inline-flex"
-          to="/signup"
-          block
-        />
+          <UButton
+            label="Sign up"
+            color="neutral"
+            to="/signup"
+            size="xl"
+            class="rounded-lg"
+            block
+          />
+        </div>
       </template>
     </template>
   </UHeader>
