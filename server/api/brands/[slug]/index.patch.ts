@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     if (!brand) {
       throw createError({
         statusCode: ErrorCode.NOT_FOUND,
-        statusMessage: "Brand not found or you don't have permission to update it"
+        message: "Brand not found or you don't have permission to update it"
       });
     }
 
@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
     if (errorMessage.includes("UNIQUE constraint failed: brands.slug") || errorMessage.includes("SQLITE_CONSTRAINT")) {
       throw createError({
         statusCode: ErrorCode.CONFLICT,
-        statusMessage: "Brand with this slug already exists"
+        message: "Brand with this slug already exists"
       });
     }
 

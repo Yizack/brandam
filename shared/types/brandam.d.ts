@@ -47,7 +47,8 @@ declare global {
     createdAt: number;
     updatedAt: number;
   }
-  interface BrandamBrandWithAssets extends BrandamBrand {
+  interface BrandamBrandWithAssets {
+    brand: BrandamBrand;
     assets: BrandamAsset[];
   }
 }

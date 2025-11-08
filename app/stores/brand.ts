@@ -7,10 +7,10 @@ export const useBrandStore = defineStore("brand", () => {
   const isAdmin = computed(() => roleId.value === MemberRole.ADMIN || roleId.value === MemberRole.OWNER);
 
   const setup = (data: BrandamBrandWithAssets & { roleId?: MemberRole }) => {
-    const { assets: assetsData, roleId: roleIdData, ...brandData } = data;
+    const { brand: brandData, assets: assetsData, roleId: role } = data;
     brand.value = brandData;
     assets.value = assetsData;
-    roleId.value = roleIdData;
+    roleId.value = role;
   };
 
   const updateBrand = async (data: Partial<BrandamBrand>) => {

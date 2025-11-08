@@ -1,39 +1,41 @@
 export default defineEventHandler(async (event) => {
-  const { user } = await getUserSession(event);
-
   const params = await getValidatedRouterParams(event, z.object({
     slug: z.string().min(1).transform(v => v.toLowerCase().trim())
   }).parse);
 
   const DB = useDB();
 
-  const brandQuery = DB.select({
-    brand: tables.brands,
-    roleId: user ? tables.members.roleId : sql<BrandamMember["roleId"] | null>`NULL`
-  }).from(tables.brands).where(eq(tables.brands.slug, params.slug));
+  const brand = await DB.select().from(tables.brands).where(
+    eq(tables.brands.slug, params.slug)
+  ).get();
 
-  if (user) {
-    brandQuery.leftJoin(tables.members, and(
-      eq(tables.members.brandId, tables.brands.id),
-      eq(tables.members.userId, user.id)
-    ));
-  }
-
-  const brandResult = await brandQuery.get();
-
-  if (!brandResult) {
+  if (!brand) {
     throw createError({
       statusCode: ErrorCode.NOT_FOUND,
       message: "Brand not found"
     });
   }
 
-  const { brand, roleId } = brandResult;
   const assets = await DB.select().from(tables.assets).where(eq(tables.assets.brandId, brand.id)).all();
 
+  const { user } = await getUserSession(event);
+
+  let roleId: number | undefined;
+
+  if (user) {
+    const member = await DB.select({
+      roleId: tables.members.roleId
+    }).from(tables.members).where(and(
+      eq(tables.members.brandId, brand.id),
+      eq(tables.members.userId, user.id)
+    )).get();
+
+    roleId = member?.roleId;
+  }
+
   return {
-    ...brand,
-    roleId: roleId ?? undefined,
+    roleId,
+    brand,
     assets
   };
 });

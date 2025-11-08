@@ -8,9 +8,9 @@ export default defineEventHandler(async (event) => {
 
   const DB = useDB();
 
-  const brand = await DB.select().from(tables.brands).where(and(
-    eq(tables.brands.slug, params.slug)
-  )).get();
+  const brand = await DB.select({
+    id: tables.brands.id
+  }).from(tables.brands).where(eq(tables.brands.slug, params.slug)).get();
 
   if (!brand) {
     throw createError({

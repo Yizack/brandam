@@ -32,7 +32,10 @@ export default defineEventHandler(async (event) => {
   const { items } = validation.data;
 
   const DB = useDB();
-  const brand = await DB.select().from(tables.brands).where(and(
+
+  const brand = await DB.select({
+    id: tables.brands.id
+  }).from(tables.brands).where(and(
     eq(tables.brands.id, validation.data.brandId),
     eq(tables.brands.slug, params.slug)
   )).get();
