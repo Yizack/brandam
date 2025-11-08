@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const domain = await DB.select().from(tables.domains).where(and(
-    eq(tables.domains.name, params.hostname),
+    eq(tables.domains.hostname, params.hostname),
     eq(tables.domains.brandId, brand.id)
   )).get();
 
@@ -31,5 +31,5 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await DB.delete(tables.domains).where(eq(tables.domains.name, params.hostname));
+  await DB.delete(tables.domains).where(eq(tables.domains.hostname, params.hostname));
 });

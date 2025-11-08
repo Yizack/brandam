@@ -50,7 +50,7 @@ export const assets = sqliteTable("assets", {
 
 export const domains = sqliteTable("domains", {
   id: integer().primaryKey(),
-  name: text().notNull().unique(),
+  hostname: text().notNull().unique(),
   brandId: integer().notNull().references(() => brands.id, { onDelete: "cascade" }),
   active: integer({ mode: "boolean" }).notNull().default(true),
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),

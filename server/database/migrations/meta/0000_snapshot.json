@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d57b4b06-64c3-43cd-9094-5c9f8f8f2766",
+  "id": "39d56aa2-8b1f-4b4e-9643-3f55c9b7e0ee",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "assets": {
@@ -187,8 +187,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "name": {
-          "name": "name",
+        "hostname": {
+          "name": "hostname",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -227,10 +227,10 @@
         }
       },
       "indexes": {
-        "domains_name_unique": {
-          "name": "domains_name_unique",
+        "domains_hostname_unique": {
+          "name": "domains_hostname_unique",
           "columns": [
-            "name"
+            "hostname"
           ],
           "isUnique": true
         },

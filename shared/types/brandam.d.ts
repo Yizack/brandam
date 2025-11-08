@@ -67,7 +67,7 @@ declare global {
 
   interface BrandamDomain {
     id: number;
-    name: string;
+    hostname: string;
     brandId: number;
     active: boolean;
     createdAt: number;

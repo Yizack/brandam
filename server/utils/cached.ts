@@ -1,11 +1,11 @@
 import type { H3Event } from "h3";
 
-export const getSlugFromHost = defineCachedFunction(async (event: H3Event, host: string) => {
+export const getSlugFromHost = defineCachedFunction(async (event: H3Event, hostname: string) => {
   const DB = useDB();
   const brand = await DB.select({
     slug: tables.brands.slug
   }).from(tables.domains).where(and(
-    eq(tables.domains.name, host),
+    eq(tables.domains.hostname, hostname),
     eq(tables.domains.active, true)
   )).leftJoin(tables.brands,
     eq(tables.domains.brandId, tables.brands.id)

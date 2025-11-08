@@ -102,10 +102,10 @@ export const useBrandStore = defineStore("brand", () => {
     return { status };
   };
 
-  const addDomain = async (name: string) => {
+  const addDomain = async (hostname: string) => {
     return $fetch(`/api/brands/${brand.value.slug}/domains`, {
       method: "POST",
-      body: { name }
+      body: { hostname }
     }).then((domain) => {
       domains.value.push(domain);
       toast.add({
@@ -120,7 +120,7 @@ export const useBrandStore = defineStore("brand", () => {
     return $fetch(`/api/brands/${brand.value.slug}/domains/${hostname}`, {
       method: "DELETE"
     }).then(() => {
-      domains.value = domains.value.filter(d => d.name !== hostname);
+      domains.value = domains.value.filter(d => d.hostname !== hostname);
       toast.add({
         description: "Domain deleted successfully",
         color: "success"

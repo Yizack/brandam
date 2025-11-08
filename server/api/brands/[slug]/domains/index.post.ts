@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   }).parse);
 
   const body = await readValidatedBody(event, z.object({
-    name: z.hostname()
+    hostname: z.hostname()
   }).parse);
 
   const DB = useDB();
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const existingDomain = await DB.select().from(tables.domains).where(
-    eq(tables.domains.name, body.name)
+    eq(tables.domains.hostname, body.hostname)
   ).get();
 
   if (existingDomain) {
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const domain = await DB.insert(tables.domains).values({
-    name: body.name,
+    hostname: body.hostname,
     brandId: brand.id,
     active: true
   }).returning().get();
