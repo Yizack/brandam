@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { DropdownMenuItem, SelectItem } from "@nuxt/ui";
 
+const { user } = useUserSession();
+
 const brandStore = useBrandStore();
 const { data: members } = await brandStore.getMembers();
 
@@ -8,7 +10,7 @@ const actions: DropdownMenuItem[] = [
   {
     label: "Remove member",
     color: "error" as const,
-    onSelect: () => console.info("Remove member")
+    onSelect: () => console.info("Not implemented yet")
   }
 ];
 
@@ -44,9 +46,10 @@ const roles: SelectItem[] = [
           :items="roles"
           color="neutral"
           :ui="{ value: 'capitalize', item: 'capitalize' }"
+          :disabled="!brandStore.isAdmin || member.user.id === user?.id || member.roleId === MemberRole.OWNER"
         />
 
-        <UDropdownMenu :items="actions" :content="{ align: 'end' }">
+        <UDropdownMenu :items="actions" :content="{ align: 'end' }" :disabled="!brandStore.isAdmin || member.user.id === user?.id || member.roleId === MemberRole.OWNER">
           <UButton
             icon="i-lucide-ellipsis-vertical"
             color="neutral"
