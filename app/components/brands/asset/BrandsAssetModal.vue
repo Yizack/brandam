@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import mime from "mime";
+
 const props = defineProps<{
   asset: BrandamAsset;
 }>();
@@ -80,7 +82,7 @@ watch(open, (value) => {
                 </div>
                 <div v-if="asset.data.metadata.mimetype">
                   <p class="font-bold uppercase">Format</p>
-                  <p class="uppercase">{{ getFileExtension(asset.data.metadata.mimetype) }}</p>
+                  <p class="uppercase">{{ mime.getExtension(asset.data.metadata.mimetype) }}</p>
                 </div>
                 <div v-if="asset.data.metadata.width && asset.data.metadata.height">
                   <p class="font-bold uppercase">Dimensions</p>

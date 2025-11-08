@@ -1,10 +1,4 @@
-import { extension } from "mime-types";
-
 export { useTimeAgo, useMagicKeys, useClipboard } from "@vueuse/core";
-
-export const getFileExtension = (mimetype: string): string => {
-  return extension(mimetype) || "";
-};
 
 export const getImageDimensions = (file: File) => {
   return new Promise<{ width: number, height: number }>((resolve, reject) => {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import mime from "mime";
 import type { DropdownMenuItem } from "@nuxt/ui";
 
 defineProps<{
@@ -94,7 +95,7 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
             class="uppercase"
             variant="subtle"
           >
-            {{ getFileExtension(asset.data.metadata?.mimetype) }}
+            {{ mime.getExtension(asset.data.metadata?.mimetype) }}
           </UBadge>
         </div>
         <p class="text-sm text-muted-foreground truncate">{{ asset.data.content }}</p>
