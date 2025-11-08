@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
   const { user } = await getUserSession(event);
 
-  let roleId: number | undefined;
+  let roleId: BrandamMember["roleId"] | undefined;
 
   if (user) {
     const member = await DB.select({

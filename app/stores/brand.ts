@@ -80,6 +80,12 @@ export const useBrandStore = defineStore("brand", () => {
     });
   };
 
+  const getMembers = async () => {
+    return useFetch(`/api/brands/${brand.value.slug}/members`, {
+      key: `brands:${brand.value.slug}:members`
+    });
+  };
+
   return {
     brand,
     assets,
@@ -88,6 +94,7 @@ export const useBrandStore = defineStore("brand", () => {
     updateBrand,
     deleteAsset,
     addAssets,
-    downloadAsset
+    downloadAsset,
+    getMembers
   };
 });

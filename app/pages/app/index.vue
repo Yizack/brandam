@@ -1,9 +1,9 @@
 <script setup lang="ts">
 definePageMeta({ layout: "app", middleware: "session" });
 
-const { data: brands, refresh } = await useFetch("/api/brands");
-
-const toast = useToast();
+const { data } = await useFetch("/api/brands", {
+  key: "brands"
+});
 
 const loading = ref(false);
 const form = useFormState({
@@ -16,17 +16,17 @@ watch(() => form.value.name, (newName) => {
   form.value.slug = toSlug(newName);
 });
 
+const brandsStore = useBrandsStore();
+brandsStore.setup(data.value || []);
+
+const brands = computed(() => brandsStore.brands);
+
 const closeCreate = ref(false);
 const createBrand = async () => {
   loading.value = true;
-  $fetch("/api/brands", {
-    method: "POST",
-    body: form.value
-  }).then(() => {
+  brandsStore.createBrand(form.value).then(() => {
     form.reset();
     closeCreate.value = false;
-    toast.add({ description: "Your brand has been created", color: "success" });
-    refresh();
   }).catch(() => {}).finally(() => {
     loading.value = false;
   });

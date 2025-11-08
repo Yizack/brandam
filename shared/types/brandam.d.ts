@@ -8,14 +8,24 @@ declare global {
     createdAt: number;
     updatedAt: number;
   }
+
   interface BrandamBrand {
     id: number;
     name: string;
-    description: string | null;
     slug: string;
+    description: string | null;
+    active: boolean;
     createdAt: number;
     updatedAt: number;
   }
+
+  interface BrandamBrandWithCount extends BrandamBrand {
+    count: {
+      members: number;
+      assets: number;
+    };
+  }
+
   interface BrandamMember {
     id: number;
     userId: number;
@@ -24,7 +34,9 @@ declare global {
     createdAt: number;
     updatedAt: number;
   }
+
   type BrandamAssetTypes = "image" | "vector" | "document" | "font" | "color";
+
   interface BrandamAsset {
     uuid: string;
     name: string;
@@ -47,9 +59,19 @@ declare global {
     createdAt: number;
     updatedAt: number;
   }
+
   interface BrandamBrandWithAssets {
     brand: BrandamBrand;
     assets: BrandamAsset[];
+  }
+
+  interface BrandamDomain {
+    id: number;
+    name: string;
+    brandId: number;
+    active: boolean;
+    createdAt: number;
+    updatedAt: number;
   }
 }
 

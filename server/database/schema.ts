@@ -17,6 +17,7 @@ export const brands = sqliteTable("brands", {
   name: text().notNull(),
   description: text(),
   slug: text().notNull().unique(),
+  active: integer({ mode: "boolean" }).notNull().default(true),
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
   updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))
 });

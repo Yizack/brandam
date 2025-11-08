@@ -17,6 +17,7 @@ CREATE TABLE `brands` (
 	`name` text NOT NULL,
 	`description` text,
 	`slug` text NOT NULL,
+	`active` integer DEFAULT true NOT NULL,
 	`created_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
 	`updated_at` integer DEFAULT (unixepoch() * 1000) NOT NULL
 );

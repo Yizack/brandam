@@ -1,9 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  brand: BrandamBrand & {
-    members: number;
-    assets: number;
-  };
+  brand: BrandamBrandWithCount;
 }>();
 </script>
 
@@ -19,11 +16,11 @@ defineProps<{
         <div class="flex gap-2">
           <div class="flex items-center text-sm">
             <Icon name="lucide:users" size="1.2em" class="text-secondary mr-1" />
-            <span class="whitespace-nowrap">{{ brand.members }} {{ brand.members === 1 ? 'member' : 'members' }}</span>
+            <span class="whitespace-nowrap">{{ brand.count.members }} {{ brand.count.members === 1 ? 'member' : 'members' }}</span>
           </div>
           <div class="flex items-center text-sm">
             <Icon name="lucide:box" size="1.2em" class="text-secondary mr-1" />
-            <span class="whitespace-nowrap">{{ brand.assets }} {{ brand.assets === 1 ? 'asset' : 'assets' }}</span>
+            <span class="whitespace-nowrap">{{ brand.count.assets }} {{ brand.count.assets === 1 ? 'asset' : 'assets' }}</span>
           </div>
         </div>
         <div class="text-xs">Updated {{ useTimeAgo(brand.updatedAt) }}</div>

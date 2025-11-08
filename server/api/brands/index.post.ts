@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
   if (!brand) {
     throw createError({
       statusCode: ErrorCode.CONFLICT,
-      message: "brand-exists"
+      message: "Brand with this slug already exists"
     });
   }
 
@@ -27,4 +27,12 @@ export default defineEventHandler(async (event) => {
     brandId: brand.id,
     roleId: MemberRole.OWNER
   }).run();
+
+  return {
+    ...brand,
+    count: {
+      members: 1,
+      assets: 0
+    }
+  };
 });
