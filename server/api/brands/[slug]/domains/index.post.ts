@@ -6,7 +6,9 @@ export default defineEventHandler(async (event) => {
   }).parse);
 
   const validation = await readValidatedBody(event, z.object({
-    hostname: z.hostname()
+    hostname: z.hostname().refine(val => val !== SITE.domain, {
+      message: "Domain not allowed"
+    })
   }).safeParse);
 
   if (!validation.success) {
