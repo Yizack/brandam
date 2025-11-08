@@ -81,7 +81,7 @@ const isSubmittable = computed(() => assetStep.value === assetStepper.length - 1
 
 const { enter } = useMagicKeys();
 
-if (enter) {
+if (enter && isAssetOpen.value) {
   watch(enter, (v) => {
     if (!v && !isSubmittable.value) return;
     addAsset();

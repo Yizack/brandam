@@ -39,16 +39,23 @@ const editBrand = async () => {
     <UButton icon="lucide:cog" color="neutral" variant="soft" label="Brand Settings" class="rounded-lg" />
     <template #body>
       <form @submit.prevent="editBrand">
-        <InputFloating v-model.trim="brandForm.name" type="text" class="mb-3" placeholder="Brand name" required />
-        <InputFloating v-model.trim="brandForm.description" type="text" class="mb-3" placeholder="Description" />
-        <UFieldGroup class="form-input-group">
-          <UBadge color="neutral" variant="outline" size="lg">{{ SITE.domain }}/</UBadge>
-          <InputFloating v-model.slug="brandForm.slug" type="text" placeholder="Slug" required />
-        </UFieldGroup>
-        <div class="grid mt-3">
-          <UButton type="submit" variant="subtle" size="xl" class="justify-center rounded-lg font-bold" :disabled="loading">Edit</UButton>
+        <h3 class="text-highlighted text-sm font-semibold mb-1">Brand Information</h3>
+        <div class="space-y-3 mt-3">
+          <InputFloating v-model.trim="brandForm.name" type="text" placeholder="Brand name" required />
+          <InputFloating v-model.trim="brandForm.description" type="text" placeholder="Description" />
+          <UFieldGroup class="form-input-group mb-3">
+            <UBadge color="neutral" variant="outline" size="lg">{{ SITE.domain }}/</UBadge>
+            <InputFloating v-model.slug="brandForm.slug" type="text" placeholder="Slug" required />
+          </UFieldGroup>
+          <div class="grid">
+            <UButton type="submit" variant="subtle" size="xl" class="justify-center rounded-lg font-bold" :disabled="loading">
+              Edit
+            </UButton>
+          </div>
         </div>
       </form>
+      <USeparator class="my-6" />
+      <BrandsSettingsDomains />
     </template>
   </UModal>
 </template>

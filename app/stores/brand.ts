@@ -3,6 +3,7 @@ export const useBrandStore = defineStore("brand", () => {
 
   const brand = ref() as Ref<BrandamBrand>;
   const assets = ref<BrandamAsset[]>([]);
+  const domains = ref<BrandamDomain[]>([]);
   const roleId = ref<MemberRole>();
   const isAdmin = computed(() => roleId.value === MemberRole.ADMIN || roleId.value === MemberRole.OWNER);
 
@@ -86,15 +87,60 @@ export const useBrandStore = defineStore("brand", () => {
     });
   };
 
+  const fetchDomains = async () => {
+    const { data, status } = await useFetch(`/api/brands/${brand.value.slug}/domains`, {
+      key: `brands:${brand.value.slug}:domains`,
+      lazy: true
+    });
+
+    watch(status, (newStatus) => {
+      if (newStatus === "success") {
+        domains.value = data.value || [];
+      }
+    });
+
+    return { status };
+  };
+
+  const addDomain = async (name: string) => {
+    return $fetch(`/api/brands/${brand.value.slug}/domains`, {
+      method: "POST",
+      body: { name }
+    }).then((domain) => {
+      domains.value.push(domain);
+      toast.add({
+        description: "Domain added successfully",
+        color: "success"
+      });
+    });
+  };
+
+  const deleteDomain = async (hostname: string) => {
+    if (!confirm("Are you sure you want to delete this domain? This action cannot be undone.")) return;
+    return $fetch(`/api/brands/${brand.value.slug}/domains/${hostname}`, {
+      method: "DELETE"
+    }).then(() => {
+      domains.value = domains.value.filter(d => d.name !== hostname);
+      toast.add({
+        description: "Domain deleted successfully",
+        color: "success"
+      });
+    });
+  };
+
   return {
     brand,
     assets,
+    domains,
     isAdmin,
     setup,
     updateBrand,
     deleteAsset,
     addAssets,
     downloadAsset,
-    getMembers
+    getMembers,
+    fetchDomains,
+    addDomain,
+    deleteDomain
   };
 });

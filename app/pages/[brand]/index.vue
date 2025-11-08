@@ -95,7 +95,7 @@ const assetsData = computed(() =>
             <BrandsAssetCard v-for="asset of assetsByType.values" :key="asset.uuid" :asset="asset" />
           </div>
         </div>
-        <hr v-if="assetsByType.values.length && i < assetsData.length - 1" class="border-muted">
+        <USeparator v-if="assetsByType.values.length && i < assetsData.length - 1" />
       </template>
     </div>
     <BrandsToolbar v-if="brandStore.isAdmin" />
