@@ -92,14 +92,16 @@ const userMenu: DropdownMenuItem[][] = [
           variant="outline"
           to="/login"
           class="hidden lg:inline-flex rounded-lg"
+          size="xl"
         />
 
         <UButton
           label="Sign up"
           color="neutral"
           trailing-icon="i-lucide-arrow-right"
-          class="hidden lg:inline-flex rounded-lg"
           to="/signup"
+          class="hidden lg:inline-flex rounded-lg"
+          size="xl"
         />
       </template>
       <UDropdownMenu v-else :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }">

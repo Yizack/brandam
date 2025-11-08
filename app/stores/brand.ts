@@ -1,11 +1,12 @@
 export const useBrandStore = defineStore("brand", () => {
   const toast = useToast();
+  const { user } = useUserSession();
 
   const brand = ref() as Ref<BrandamBrand>;
   const assets = ref<BrandamAsset[]>([]);
   const domains = ref<BrandamDomain[]>([]);
   const roleId = ref<MemberRole>();
-  const isAdmin = computed(() => roleId.value === MemberRole.ADMIN || roleId.value === MemberRole.OWNER);
+  const isAdmin = computed(() => user.value && (roleId.value === MemberRole.ADMIN || roleId.value === MemberRole.OWNER));
 
   const setup = (data: BrandamBrandWithAssets & { roleId?: MemberRole }) => {
     const { brand: brandData, assets: assetsData, roleId: role } = data;
