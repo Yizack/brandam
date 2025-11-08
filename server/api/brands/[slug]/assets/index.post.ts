@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
   if (!validation.success) {
     throw createError({
       statusCode: ErrorCode.BAD_REQUEST,
-      message: "Invalid payload"
+      message: `Invalid payload. ${validation.error.issues.map(i => i.message).join(", ")}`
     });
   }
 

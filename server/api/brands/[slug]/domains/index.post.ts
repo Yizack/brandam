@@ -5,9 +5,18 @@ export default defineEventHandler(async (event) => {
     slug: z.string().min(1).transform(v => v.toLowerCase().trim())
   }).parse);
 
-  const body = await readValidatedBody(event, z.object({
+  const validation = await readValidatedBody(event, z.object({
     hostname: z.hostname()
-  }).parse);
+  }).safeParse);
+
+  if (!validation.success) {
+    throw createError({
+      statusCode: ErrorCode.BAD_REQUEST,
+      message: validation.error.issues.map(i => i.message).join(", ")
+    });
+  }
+
+  const body = validation.data;
 
   const DB = useDB();
 
