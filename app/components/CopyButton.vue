@@ -6,13 +6,13 @@ defineProps<{
 
 const { copy, copied } = useClipboard();
 
-const emits = defineEmits<{
+const emit = defineEmits<{
   copy: [];
 }>();
 
 watch(copied, (bool) => {
   if (!bool) return;
-  emits("copy");
+  emit("copy");
 });
 </script>
 

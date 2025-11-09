@@ -46,6 +46,11 @@ export default defineNuxtConfig({
     }
   },
 
+  turnstile: {
+    siteKey: "0x4AAAAAAB_7RZVN4AGQKW4Q",
+    addValidateEndpoint: false
+  },
+
   eslint: {
     config: {
       autoInit: false,
@@ -55,7 +60,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     secure: {
-      salt: ""
+      salt: "",
+      secret: ""
     }
   },
 

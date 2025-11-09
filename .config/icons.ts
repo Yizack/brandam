@@ -13,6 +13,7 @@ export default [
   "lucide:users",
   "lucide:plus",
   "lucide:x",
+  "lucide:check",
   "lucide:box",
   "lucide:grid-2x2",
   "lucide:images",
@@ -31,7 +32,6 @@ export default [
   "lucide:trash",
   "lucide:ellipsis",
   "lucide:ellipsis-vertical",
-  "lucide:check",
   "simple-icons:github",
   "logos:google-icon"
 ];

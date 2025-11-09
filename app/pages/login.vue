@@ -30,8 +30,22 @@ const login = () => {
     <div class="bg-default p-8 rounded-lg shadow-md w-full max-w-xl">
       <h1 class="text-3xl font-bold text-center mb-6">{{ SITE.name }}</h1>
       <form class="mb-3 space-y-3" @submit.prevent="login">
-        <InputFloating v-model.trim="form.email" type="email" placeholder="Email address" autocomplete="email" required />
-        <InputFloating v-model="form.password" type="password" placeholder="Password" autocomplete="current-password" required />
+        <InputFloating
+          id="email"
+          v-model.trim="form.email"
+          type="email"
+          placeholder="Email address"
+          autocomplete="email"
+          required
+        />
+        <InputFloating
+          id="password"
+          v-model="form.password"
+          type="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          required
+        />
         <UCheckbox v-model="form.remember" label="Remember me" color="secondary" />
         <p>
           <ULink to="/recovery" class="text-primary hover:text-primary hover:underline font-bold">Forgot password?</ULink>

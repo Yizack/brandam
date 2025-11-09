@@ -21,6 +21,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   change: [string];
+  focus: [FocusEvent];
+  blur: [FocusEvent];
 }>();
 
 const [model, modifiers] = defineModel<string | number>();
@@ -53,8 +55,24 @@ const binds = {
 <template>
   <div class="form-input-floating w-full" :class="{ 'form-input-icon': icon }">
     <Icon v-if="icon" :name="icon" class="input-icon h-5 w-5 text-primary" />
-    <input v-if="!value" v-model="model" class="from-input peer" v-bind="binds" @change="applyModifiers">
-    <input v-else class="from-input peer" :value="value" v-bind="binds" @change="applyModifiers">
+    <input
+      v-if="!value"
+      v-model="model"
+      class="from-input peer"
+      v-bind="binds"
+      @change="applyModifiers"
+      @focus="emit('focus', $event)"
+      @blur="emit('blur', $event)"
+    >
+    <input
+      v-else
+      class="from-input peer"
+      :value="value"
+      v-bind="binds"
+      @change="applyModifiers"
+      @focus="emit('focus', $event)"
+      @blur="emit('blur', $event)"
+    >
     <label :for="id" :class="{ 'pl-8': icon }">
       {{ placeholder }}
     </label>
