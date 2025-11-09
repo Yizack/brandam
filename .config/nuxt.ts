@@ -39,13 +39,8 @@ export default defineNuxtConfig({
 
   icon: {
     mode: "svg",
+    provider: "none",
     clientBundle: { scan: true, sizeLimitKb: 2048 }
-  },
-
-  postcss: {
-    plugins: {
-      "@tailwindcss/postcss": {}
-    }
   },
 
   eslint: {
