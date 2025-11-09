@@ -48,7 +48,7 @@ const signUp = () => {
           v-model.trim="form.name"
           type="text"
           placeholder="Name"
-          autocomplete="name"
+          autocomplete="given-name"
           required
         />
         <InputFloating
@@ -86,7 +86,7 @@ const signUp = () => {
         </div>
         <div class="space-y-2">
           <UButton
-            label="Sign in"
+            label="Sign up"
             type="submit"
             variant="subtle"
             size="xl"
