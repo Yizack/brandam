@@ -34,7 +34,7 @@ const getItems = (asset: BrandamAsset): DropdownMenuItem[][] => {
       {
         label: "Delete",
         color: "error",
-        icon: "i-lucide-trash",
+        icon: "lucide:trash",
         onSelect: () => brandStore.deleteAsset(asset).catch(() => {})
       }
     ]);

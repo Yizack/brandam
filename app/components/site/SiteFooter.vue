@@ -60,7 +60,7 @@ const columns: FooterColumn[] = [
       <UButton
         to="https://github.com/Yizack/brandam"
         target="_blank"
-        icon="i-simple-icons-github"
+        icon="simple-icons:github"
         aria-label="BrandAM on GitHub"
         color="neutral"
         variant="ghost"

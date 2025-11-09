@@ -37,7 +37,7 @@ const removeColor = (index: number) => {
                 <UColorPicker v-model="item.content" class="p-2" />
               </template>
             </UPopover>
-            <UButton icon="lucide:trash-2" variant="outline" color="error" class="px-3" :ui="{ base: 'rounded-lg' }" @click="removeColor(i)" />
+            <UButton icon="lucide:trash" variant="subtle" color="error" class="px-3" :ui="{ base: 'rounded-lg' }" @click="removeColor(i)" />
           </UFieldGroup>
           <InputFloating id="name" v-model.trim="item.name" type="text" class="w-full" placeholder="Name" required />
           <InputFloating id="description" v-model.trim="item.description" type="text" class="w-full" placeholder="Description" />

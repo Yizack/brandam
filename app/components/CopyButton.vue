@@ -21,7 +21,7 @@ watch(copied, (bool) => {
     <UButton
       :color="copied ? 'success' : 'neutral'"
       variant="link"
-      :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
+      :icon="copied ? 'lucide:copy-check' : 'lucide:copy'"
       aria-label="Copy to clipboard"
       @click="copy(value)"
     />

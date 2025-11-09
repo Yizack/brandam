@@ -1,3 +1,4 @@
+import icons from "./icons";
 import { SITE } from "../shared/utils/site";
 
 export default defineNuxtConfig({
@@ -40,7 +41,9 @@ export default defineNuxtConfig({
   icon: {
     mode: "svg",
     provider: "none",
-    clientBundle: { scan: true, sizeLimitKb: 2048 }
+    clientBundle: {
+      icons
+    }
   },
 
   eslint: {

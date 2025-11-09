@@ -98,7 +98,7 @@ const userMenu: DropdownMenuItem[][] = [
         <UButton
           label="Sign up"
           color="neutral"
-          trailing-icon="i-lucide-arrow-right"
+          trailing-icon="lucide:arrow-right"
           to="/signup"
           class="hidden lg:inline-flex rounded-lg"
           size="xl"

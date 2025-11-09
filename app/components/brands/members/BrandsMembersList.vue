@@ -51,7 +51,7 @@ const roles: SelectItem[] = [
 
         <UDropdownMenu :items="actions" :content="{ align: 'end' }" :disabled="!brandStore.isAdmin || member.user.id === user?.id || member.roleId === MemberRole.OWNER">
           <UButton
-            icon="i-lucide-ellipsis-vertical"
+            icon="lucide:ellipsis-vertical"
             color="neutral"
             variant="ghost"
           />
