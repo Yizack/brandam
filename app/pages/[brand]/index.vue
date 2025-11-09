@@ -72,7 +72,9 @@ const assetsData = computed(() =>
             <USeparator color="neutral" orientation="vertical" class="h-6" />
             <ULink class="flex items-center gap-1 text-inverted hover:text-inverted/80 hover:underline">
               <Icon name="lucide:share" />
-              <span>Share brand</span>
+              <BrandsShare :path="`/${brand.slug}`" :description="`Share '${brand.name}' brand.`">
+                <span>Share brand</span>
+              </BrandsShare>
             </ULink>
           </div>
         </div>

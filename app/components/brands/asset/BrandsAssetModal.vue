@@ -7,7 +7,8 @@ const props = defineProps<{
 
 const brandStore = useBrandStore();
 
-const assetCardUrl = `${SITE.url}/${brandStore.brand.slug}?asset=${props.asset.uuid}`;
+const assetCardPath = `/${brandStore.brand.slug}?asset=${props.asset.uuid}`;
+const assetCardUrl = useOrigin(assetCardPath).url;
 
 const route = useRoute("brand");
 const open = ref(route.query.asset === props.asset.uuid);
@@ -24,9 +25,11 @@ watch(open, (value) => {
     <slot />
     <template v-if="asset.data.type !== 'color'" #actions>
       <div class="ms-auto me-8 flex gap-2">
-        <UButton icon="lucide:arrow-big-right-dash" variant="soft" color="neutral">
-          Share
-        </UButton>
+        <BrandsShare :path="assetCardPath" :description="`Share '${asset.name}' asset.`">
+          <UButton icon="lucide:arrow-big-right-dash" variant="soft" color="neutral">
+            Share
+          </UButton>
+        </BrandsShare>
         <UButton icon="lucide:download" variant="soft" @click="brandStore.downloadAsset(asset)">
           Download
         </UButton>
