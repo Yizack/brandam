@@ -25,7 +25,7 @@ watch(open, (value) => {
     <slot />
     <template v-if="asset.data.type !== 'color'" #actions>
       <div class="ms-auto me-8 flex gap-2">
-        <BrandsShare :path="assetCardPath" :description="`Share '${asset.name}' asset.`">
+        <BrandsShare :path="assetCardPath" :description="`Share asset.`">
           <UButton icon="lucide:arrow-big-right-dash" variant="soft" color="neutral">
             Share
           </UButton>
