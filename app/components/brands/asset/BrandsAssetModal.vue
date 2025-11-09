@@ -41,9 +41,14 @@ watch(open, (value) => {
           <img
             :src="getAssetImage(asset.uuid)"
             :alt="asset.name"
-            class="max-h-96 object-contain"
+            class="max-h-98 object-contain"
           >
         </div>
+        <PDFNavigator
+          v-else-if="asset.data.type === 'document'"
+          :url="getAssetImage(asset.uuid)"
+          class="bg-accented rounded-lg p-4"
+        />
         <div v-else class="h-48 rounded-lg" :style="{ backgroundColor: asset.data.content }" />
         <div class="text-sm space-y-4">
           <div v-if="asset.description" class="space-y-2">

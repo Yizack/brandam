@@ -59,6 +59,10 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
             :alt="asset.name"
             class="mx-auto center h-full"
           >
+          <PDFPreview
+            v-else-if="asset.data.type === 'document'"
+            :url="getAssetImage(asset.uuid)"
+          />
           <div
             v-else
             :style="{ backgroundColor: asset.data.content }"
