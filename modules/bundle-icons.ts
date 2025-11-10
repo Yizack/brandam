@@ -1,4 +1,6 @@
-export default [
+import { defineNuxtModule } from "nuxt/kit";
+
+const iconsList = [
   "lucide:menu",
   "lucide:info",
   "lucide:house",
@@ -30,6 +32,7 @@ export default [
   "lucide:log-out",
   "lucide:download",
   "lucide:upload",
+  "lucide:pencil",
   "lucide:trash",
   "lucide:ellipsis",
   "lucide:ellipsis-vertical",
@@ -37,3 +40,16 @@ export default [
   "simple-icons:github",
   "logos:google-icon"
 ];
+
+export default defineNuxtModule({
+  meta: {
+    name: "bundle-icons"
+  },
+  hooks: {
+    "icon:clientBundleIcons": (icons: Set<string>) => {
+      for (const icon of iconsList) {
+        icons.add(icon);
+      }
+    }
+  }
+});

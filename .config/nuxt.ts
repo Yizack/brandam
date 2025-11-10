@@ -1,4 +1,3 @@
-import icons from "./icons";
 import { SITE } from "../shared/utils/site";
 
 export default defineNuxtConfig({
@@ -47,10 +46,7 @@ export default defineNuxtConfig({
 
   icon: {
     mode: "svg",
-    provider: "none",
-    clientBundle: {
-      icons
-    }
+    provider: "none"
   },
 
   turnstile: {
