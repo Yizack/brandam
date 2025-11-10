@@ -68,6 +68,23 @@ export const useBrandStore = defineStore("brand", () => {
     });
   };
 
+  const editAsset = async (uuid: string, data: Pick<BrandamAsset, "name" | "description">) => {
+    return $fetch(`/api/brands/${brand.value.slug}/assets/${uuid}`, {
+      method: "PATCH",
+      body: data
+    }).then((response) => {
+      const asset = assets.value.find(a => a.uuid === uuid);
+      if (asset) {
+        asset.name = response.name;
+        asset.description = response.description;
+      }
+      toast.add({
+        description: "Asset updated successfully",
+        color: "success"
+      });
+    });
+  };
+
   const downloadAsset = async (asset: BrandamAsset) => {
     if (asset.data.type === "color" || !asset.data.metadata) return;
 
@@ -144,8 +161,9 @@ export const useBrandStore = defineStore("brand", () => {
     isAdmin,
     setup,
     updateBrand,
-    deleteAsset,
     addAssets,
+    editAsset,
+    deleteAsset,
     downloadAsset,
     getMembers,
     fetchDomains,

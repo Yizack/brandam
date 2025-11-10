@@ -20,6 +20,7 @@ const iconsList = [
   "lucide:grid-2x2",
   "lucide:images",
   "lucide:pen-tool",
+  "lucide:file",
   "lucide:file-text",
   "lucide:type",
   "lucide:palette",
