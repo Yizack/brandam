@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const loading = ref(false);
+const isLoading = ref(false);
 
 const brandStore = useBrandStore();
 const { brand } = storeToRefs(brandStore);
@@ -24,12 +24,12 @@ const onCloseBrand = () => {
 };
 
 const editBrand = async () => {
-  loading.value = true;
+  isLoading.value = true;
   brandStore.updateBrand(brandForm.value).then(() => {
     brandForm.update(brandForm.value);
     isBrandOpen.value = false;
   }).catch(() => {}).finally(() => {
-    loading.value = false;
+    isLoading.value = false;
   });
 };
 </script>
@@ -48,7 +48,7 @@ const editBrand = async () => {
             <InputFloating v-model.slug="brandForm.slug" type="text" placeholder="Slug" required />
           </UFieldGroup>
           <div class="grid">
-            <UButton type="submit" variant="subtle" size="xl" class="justify-center rounded-lg font-bold" :disabled="loading">
+            <UButton type="submit" variant="subtle" size="xl" class="justify-center rounded-lg font-bold" :disabled="isLoading">
               Edit
             </UButton>
           </div>

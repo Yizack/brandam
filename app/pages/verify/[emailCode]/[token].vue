@@ -6,8 +6,8 @@ onBeforeRouteLeave((to, from, next) => {
   next();
 });
 
-const loaded = ref(false);
-const verified = ref(false);
+const isLoaded = ref(false);
+const isVerified = ref(false);
 
 const { params, meta } = useRoute("verify-emailCode-token");
 const emailCode = ref(params.emailCode);
@@ -31,10 +31,10 @@ const verifyEmail = async () => {
     method: "POST",
     body: { email: email.value, token: token.value }
   }).then(() => {
-    verified.value = true;
+    isVerified.value = true;
     meta.email = email;
   }).catch(() => {}).finally(() => {
-    loaded.value = true;
+    isLoaded.value = true;
   });
 };
 
@@ -48,7 +48,7 @@ onMounted(async () => {
   <main class="flex items-center justify-center h-dvh bg-primary px-4">
     <div class="bg-default p-8 rounded-lg shadow-md w-full max-w-xl text-center">
       <Transition name="fade" mode="out-in">
-        <div v-if="!loaded" class="space-y-2">
+        <div v-if="!isLoaded" class="space-y-2">
           <Icon
             name="lucide:loader-circle"
             class="text-primary animate-spin mx-auto"
@@ -57,7 +57,7 @@ onMounted(async () => {
           <h3 class="text-xl font-semibold">Verifying email...</h3>
         </div>
 
-        <div v-else-if="verified" class="space-y-2">
+        <div v-else-if="isVerified" class="space-y-2">
           <Icon
             name="lucide:check"
             class="text-inverted mx-auto bg-success rounded-full p-4"

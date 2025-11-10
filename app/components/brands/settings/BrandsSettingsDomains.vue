@@ -8,23 +8,23 @@ const domainForm = useFormState({
   hostname: ""
 });
 
-const loadingDomains = ref(false);
+const isLoading = ref(false);
 
 const addDomain = async () => {
   if (!domainForm.value.hostname) return;
-  loadingDomains.value = true;
+  isLoading.value = true;
   brandStore.addDomain(domainForm.value.hostname).then(() => {
     domainForm.reset();
   }).catch(() => {}).finally(() => {
-    loadingDomains.value = false;
+    isLoading.value = false;
   });
 };
 
 const deleteDomain = async (hostname: string) => {
-  loadingDomains.value = true;
+  isLoading.value = true;
   brandStore.deleteDomain(hostname).then(() => {
   }).catch(() => {}).finally(() => {
-    loadingDomains.value = false;
+    isLoading.value = false;
   });
 };
 
@@ -55,7 +55,7 @@ const isPending = computed(() => status.value === "pending");
 
     <UFieldGroup class="w-full">
       <UInput id="hostname" v-model.trim="domainForm.hostname" type="text" placeholder="example.com" :ui="{ root: 'w-full', base: 'h-full' }" />
-      <UButton type="submit" icon="lucide:plus" variant="subtle" size="xl" :disabled="isPending || loadingDomains || !domainForm.hostname">
+      <UButton type="submit" icon="lucide:plus" variant="subtle" size="xl" :disabled="isPending || isLoading || !domainForm.hostname">
         Add
       </UButton>
     </UFieldGroup>

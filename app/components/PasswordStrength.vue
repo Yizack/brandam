@@ -48,8 +48,8 @@ watch(() => props.password, () => {
         class="flex items-center gap-0.5"
         :class="req.met ? 'text-success' : 'text-muted'"
       >
-        <UIcon v-if="req.met" :name="'lucide:check'" class="size-4 shrink-0" />
-        <UIcon v-else :name="'lucide:x'" class="size-4 shrink-0" />
+        <Icon v-if="req.met" :name="'lucide:check'" class="size-4 shrink-0" />
+        <Icon v-else :name="'lucide:x'" class="size-4 shrink-0" />
 
         <span class="font-light">
           {{ req.text }}

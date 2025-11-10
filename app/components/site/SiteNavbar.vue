@@ -6,15 +6,15 @@ const { loggedIn, user, clear } = useUserSession();
 const route = useRoute();
 const isAppPath = computed(() => route.path.startsWith("/app"));
 
-const scrolled = ref(false);
+const isScrolled = ref(false);
 const maxScroll = 50;
 
 const getScrolled = () => (document.body.scrollTop > maxScroll || document.documentElement.scrollTop > maxScroll);
 
 onMounted(() => {
-  scrolled.value = getScrolled();
+  isScrolled.value = getScrolled();
   onscroll = () => {
-    scrolled.value = getScrolled();
+    isScrolled.value = getScrolled();
   };
 });
 

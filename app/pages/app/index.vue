@@ -5,7 +5,7 @@ const { data } = await useFetch("/api/brands", {
   key: "brands"
 });
 
-const loading = ref(false);
+const isLoading = ref(false);
 const form = useFormState({
   name: "",
   description: "",
@@ -21,14 +21,14 @@ brandsStore.setup(data.value || []);
 
 const brands = computed(() => brandsStore.brands);
 
-const closeCreate = ref(false);
+const isOpen = ref(false);
 const createBrand = async () => {
-  loading.value = true;
+  isLoading.value = true;
   brandsStore.createBrand(form.value).then(() => {
     form.reset();
-    closeCreate.value = false;
+    isOpen.value = false;
   }).catch(() => {}).finally(() => {
-    loading.value = false;
+    isLoading.value = false;
   });
 };
 
@@ -43,7 +43,7 @@ useHead({
   <main class="p-6 md:p-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <BrandCard v-for="brand in brands" :key="brand.id" :brand="brand" />
-      <UModal v-model:open="closeCreate" title="Create Brand" description="Get started managing your brand assets." :close="{ variant: 'outline', class: 'rounded-full' }" :dismissible="false">
+      <UModal v-model:open="isOpen" title="Create Brand" description="Get started managing your brand assets." :close="{ variant: 'outline', class: 'rounded-full' }" :dismissible="false">
         <div class="light:bg-default dark:bg-muted rounded-lg border-2 border-dashed border-accented p-6 flex flex-col items-center justify-center text-center h-full hover:border-secondary transition-colors group">
           <div class="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4 group-hover:scale-[1.1] transition-transform">
             <Icon name="lucide:plus" size="1.5em" />
@@ -60,7 +60,7 @@ useHead({
               <InputFloating id="slug" v-model.slug="form.slug" type="text" placeholder="Slug" required />
             </UFieldGroup>
             <div class="grid mt-3">
-              <UButton type="submit" variant="subtle" size="xl" class="justify-center rounded-lg font-bold" :disabled="loading">Create</UButton>
+              <UButton type="submit" variant="subtle" size="xl" class="justify-center rounded-lg font-bold" :disabled="isLoading">Create</UButton>
             </div>
           </form>
         </template>

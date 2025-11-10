@@ -7,14 +7,14 @@ defineProps<{
 }>();
 
 const brandStore = useBrandStore();
-const shareOpen = ref(false);
+const isOpen = ref(false);
 
 const getItems = (asset: BrandamAsset): DropdownMenuItem[][] => {
   const dropdownItems: DropdownMenuItem[][] = [[
     {
       label: "Share",
       icon: "lucide:arrow-big-right-dash",
-      onSelect: () => { shareOpen.value = true; }
+      onSelect: () => { isOpen.value = true; }
     }
   ]];
 
@@ -107,7 +107,7 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
       </div>
     </div>
     <BrandsShare
-      v-model:open="shareOpen"
+      v-model:open="isOpen"
       :path="`/${brandStore.brand.slug}?asset=${asset.uuid}`"
       :description="`Share asset.`"
     />

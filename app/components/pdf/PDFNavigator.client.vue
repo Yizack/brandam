@@ -8,7 +8,7 @@ const props = defineProps<{
 const { pdf, pages } = usePDF({ url: props.url, verbosity: 0 });
 
 const page = ref(1);
-const loaded = ref(false);
+const isLoaded = ref(false);
 
 const previousPage = () => {
   page.value = page.value <= 1 ? pages.value : page.value - 1;
@@ -44,7 +44,7 @@ const nextPage = () => {
       class="justify-items-center h-98 [&_canvas]:w-auto! [&_div]:w-full! **:max-h-98! text-center"
       :pdf="pdf"
       :page="page"
-      @loaded="loaded = true"
+      @loaded="isLoaded = true"
     >
       <span>loading</span>
     </VuePDF>
