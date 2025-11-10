@@ -40,13 +40,15 @@ const nextPage = () => {
         />
       </UFieldGroup>
     </div>
-    <VuePDF
-      class="justify-items-center h-98 [&_canvas]:shadow [&_canvas]:w-auto! [&_div]:w-full! **:max-h-98! text-center"
-      :pdf="pdf"
-      :page="page"
-      @loaded="isLoaded = true"
-    >
-      <span>loading</span>
-    </VuePDF>
+    <div class="flex justify-center">
+      <VuePDF
+        class="h-98 [&_canvas]:shadow [&_canvas]:w-auto! [&_div]:w-full! **:max-h-98! text-center"
+        :pdf="pdf"
+        :page="page"
+        @loaded="isLoaded = true"
+      >
+        <span>loading</span>
+      </VuePDF>
+    </div>
   </div>
 </template>
