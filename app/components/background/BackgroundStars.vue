@@ -7,19 +7,26 @@ interface Star {
 
 const props = withDefaults(defineProps<{
   starCount?: number;
-  color?: string;
+  color?: "primary" | "inverted";
   speed?: "slow" | "normal" | "fast";
   size?: { min: number, max: number };
   radialGradient?: boolean;
 }>(), {
   starCount: 300,
-  color: "var(--ui-primary)",
+  color: "primary",
   speed: "normal",
   size: () => ({
     min: 1,
     max: 2
   })
 });
+
+const colorMap = {
+  primary: "var(--ui-primary)",
+  inverted: "var(--ui-bg)"
+};
+
+const currentColor = colorMap[props.color];
 
 // Generate random star positions and sizes
 const generateStars = (count: number): Star[] => {
@@ -90,10 +97,10 @@ const { isLoading } = useLoadingIndicator();
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(508.999 19.5) rotate(90.177) scale(161.501 509.002)"
         >
-          <stop stop-color="var(--ui-primary)" />
+          <stop :stop-color="currentColor" />
           <stop
             offset="1"
-            stop-color="var(--ui-primary)"
+            :stop-color="currentColor"
             stop-opacity="0"
           />
         </radialGradient>
@@ -106,16 +113,16 @@ const { isLoading } = useLoadingIndicator();
           gradientUnits="userSpaceOnUse"
         >
           <stop
-            stop-color="var(--ui-primary)"
+            :stop-color="currentColor"
             stop-opacity="0"
           />
           <stop
             offset="0.395"
-            stop-color="var(--ui-primary)"
+            :stop-color="currentColor"
           />
           <stop
             offset="1"
-            stop-color="var(--ui-primary)"
+            :stop-color="currentColor"
             stop-opacity="0"
           />
         </linearGradient>
@@ -130,7 +137,7 @@ const { isLoading } = useLoadingIndicator();
         :style="{
           '--star-duration': `${layer.duration}s`,
           '--star-opacity': layer.opacity,
-          '--star-color': color,
+          '--star-color': currentColor,
         }"
       >
         <div

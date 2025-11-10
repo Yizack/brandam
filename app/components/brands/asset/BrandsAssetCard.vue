@@ -56,7 +56,12 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
 
 <template>
   <BrandsAssetModal :asset="asset">
-    <div class="bg-muted rounded-lg border-2 border-accented overflow-hidden cursor-pointer h-full flex flex-col transition-transform duration-200" @mouseenter="hoveredAsset = asset.uuid" @mouseleave="hoveredAsset = undefined">
+    <div
+      class="bg-muted rounded-lg shadow border border-accented overflow-hidden cursor-pointer h-full flex flex-col duration-200 transition-all"
+      :class="{ 'border-secondary scale-[1.01]': isActive(asset.uuid) }"
+      @mouseenter="hoveredAsset = asset.uuid"
+      @mouseleave="hoveredAsset = undefined"
+    >
       <div class="h-35 border-b border-muted relative bg-accented">
         <div class="size-full relative">
           <img

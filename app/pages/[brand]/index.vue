@@ -60,9 +60,9 @@ const assetsData = computed(() =>
 
 <template>
   <main v-if="brand">
-    <div class="bg-primary">
-      <UContainer class="flex flex-col gap-3 py-8 px-4 sm:px-6 lg:px-8">
-        <div class="text-inverted flex flex-wrap gap-3 items-center justify-between">
+    <UPageHero class="border-b border-b-default" :ui="{ container: 'flex flex-col gap-3 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8' }">
+      <div>
+        <div class="flex flex-wrap gap-3 items-center justify-between">
           <div class="sm:max-w-2/3 lg:max-w-3/4">
             <h1 class="text-4xl font-bold">{{ brand.name }}</h1>
             <p v-if="brand.description" class="mt-3">{{ brand.description }}</p>
@@ -70,7 +70,7 @@ const assetsData = computed(() =>
           <div class="flex flex-wrap gap-3">
             <p>{{ assets.length }} Assets</p>
             <USeparator color="neutral" orientation="vertical" class="h-6" />
-            <ULink class="flex items-center gap-1 text-inverted hover:text-inverted/80 hover:underline">
+            <ULink class="flex items-center gap-1 hover:underline text-primary!">
               <Icon name="lucide:arrow-big-right-dash" />
               <BrandsShare :path="`/${brand.slug}`" :description="`Share '${brand.name}' brand.`">
                 <span>Share brand</span>
@@ -79,12 +79,29 @@ const assetsData = computed(() =>
           </div>
         </div>
         <div class="mt-4">
-          <p class="text-inverted text-center md:hidden mb-2 font-medium">{{ sectionName }}</p>
-          <UTabs v-model="filters.section" :items="items" color="neutral" size="xl" :ui="{ label: 'hidden md:inline' }" />
+          <p class="text-center md:hidden mb-2 font-medium">{{ sectionName }}</p>
+          <UTabs
+            v-model="filters.section"
+            :items="items"
+            color="neutral"
+            size="xl"
+            :ui="{ list: 'border border-accented shadow', label: 'hidden md:inline' }"
+          />
         </div>
-        <InputFloating id="search" v-model.trim="filters.search" type="search" icon="lucide:search" placeholder="Search for assets" />
-      </UContainer>
-    </div>
+        <InputFloating
+          id="search"
+          v-model.trim="filters.search"
+          class="[&_input]:shadow"
+          type="search"
+          icon="lucide:search"
+          placeholder="Search for assets"
+        />
+      </div>
+      <template #top>
+        <BackgroundHero />
+        <BackgroundStars radial-gradient />
+      </template>
+    </UPageHero>
     <div class="py-10 px-4 sm:px-6 lg:px-8 flex flex-col gap-10">
       <UEmpty
         v-if="!assets.length || assetsData.every(assetsByType => !assetsByType.values.length)"

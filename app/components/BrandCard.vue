@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <ULink :to="`/${brand.slug}`" class="bg-muted rounded-lg border-2 border-accented overflow-hidden hover:shadow-md hover:border-secondary cursor-pointer h-full flex flex-col hover:scale-[1.02] transition-transform duration-200" :title="brand.description || brand.name">
+  <ULink :to="`/${brand.slug}`" class="bg-muted rounded-lg border-2 border-accented overflow-hidden hover:shadow-md hover:border-secondary cursor-pointer h-full flex flex-col hover:scale-[1.01] transition-transform duration-200" :title="brand.description || brand.name">
     <div class="h-25 bg-primary">
       <div class="size-full flex items-end p-4 bg-linear-to-t from-slate-900/70 to-transparent">
         <h3 class="text-3xl font-semibold text-white">{{ brand.name }}</h3>

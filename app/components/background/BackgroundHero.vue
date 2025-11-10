@@ -1,11 +1,25 @@
 <script setup lang="ts">
+const props = withDefaults(defineProps<{
+  color?: "primary" | "inverted";
+  gradient?: boolean;
+}>(), {
+  color: "primary"
+});
+
 const { isLoading } = useLoadingIndicator();
+
+const colorMap = {
+  primary: "text-primary",
+  inverted: "text-inverted"
+};
+
+const currentColor = colorMap[props.color];
 </script>
 
 <template>
   <div
-    class="absolute w-full -top-px transition-all text-primary shrink-0 -z-1"
-    :class="{ 'animate-pulse': isLoading }"
+    class="absolute w-full -top-px transition-all shrink-0 -z-1"
+    :class="[currentColor, { 'animate-pulse': isLoading }]"
   >
     <svg
       viewBox="0 0 1440 181"
@@ -20,6 +34,7 @@ const { isLoading } = useLoadingIndicator();
         <path d="M0 0H1440V181H0V0Z" />
       </mask>
       <path
+        v-if="props.gradient"
         d="M0 0H1440V181H0V0Z"
         fill="url(#paint0_linear_414_5526)"
         fill-opacity="0.22"

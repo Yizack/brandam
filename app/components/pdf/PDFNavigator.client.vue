@@ -41,7 +41,7 @@ const nextPage = () => {
       </UFieldGroup>
     </div>
     <VuePDF
-      class="justify-items-center h-98 [&_canvas]:w-auto! [&_div]:w-full! **:max-h-98! text-center"
+      class="justify-items-center h-98 [&_canvas]:shadow [&_canvas]:w-auto! [&_div]:w-full! **:max-h-98! text-center"
       :pdf="pdf"
       :page="page"
       @loaded="isLoaded = true"
