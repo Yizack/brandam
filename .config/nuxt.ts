@@ -33,10 +33,17 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@nuxtjs/turnstile",
     "nuxt-auth-utils",
-    "@pinia/nuxt"
+    "@pinia/nuxt",
+    "nuxt-mailchannels",
+    "nuxt-email-renderer"
   ],
 
   hub: { database: true, blob: true, cache: true, workers: true },
+
+  ui: {
+    colorMode: true,
+    fonts: false
+  },
 
   icon: {
     mode: "svg",
@@ -58,10 +65,31 @@ export default defineNuxtConfig({
     }
   },
 
+  mailchannels: {
+    from: {
+      email: `brandam@${SITE.rootDomain}`,
+      name: `${SITE.name} Support`
+    }
+  },
+
   runtimeConfig: {
+    session: {
+      password: ""
+    },
     secure: {
       salt: "",
       secret: ""
+    },
+    turnstile: {
+      secretKey: ""
+    },
+    mailchannels: {
+      apiKey: "",
+      dkim: {
+        domain: SITE.rootDomain,
+        privateKey: "",
+        selector: ""
+      }
     }
   },
 
@@ -94,6 +122,7 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
+    exclude: ["/app/**"],
     discoverImages: false,
     defaults: { priority: 0.8, lastmod: new Date().toISOString() },
     urls: [
@@ -137,12 +166,12 @@ export default defineNuxtConfig({
     }
   },
 
-  ui: {
-    colorMode: true,
-    fonts: false
-  },
-
   typescript: {
+    tsConfig: {
+      include: [
+        "../emails/**/*"
+      ]
+    },
     nodeTsConfig: {
       include: [
         "../test/**/*",

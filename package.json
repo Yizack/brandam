@@ -49,6 +49,8 @@
     "mime": "^4.1.0",
     "nuxt": "^4.2.1",
     "nuxt-auth-utils": "^0.5.25",
+    "nuxt-email-renderer": "^2.1.2",
+    "nuxt-mailchannels": "^0.3.7",
     "pinia": "^3.0.4",
     "sass": "^1.93.3",
     "stylelint": "^16.25.0",
@@ -59,5 +61,8 @@
     "wrangler": "^4.46.0",
     "zod": "^4.1.12"
   },
-  "packageManager": "pnpm@10.20.0"
+  "packageManager": "pnpm@10.20.0",
+  "dependencies": {
+    "dev": "^0.1.3"
+  }
 }

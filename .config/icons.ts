@@ -32,6 +32,7 @@ export default [
   "lucide:trash",
   "lucide:ellipsis",
   "lucide:ellipsis-vertical",
+  "lucide:loader-circle",
   "simple-icons:github",
   "logos:google-icon"
 ];

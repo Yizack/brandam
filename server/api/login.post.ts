@@ -22,14 +22,14 @@ export default defineEventHandler(async (event) => {
   if (!user) {
     throw createError({
       statusCode: ErrorCode.UNAUTHORIZED,
-      message: "invalid-credentials"
+      message: "Invalid email or password"
     });
   }
 
   if (!user.confirmed) {
     throw createError({
-      statusCode: ErrorCode.UNAUTHORIZED,
-      message: "confirmed-error"
+      statusCode: ErrorCode.FORBIDDEN,
+      message: "Account is not verified"
     });
   }
 

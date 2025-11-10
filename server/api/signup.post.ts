@@ -45,16 +45,15 @@ export default defineEventHandler(async (event) => {
   if (!user) {
     throw createError({
       statusCode: ErrorCode.CONFLICT,
-      message: "user_exists"
+      message: "An account with that email already exists"
     });
   }
 
-  /*
   const token = await generateToken(event, [user.id, user.updatedAt]);
 
   const { html, text } = await renderEmail("AccountVerify", {
     lang: "en",
-    verifyLink: `${SITE.host}/verify/${toBase64URL(user.email)}/${token}`
+    link: `${SITE.url}/verify/${toBase64URL(user.email)}/${token}`
   });
 
   const mailchannels = useMailChannels(event);
@@ -64,5 +63,4 @@ export default defineEventHandler(async (event) => {
     html,
     text
   });
-  */
 });

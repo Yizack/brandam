@@ -1,0 +1,27 @@
+// @ts-expect-error no types from html-to-text
+import { convert } from "html-to-text";
+import type { AllowedComponentProps, VNodeProps } from "vue";
+import type AccountVerify from "~~/emails/AccountVerify.vue";
+
+interface EmailTemplates {
+  AccountVerify: typeof AccountVerify;
+}
+
+type ExtractComponentProps<TComponent> = TComponent extends new () => {
+  $props: infer P;
+} ? Omit<P, keyof VNodeProps | keyof AllowedComponentProps> : never;
+
+export const renderEmail = async <T extends keyof EmailTemplates>(
+  templateName: T,
+  props?: ExtractComponentProps<EmailTemplates[T]>
+) => {
+  const html: string = await renderEmailComponent(templateName, props);
+
+  const text: string = convert(html, {
+    selectors: [
+      { selector: "img", format: "skip" }
+    ]
+  });
+
+  return { html, text };
+};

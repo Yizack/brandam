@@ -1,17 +1,24 @@
 <script setup lang="ts">
 definePageMeta({ layout: false, middleware: "authenticated" });
 
-const loading = ref(false);
+const toast = useToast();
+
+const isLoading = ref(false);
+const isResent = ref(false);
+
+const { query, meta } = useRoute("login");
+const needsConfirm = ref(query.error === "verify_needed" ? true : false);
+
 const route = useRoute("login");
 
 const form = useFormState({
-  email: "",
+  email: (query.email || meta.email) as string || "",
   password: "",
   remember: false
 });
 
-const login = () => {
-  loading.value = true;
+const signIn = () => {
+  isLoading.value = true;
   $fetch("/api/login", {
     method: "POST",
     body: form.value
@@ -19,8 +26,28 @@ const login = () => {
     const redirect = route.query.redirect?.toString();
     const isInternalPath = redirect && redirect.startsWith("/"); // Make sure redirect is an internal path
     navigateTo(isInternalPath ? redirect : "/app", { external: true, replace: true });
-  }).catch(() => {}).finally(() => {
-    loading.value = false;
+  }).catch((response) => {
+    needsConfirm.value = response.data.statusCode === ErrorCode.FORBIDDEN;
+  }).finally(() => {
+    isLoading.value = false;
+  });
+};
+
+const resendVerification = async () => {
+  isLoading.value = true;
+  $fetch("/api/verify/resend", {
+    method: "POST",
+    body: { email: form.value.email }
+  }).then(() => {
+    isResent.value = true;
+    toast.add({
+      description: "Email verification resent, please check your inbox",
+      color: "success"
+    });
+  }).catch(() => {
+    isResent.value = false;
+  }).finally(() => {
+    isLoading.value = false;
   });
 };
 </script>
@@ -29,7 +56,7 @@ const login = () => {
   <main class="flex items-center justify-center h-dvh bg-primary px-4">
     <div class="bg-default p-8 rounded-lg shadow-md w-full max-w-xl">
       <h1 class="text-3xl font-bold text-center mb-6">{{ SITE.name }}</h1>
-      <form class="mb-3 space-y-3" @submit.prevent="login">
+      <form class="mb-3 space-y-3" @submit.prevent="signIn">
         <InputFloating
           id="email"
           v-model.trim="form.email"
@@ -57,7 +84,7 @@ const login = () => {
             variant="subtle"
             size="xl"
             class="rounded-lg font-bold"
-            :disabled="loading"
+            :disabled="isLoading"
             block
           />
           <UButton
@@ -68,11 +95,23 @@ const login = () => {
             type="button"
             size="xl"
             class="rounded-lg font-bold"
-            :disabled="loading"
+            :disabled="isLoading"
             block
           />
         </div>
       </form>
+      <UAlert
+        v-if="needsConfirm && !isResent"
+        color="neutral"
+        variant="subtle"
+        class="my-2"
+        description="Your email needs to be verified to continue, check your inbox for a verification email."
+        :actions="[{
+          label: 'Resend verification email',
+          onClick: () => resendVerification(),
+          loading: isLoading,
+        }]"
+      />
       <p>No account? <ULink to="/signup" class="text-primary hover:text-primary hover:underline font-bold">Sign up</ULink></p>
       <ULink to="/" class="text-primary hover:text-primary hover:underline font-bold">Go back home</ULink>
     </div>
