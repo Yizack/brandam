@@ -32,6 +32,6 @@ export default defineEventHandler(async (event) => {
 
   await DB.update(tables.users).set({
     confirmed: true,
-    updatedAt: Date.now()
+    updatedAt: unixepoch({ mode: "ms" })
   }).where(eq(tables.users.id, user.id)).run();
 });

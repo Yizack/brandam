@@ -32,14 +32,13 @@ export default defineEventHandler(async (event) => {
   const { secure } = useRuntimeConfig(event);
 
   const DB = useDB();
-  const today = Date.now();
 
   const user = await DB.insert(tables.users).values({
     email: body.email,
     password: hash(body.password, secure.salt),
     name: body.name,
-    createdAt: today,
-    updatedAt: today
+    createdAt: unixepoch({ mode: "ms" }),
+    updatedAt: unixepoch({ mode: "ms" })
   }).onConflictDoNothing().returning().get();
 
   if (!user) {
