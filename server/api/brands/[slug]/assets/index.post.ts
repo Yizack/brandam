@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
     };
   });
 
-  const assets = await DB.insert(tables.assets).values(values).returning().all();
+  const assets = await DB.insert(tables.assets).values(values).onConflictDoNothing().returning().all();
 
   if (!assets) {
     throw createError({
