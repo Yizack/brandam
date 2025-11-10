@@ -86,6 +86,15 @@ const assetsData = computed(() =>
       </UContainer>
     </div>
     <div class="py-10 px-4 sm:px-6 lg:px-8 flex flex-col gap-10">
+      <UEmpty
+        v-if="!assets.length || assetsData.every(assetsByType => !assetsByType.values.length)"
+        icon="lucide:file"
+        title="No assets found"
+        :description="!assets.length
+          ? 'It looks like you haven\'t added any assets. Create one to get started.'
+          : 'No assets match your current filters. Try adjusting your search or selecting a different category.'"
+        variant="subtle"
+      />
       <template v-for="(assetsByType, i) of assetsData" :key="i">
         <div v-if="assetsByType.values.length">
           <div class="flex flex-wrap gap-3 items-center mb-4">
