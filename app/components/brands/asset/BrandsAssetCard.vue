@@ -57,7 +57,7 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
             v-if="['image', 'vector'].includes(asset.data.type)"
             :src="getAssetImage(asset.uuid)"
             :alt="asset.name"
-            class="mx-auto h-full"
+            class="mx-auto h-full object-contain"
           >
           <PDFPreview
             v-else-if="asset.data.type === 'document'"

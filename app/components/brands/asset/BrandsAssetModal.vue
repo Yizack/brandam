@@ -44,11 +44,16 @@ watch(open, (value) => {
             class="max-h-98 object-contain"
           >
         </div>
-        <PDFNavigator
-          v-else-if="asset.data.type === 'document'"
-          :url="getAssetImage(asset.uuid)"
-          class="bg-accented rounded-lg p-4"
-        />
+        <div v-else-if="asset.data.type === 'document'">
+          <PDFNavigator :url="getAssetImage(asset.uuid)" class="bg-accented rounded-lg p-4" />
+          <UButton
+            label="Open document in new tab"
+            icon="lucide:external-link"
+            :to="getAssetImage(asset.uuid)"
+            target="_blank"
+            variant="link"
+          />
+        </div>
         <div v-else class="h-48 rounded-lg" :style="{ backgroundColor: asset.data.content }" />
         <div class="text-sm space-y-4">
           <div v-if="asset.description" class="space-y-2">

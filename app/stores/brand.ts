@@ -73,11 +73,12 @@ export const useBrandStore = defineStore("brand", () => {
 
     const { default: mime } = await import("mime");
     const extension = mime.getExtension(asset.data.metadata.mimetype);
+    const filename = toSlug(asset.name);
 
     const link = document.createElement("a");
 
     link.href = getAssetImage(asset.uuid);
-    link.download = [asset.name, extension].filter(Boolean).join(".");
+    link.download = [filename, extension].filter(Boolean).join(".");
 
     document.body.appendChild(link);
     link.click();
