@@ -13,7 +13,7 @@ CREATE TABLE `assets` (
 --> statement-breakpoint
 CREATE INDEX `assets_brand_id_idx` ON `assets` (`brand_id`);--> statement-breakpoint
 CREATE TABLE `brands` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`id` integer PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`description` text,
 	`slug` text NOT NULL,

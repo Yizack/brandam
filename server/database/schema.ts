@@ -14,7 +14,7 @@ export const users = sqliteTable("users", {
 });
 
 export const brands = sqliteTable("brands", {
-  id: integer().primaryKey({ autoIncrement: true }),
+  id: integer().primaryKey(),
   name: text().notNull(),
   description: text(),
   slug: text().notNull().unique(),

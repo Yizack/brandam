@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  await requireUserSession(event);
+  const { user } = await requireUserSession(event);
 
   const params = await getValidatedRouterParams(event, z.object({
     slug: z.string().min(1).transform(v => v.toLowerCase().trim()),
@@ -16,6 +16,18 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: ErrorCode.NOT_FOUND,
       message: "Brand not found"
+    });
+  }
+
+  const member = await DB.select().from(tables.members).where(and(
+    eq(tables.members.brandId, brand.id),
+    eq(tables.members.userId, user.id)
+  )).get();
+
+  if (!member) {
+    throw createError({
+      statusCode: ErrorCode.FORBIDDEN,
+      message: "You do not have access to this brand"
     });
   }
 

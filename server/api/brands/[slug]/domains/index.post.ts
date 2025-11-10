@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  await requireUserSession(event);
+  const { user } = await requireUserSession(event);
 
   const params = await getValidatedRouterParams(event, z.object({
     slug: z.string().min(1).transform(v => v.toLowerCase().trim())
@@ -33,14 +33,15 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const existingDomain = await DB.select().from(tables.domains).where(
-    eq(tables.domains.hostname, body.hostname)
-  ).get();
+  const member = await DB.select().from(tables.members).where(and(
+    eq(tables.members.brandId, brand.id),
+    eq(tables.members.userId, user.id)
+  )).get();
 
-  if (existingDomain) {
+  if (!member) {
     throw createError({
-      statusCode: ErrorCode.CONFLICT,
-      message: "Domain already exists"
+      statusCode: ErrorCode.FORBIDDEN,
+      message: "You do not have access to this brand"
     });
   }
 
@@ -48,7 +49,14 @@ export default defineEventHandler(async (event) => {
     hostname: body.hostname,
     brandId: brand.id,
     active: true
-  }).returning().get();
+  }).onConflictDoNothing().returning().get();
+
+  if (!domain) {
+    throw createError({
+      statusCode: ErrorCode.CONFLICT,
+      message: "Domain already exists"
+    });
+  }
 
   return domain;
 });
