@@ -4,6 +4,7 @@ declare global {
     email: string;
     password: string | null;
     name: string;
+    active: boolean;
     confirmed: boolean;
     createdAt: number;
     updatedAt: number;

@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
     id: tables.users.id,
     name: tables.users.name,
     email: tables.users.email,
+    active: tables.users.active,
     confirmed: tables.users.confirmed
   }).from(tables.users).where(and(
     eq(tables.users.email, body.email),
@@ -30,6 +31,13 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: ErrorCode.FORBIDDEN,
       message: "Account is not verified"
+    });
+  }
+
+  if (!user.active) {
+    throw createError({
+      statusCode: ErrorCode.FORBIDDEN,
+      message: "Account is deactivated"
     });
   }
 

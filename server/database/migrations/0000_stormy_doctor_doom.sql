@@ -54,6 +54,7 @@ CREATE TABLE `users` (
 	`email` text NOT NULL,
 	`password` text,
 	`name` text NOT NULL,
+	`active` integer DEFAULT true NOT NULL,
 	`confirmed` integer DEFAULT false NOT NULL,
 	`created_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
 	`updated_at` integer DEFAULT (unixepoch() * 1000) NOT NULL

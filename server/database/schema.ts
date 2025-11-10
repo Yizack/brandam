@@ -7,6 +7,7 @@ export const users = sqliteTable("users", {
   email: text().notNull().unique(),
   password: text(),
   name: text().notNull(),
+  active: integer({ mode: "boolean" }).notNull().default(true),
   confirmed: integer({ mode: "boolean" }).notNull().default(false),
   createdAt: integer().notNull().default(unixepoch({ mode: "ms" })),
   updatedAt: integer().notNull().default(unixepoch({ mode: "ms" }))

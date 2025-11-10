@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "39d56aa2-8b1f-4b4e-9643-3f55c9b7e0ee",
+  "id": "d0b1c6b8-5dcb-474b-bc14-b0393ef58541",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "assets": {
@@ -395,6 +395,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "active": {
+          "name": "active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
         },
         "confirmed": {
           "name": "confirmed",
