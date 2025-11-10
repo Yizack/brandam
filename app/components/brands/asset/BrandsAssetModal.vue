@@ -21,7 +21,13 @@ watch(open, (value) => {
 </script>
 
 <template>
-  <UModal v-model:open="open" :title="asset.name" scrollable :ui="{ content: 'max-w-7xl' }" :close="{ variant: 'outline', class: 'rounded-full' }">
+  <UModal
+    v-model:open="open"
+    :title="asset.name"
+    scrollable
+    :ui="{ content: asset.data.type !== 'color' ? 'max-w-7xl' : '' }"
+    :close="{ variant: 'outline', class: 'rounded-full' }"
+  >
     <slot />
     <template v-if="asset.data.type !== 'color'" #actions>
       <div class="ms-auto me-8 flex gap-2">
@@ -37,16 +43,21 @@ watch(open, (value) => {
     </template>
     <template #body>
       <div class="space-y-6">
-        <div v-if="['image', 'vector'].includes(asset.data.type)" class="flex justify-center bg-accented rounded-lg p-4">
+        <div
+          v-if="['image', 'vector'].includes(asset.data.type)"
+          class="flex justify-center bg-accented rounded-lg p-4 shadow"
+        >
           <img
             :src="getAssetImage(asset.uuid)"
             :alt="asset.name"
             class="max-h-98 object-contain"
+            :class="{ 'h-98': asset.data.type === 'vector' }"
           >
         </div>
         <div v-else-if="asset.data.type === 'document'">
           <PDFNavigator :url="getAssetImage(asset.uuid)" class="bg-accented rounded-lg p-4" />
           <UButton
+            class="p-0 pt-2"
             label="Open document in new tab"
             icon="lucide:external-link"
             :to="getAssetImage(asset.uuid)"
@@ -56,11 +67,11 @@ watch(open, (value) => {
         </div>
         <div v-else class="h-48 rounded-lg" :style="{ backgroundColor: asset.data.content }" />
         <div class="text-sm space-y-4">
-          <div v-if="asset.description" class="space-y-2">
+          <div v-if="asset.description" class="space-y-1">
             <h3 class="font-bold uppercase">Description</h3>
             <p>{{ asset.description }}</p>
           </div>
-          <div v-if="asset.data.type === 'color' && asset.data.content" class="space-y-2">
+          <div v-if="asset.data.type === 'color' && asset.data.content" class="space-y-1">
             <h3 class="font-bold uppercase">Color Values</h3>
             <div class="space-y-2">
               <div class="flex items-center justify-between gap-2 bg-muted rounded border border-accented overflow-hidden">
@@ -86,23 +97,23 @@ watch(open, (value) => {
               </div>
             </div>
           </div>
-          <div class="space-y-2">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 gap-4" :class="{ 'sm:grid-cols-2 md:grid-cols-3': asset.data.type !== 'color' }">
               <template v-if="asset.data.type !== 'color' && asset.data.metadata">
-                <div v-if="asset.data.metadata.size">
+                <div v-if="asset.data.metadata.size" class="space-y-1">
                   <p class="font-bold uppercase">Size</p>
                   <p>{{ formatFileSize(asset.data.metadata.size) }}</p>
                 </div>
-                <div v-if="asset.data.metadata.mimetype">
+                <div v-if="asset.data.metadata.mimetype" class="space-y-1">
                   <p class="font-bold uppercase">Format</p>
                   <p class="uppercase">{{ mime.getExtension(asset.data.metadata.mimetype) }}</p>
                 </div>
-                <div v-if="asset.data.metadata.width && asset.data.metadata.height">
+                <div v-if="asset.data.metadata.width && asset.data.metadata.height" class="space-y-1">
                   <p class="font-bold uppercase">Dimensions</p>
                   <p>{{ asset.data.metadata.width }} x {{ asset.data.metadata.height }} px</p>
                 </div>
               </template>
-              <div>
+              <div class="space-y-1">
                 <p class="font-bold uppercase">Created</p>
                 <NuxtTime
                   :datetime="asset.createdAt"
@@ -115,18 +126,16 @@ watch(open, (value) => {
                 />
               </div>
             </div>
-          </div>
-          <div class="space-y-2">
-            <h3 class="font-bold uppercase">Asset Key</h3>
-            <div class="flex items-center gap-2">
-              <span class="font-mono">{{ asset.uuid }}</span>
-              <CopyButton :value="asset.uuid" />
+            <div class="space-y-1">
+              <h3 class="font-bold uppercase">Asset Key</h3>
+              <div class="flex items-center gap-2">
+                <span class="font-mono">{{ asset.uuid }}</span>
+                <CopyButton :value="asset.uuid" class="p-0" />
+              </div>
             </div>
-          </div>
-          <div class="space-y-2">
-            <h3 class="font-bold uppercase">Link to asset card</h3>
-            <div class="flex items-center gap-2">
-              <UInput :value="assetCardUrl" class="w-full font-mono" :ui="{ trailing: 'pr-0.5' }" readonly>
+            <div class="space-y-1">
+              <h3 class="font-bold uppercase">Link to asset card</h3>
+              <UInput id="asset-url" :value="assetCardUrl" class="w-full font-mono" :ui="{ trailing: 'pr-0.5' }" readonly>
                 <template #trailing>
                   <CopyButton :value="assetCardUrl" />
                 </template>
