@@ -7,6 +7,13 @@ export default defineEventHandler(async (event) => {
     slug: z.string().transform(v => toSlug(v))
   }).parse);
 
+  if (DISALLOWED_BRANDS.includes(body.slug)) {
+    throw createError({
+      statusCode: ErrorCode.BAD_REQUEST,
+      message: "Brand slug is not allowed"
+    });
+  }
+
   const DB = useDB();
 
   const brand = await DB.insert(tables.brands).values({
