@@ -1,5 +1,6 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
 import { join } from "pathe";
+import { loadFile } from "magicast";
 import { defineNuxtModule } from "nuxt/kit";
 
 export default defineNuxtModule({
@@ -8,9 +9,12 @@ export default defineNuxtModule({
   },
   hooks: {
     "pages:extend": async (pages) => {
-      const pageNames = [...new Set(pages.map(page => page.name?.split("-")[0]))];
+      const pageNames = new Set(pages.map(page => page.name?.split("-")[0]));
 
-      const disallowedBrands = [
+      const filePath = join("server", "utils", "constants.ts");
+      const mod = await loadFile(filePath);
+
+      mod.exports.DISALLOWED_BRANDS = [
         ...pageNames,
         // Additional reserved names
         "api",
@@ -18,17 +22,11 @@ export default defineNuxtModule({
         "images"
       ];
 
-      const filePath = join("server", "utils", "constants.ts");
-      let fileContent = await readFile(filePath, "utf-8");
+      const eol = mod.$code.match(/\r\n/) ? "\r\n" : "\n";
 
-      const eol = fileContent.includes("\r\n") ? "\r\n" : "\n";
-      const arrayContent = `${eol}  ${disallowedBrands.map(b => `"${b}"`).join(`,${eol}  `)}${eol}`;
-
-      const exportRegex = /export const DISALLOWED_BRANDS = \[[\s\S]*?\];/m;
-      const newExport = `export const DISALLOWED_BRANDS = [${arrayContent}];`;
-
-      fileContent = fileContent.replace(exportRegex, newExport);
-      await writeFile(filePath, fileContent, "utf-8");
+      const generated = mod.generate({ lineTerminator: eol });
+      const code = generated.code.endsWith(eol) ? generated.code : generated.code + eol;
+      await writeFile(filePath, code, "utf-8");
     }
   }
 });
