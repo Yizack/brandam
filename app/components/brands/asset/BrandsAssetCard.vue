@@ -7,6 +7,8 @@ defineProps<{
 }>();
 
 const brandStore = useBrandStore();
+const { grants } = storeToRefs(brandStore);
+
 const isShareOpen = ref(false);
 const isEditOpen = ref(false);
 
@@ -30,7 +32,7 @@ const getItems = (asset: BrandamAsset): DropdownMenuItem[][] => {
     });
   }
 
-  if (brandStore.isAdmin) {
+  if (grants.value.edit) {
     dropdownItems.push([
       {
         label: "Edit",

@@ -2,7 +2,7 @@
 const isLoading = ref(false);
 
 const brandStore = useBrandStore();
-const { brand } = storeToRefs(brandStore);
+const { brand, grants } = storeToRefs(brandStore);
 
 const brandForm = useFormState({
   name: brand.value.name,
@@ -54,8 +54,10 @@ const editBrand = async () => {
           </div>
         </div>
       </form>
-      <USeparator class="my-6" />
-      <BrandsSettingsDomains />
+      <template v-if="grants.admin">
+        <USeparator class="my-6" />
+        <BrandsSettingsDomains />
+      </template>
     </template>
   </UModal>
 </template>

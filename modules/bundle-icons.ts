@@ -25,7 +25,7 @@ const iconsList = [
   "lucide:type",
   "lucide:palette",
   "lucide:search",
-  "lucide:shield-check",
+  "lucide:briefcase",
   "lucide:cog",
   "lucide:copy-check",
   "lucide:copy",

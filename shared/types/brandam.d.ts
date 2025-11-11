@@ -27,13 +27,18 @@ declare global {
     };
   }
 
-  interface BrandamMember {
+  interface BrandamMemberSchema {
     id: number;
     userId: number;
     brandId: number;
     roleId: MemberRole;
     createdAt: number;
     updatedAt: number;
+  }
+
+  interface BrandamMember {
+    roleId: MemberRole;
+    user: Omit<BrandamUser, "password" | "active" | "confirmed">;
   }
 
   type BrandamAssetTypes = "image" | "vector" | "document" | "font" | "color";

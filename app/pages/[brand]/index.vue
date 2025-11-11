@@ -17,8 +17,7 @@ if (!data.value) {
 const brandStore = useBrandStore();
 brandStore.setup(data.value);
 
-const brand = computed(() => brandStore.brand);
-const assets = computed(() => brandStore.assets);
+const { brand, assets, grants } = storeToRefs(brandStore);
 
 const items: TabsItem[] = [
   { label: "All", value: "all", icon: "lucide:grid-2x2" },
@@ -126,6 +125,6 @@ const assetsData = computed(() =>
         <USeparator v-if="assetsByType.values.length && i < assetsData.length - 1" />
       </template>
     </div>
-    <BrandsToolbar v-if="brandStore.isAdmin" />
+    <BrandsToolbar v-if="grants.edit" />
   </main>
 </template>

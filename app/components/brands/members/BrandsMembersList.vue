@@ -4,7 +4,9 @@ import type { DropdownMenuItem, SelectItem } from "@nuxt/ui";
 const { user } = useUserSession();
 
 const brandStore = useBrandStore();
-const { data: members } = await brandStore.getMembers();
+const { members, grants } = storeToRefs(brandStore);
+
+/* const { status } = */ await brandStore.fetchMembers();
 
 const actions: DropdownMenuItem[] = [
   {
@@ -14,11 +16,11 @@ const actions: DropdownMenuItem[] = [
   }
 ];
 
-const roles: SelectItem[] = [
-  { label: "Owner", id: MemberRole.OWNER },
-  { label: "Admin", id: MemberRole.ADMIN },
-  { label: "Editor", id: MemberRole.EDITOR }
-];
+const roles = [
+  { label: "Owner", value: MemberRole.OWNER },
+  { label: "Admin", value: MemberRole.ADMIN },
+  { label: "Editor", value: MemberRole.EDITOR }
+] satisfies SelectItem[];
 </script>
 
 <template>
@@ -47,14 +49,17 @@ const roles: SelectItem[] = [
       <div class="flex items-center gap-3">
         <USelect
           v-model="member.roleId"
-          value-key="id"
-          :items="roles"
+          :items="roles.filter(role => role.value !== MemberRole.OWNER || member.roleId === MemberRole.OWNER)"
           color="neutral"
           :ui="{ value: 'capitalize', item: 'capitalize' }"
-          :disabled="!brandStore.isAdmin || member.user.id === user?.id || member.roleId === MemberRole.OWNER"
+          :disabled="!grants.admin || member.user.id === user?.id || member.roleId === MemberRole.OWNER"
         />
 
-        <UDropdownMenu :items="actions" :content="{ align: 'end' }" :disabled="!brandStore.isAdmin || member.user.id === user?.id || member.roleId === MemberRole.OWNER">
+        <UDropdownMenu
+          :items="actions"
+          :content="{ align: 'end' }"
+          :disabled="!grants.admin || member.user.id === user?.id || member.roleId === MemberRole.OWNER"
+        >
           <UButton
             icon="lucide:ellipsis-vertical"
             color="neutral"

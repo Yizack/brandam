@@ -5,14 +5,19 @@ export const useBrandStore = defineStore("brand", () => {
   const brand = ref() as Ref<BrandamBrand>;
   const assets = ref<BrandamAsset[]>([]);
   const domains = ref<BrandamDomain[]>([]);
-  const roleId = ref<MemberRole>();
-  const isAdmin = computed(() => user.value && (roleId.value === MemberRole.ADMIN || roleId.value === MemberRole.OWNER));
+  const members = ref<BrandamMember[]>([]);
+  const role = ref<{ id?: MemberRole, name: string }>({ id: undefined, name: "" });
+
+  const grants = computed(() => getRoleGrants(role.value.id, !!user.value));
 
   const setup = (data: BrandamBrandWithAssets & { roleId?: MemberRole }) => {
-    const { brand: brandData, assets: assetsData, roleId: role } = data;
+    const { brand: brandData, assets: assetsData, roleId } = data;
     brand.value = brandData;
     assets.value = assetsData;
-    roleId.value = role;
+    if (roleId) {
+      role.value.id = roleId;
+      role.value.name = roleNames[roleId];
+    }
   };
 
   const updateBrand = async (data: Partial<BrandamBrand>) => {
@@ -107,16 +112,27 @@ export const useBrandStore = defineStore("brand", () => {
     });
   };
 
-  const getMembers = async () => {
-    return useFetch(`/api/brands/${brand.value.slug}/members`, {
-      key: `brands:${brand.value.slug}:members`
+  const fetchMembers = async () => {
+    const { data, status } = await useFetch(`/api/brands/${brand.value.slug}/members`, {
+      key: `brands:${brand.value.slug}:members`,
+      lazy: true,
+      getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key]
     });
+
+    watch(status, (newStatus) => {
+      if (newStatus === "success") {
+        members.value = data.value || [];
+      }
+    });
+
+    return { status };
   };
 
   const fetchDomains = async () => {
     const { data, status } = await useFetch(`/api/brands/${brand.value.slug}/domains`, {
       key: `brands:${brand.value.slug}:domains`,
-      lazy: true
+      lazy: true,
+      getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key]
     });
 
     watch(status, (newStatus) => {
@@ -134,6 +150,7 @@ export const useBrandStore = defineStore("brand", () => {
       body: { hostname }
     }).then((domain) => {
       domains.value.push(domain);
+      useCachedData(`brands:${brand.value.slug}:domains`, () => domains.value);
       toast.add({
         description: "Domain added successfully",
         color: "success"
@@ -147,6 +164,7 @@ export const useBrandStore = defineStore("brand", () => {
       method: "DELETE"
     }).then(() => {
       domains.value = domains.value.filter(d => d.hostname !== hostname);
+      useCachedData(`brands:${brand.value.slug}:domains`, () => domains.value);
       toast.add({
         description: "Domain deleted successfully",
         color: "success"
@@ -157,15 +175,17 @@ export const useBrandStore = defineStore("brand", () => {
   return {
     brand,
     assets,
+    members,
+    role,
     domains,
-    isAdmin,
+    grants,
     setup,
     updateBrand,
     addAssets,
     editAsset,
     deleteAsset,
     downloadAsset,
-    getMembers,
+    fetchMembers,
     fetchDomains,
     addDomain,
     deleteDomain

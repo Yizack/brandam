@@ -41,14 +41,14 @@ const isPending = computed(() => status.value === "pending");
         <span class="h-6" />
       </USkeleton>
       <template v-else>
-        <div v-for="domain in domains" :key="domain.id" class="flex items-center p-2 border border-accented bg-muted rounded-lg">
+        <div v-for="domain in domains" :key="domain.id" class="flex items-center px-4 py-2 border border-accented bg-muted rounded-lg">
           <span class="text-sm text-muted flex-1">{{ domain.hostname }}</span>
           <!-- active indicator -->
-          <UBadge :color="domain.active ? 'success' : 'error'" variant="soft" class="me-1 flex items-center">
+          <UBadge :color="domain.active ? 'success' : 'error'" variant="subtle" class="me-1 flex items-center">
             <span class="inline-block w-2 h-2 rounded-full bg-success me-1" />
             Active
           </UBadge>
-          <UButton icon="lucide:x" color="error" variant="ghost" size="xs" @click="deleteDomain(domain.hostname)" />
+          <UButton icon="lucide:x" color="error" variant="soft" size="xs" @click="deleteDomain(domain.hostname)" />
         </div>
       </template>
     </div>
