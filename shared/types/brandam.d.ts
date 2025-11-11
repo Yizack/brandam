@@ -36,8 +36,7 @@ declare global {
     updatedAt: number;
   }
 
-  interface BrandamMember {
-    roleId: MemberRole;
+  interface BrandamMember extends Pick<BrandamMemberSchema, "id" | "roleId"> {
     user: Omit<BrandamUser, "password" | "active" | "confirmed">;
   }
 

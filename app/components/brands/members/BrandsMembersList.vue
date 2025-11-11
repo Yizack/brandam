@@ -21,6 +21,15 @@ const roles = [
   { label: "Admin", value: MemberRole.ADMIN },
   { label: "Editor", value: MemberRole.EDITOR }
 ] satisfies SelectItem[];
+
+const form = useFormState({
+  email: ""
+});
+
+const inviteMember = async () => {
+  // TODO: Implement invite logic, e.g. brandStore.inviteMember(form.email)
+  form.reset();
+};
 </script>
 
 <template>
@@ -40,7 +49,7 @@ const roles = [
     </li>
   </ul>
   <ul v-else role="list" class="divide-y divide-default">
-    <li v-for="member in members" :key="member.user.id" class="flex items-center justify-between gap-3 py-3 px-4 sm:px-6">
+    <li v-for="member in members" :key="member.id" class="flex items-center justify-between gap-3 py-3 px-4 sm:px-6">
       <div class="flex items-center gap-3 min-w-0">
         <UAvatar
           :alt="member.user.name"
@@ -77,4 +86,23 @@ const roles = [
       </div>
     </li>
   </ul>
-</template>
+  <form v-if="grants.owner" class="flex items-center gap-2 mt-4" @submit.prevent="inviteMember">
+    <UFieldGroup class="w-full">
+      <UInput
+        id="email"
+        v-model.trim="form.email"
+        type="email"
+        placeholder="name@example.com"
+        :ui="{ root: 'w-full', base: 'h-full' }"
+      />
+      <UButton
+        label="Invite"
+        type="submit"
+        icon="lucide:plus"
+        variant="subtle"
+        size="xl"
+        :disabled="!form.email"
+      />
+    </UFieldGroup>
+  </form>
+</template>|

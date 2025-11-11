@@ -23,7 +23,6 @@ export default [
   "lucide:type",
   "lucide:palette",
   "lucide:search",
-  "lucide:briefcase",
   "lucide:cog",
   "lucide:copy-check",
   "lucide:copy",

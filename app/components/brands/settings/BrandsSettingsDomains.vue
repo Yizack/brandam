@@ -54,10 +54,22 @@ const isPending = computed(() => status.value === "pending");
     </div>
 
     <UFieldGroup class="w-full">
-      <UInput id="hostname" v-model.trim="domainForm.hostname" type="text" placeholder="example.com" :ui="{ root: 'w-full', base: 'h-full' }" />
-      <UButton type="submit" icon="lucide:plus" variant="subtle" size="xl" :disabled="isPending || isLoading || !domainForm.hostname">
-        Add
-      </UButton>
+      <UInput
+        id="hostname"
+        v-model.trim="domainForm.hostname"
+        type="text"
+        placeholder="example.com"
+        :ui="{ root: 'w-full', base: 'h-full' }"
+      />
+      <UButton
+        label="Add"
+        type="submit"
+        icon="lucide:plus"
+        variant="subtle"
+        size="xl"
+        :disabled="isPending || isLoading || !domainForm.hostname"
+        :loading="isLoading"
+      />
     </UFieldGroup>
   </form>
 </template>

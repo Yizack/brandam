@@ -5,6 +5,7 @@ export const enum MemberRole {
 }
 
 const roleGrants = {
+  owner: [MemberRole.OWNER],
   admin: [MemberRole.OWNER, MemberRole.ADMIN],
   edit: [MemberRole.OWNER, MemberRole.ADMIN, MemberRole.EDITOR]
 };

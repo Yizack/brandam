@@ -8,6 +8,7 @@ export default defineEventHandler(async (event) => {
   const DB = useDB();
 
   const membersList = await DB.select({
+    id: tables.members.id,
     roleId: tables.members.roleId,
     user: {
       id: tables.users.id,
