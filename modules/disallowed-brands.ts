@@ -9,18 +9,25 @@ export default defineNuxtModule({
   },
   hooks: {
     ready: () => extendPages(async (pages) => {
-      const pageNames = new Set(pages.map(page => page.name?.split("-")[0]));
-
-      const filePath = join("server", "utils", "constants.ts");
-      const mod = await loadFile(filePath);
-
-      mod.exports.DISALLOWED_BRANDS = [
-        ...pageNames,
-        // Additional reserved names
+      const pageNames = pages.map(page => page.name?.split("-")[0]);
+      const reservedNames = [
         "api",
         "uploads",
         "images"
       ];
+
+      const disallowedBrands = new Set([...pageNames, ...reservedNames]);
+
+      const filePath = join("server", "utils", "constants.ts");
+      const mod = await loadFile(filePath);
+
+      mod.exports.DISALLOWED_BRANDS ||= [];
+
+      if (mod.exports.DISALLOWED_BRANDS.length === disallowedBrands.size) {
+        return;
+      }
+
+      mod.exports.DISALLOWED_BRANDS = [...disallowedBrands];
 
       const eol = mod.$code.match(/\r\n/) ? "\r\n" : "\n";
 
