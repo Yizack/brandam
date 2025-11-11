@@ -8,11 +8,11 @@ const { members, grants } = storeToRefs(brandStore);
 
 const { status } = await brandStore.fetchMembers();
 
-const actions: DropdownMenuItem[] = [
+const getActions = (id: number): DropdownMenuItem[] => [
   {
     label: "Remove member",
     color: "error" as const,
-    onSelect: () => console.info("Not implemented yet")
+    onSelect: () => deleteMember(id)
   }
 ];
 
@@ -26,9 +26,19 @@ const form = useFormState({
   email: ""
 });
 
+const isLoading = ref(false);
+
 const inviteMember = async () => {
-  // TODO: Implement invite logic, e.g. brandStore.inviteMember(form.email)
+  // TODO: Implement invite member functionality via email
+  useToast().add({ description: "Not implemented yet", color: "error" });
   form.reset();
+};
+
+const deleteMember = async (id: number) => {
+  isLoading.value = true;
+  brandStore.deleteMember(id).catch(() => {}).finally(() => {
+    isLoading.value = false;
+  });
 };
 </script>
 
@@ -73,7 +83,7 @@ const inviteMember = async () => {
           :disabled="!grants.admin || member.user.id === user?.id || member.roleId === MemberRole.OWNER"
         />
         <UDropdownMenu
-          :items="actions"
+          :items="getActions(member.id)"
           :content="{ align: 'end' }"
           :disabled="!grants.admin || member.user.id === user?.id || member.roleId === MemberRole.OWNER"
         >
@@ -86,7 +96,7 @@ const inviteMember = async () => {
       </div>
     </li>
   </ul>
-  <form v-if="grants.owner" class="flex items-center gap-2 mt-4" @submit.prevent="inviteMember">
+  <form v-if="grants.admin" class="flex items-center gap-2 mt-4" @submit.prevent="inviteMember">
     <UFieldGroup class="w-full">
       <UInput
         id="email"

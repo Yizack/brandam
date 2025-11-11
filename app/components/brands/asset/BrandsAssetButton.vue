@@ -110,10 +110,10 @@ if (enter) {
         <BrandsAssetStepColor v-if="assetType === 'color'" v-model="form.items" :step="assetStep" />
         <BrandsAssetStepFiles v-else-if="assetType" v-model="form.items" :step="assetStep" :type="assetType" />
         <USeparator class="my-4" />
-        <div class="grid gap-2" :class="{ 'grid-cols-2': assetStep > 0 }">
-          <UButton :label="isInitialStep ? 'Cancel' : 'Back'" color="error" size="xl" variant="subtle" class="justify-center rounded-lg" @click="assetPrev" />
-          <UButton v-if="isStepping" type="submit" label="Continue" color="secondary" size="xl" variant="subtle" class="justify-center rounded-lg" />
-          <UButton v-if="isSubmittable" type="submit" size="xl" variant="subtle" class="justify-center rounded-lg" :loading="isLoading">
+        <div class="flex flex-col sm:flex-row gap-2">
+          <UButton :label="isInitialStep ? 'Cancel' : 'Back'" color="error" size="xl" variant="subtle" class="rounded-lg" block @click="assetPrev" />
+          <UButton v-if="isStepping" type="submit" label="Continue" color="secondary" size="xl" variant="subtle" class="rounded-lg" block />
+          <UButton v-if="isSubmittable" type="submit" size="xl" variant="subtle" class="rounded-lg" :loading="isLoading" block>
             <span v-if="!isLoading">Submit</span>
           </UButton>
         </div>

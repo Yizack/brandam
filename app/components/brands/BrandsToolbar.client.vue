@@ -15,6 +15,7 @@ const { role } = storeToRefs(brandStore);
               :label="role.name"
               color="neutral"
               variant="outline"
+              class="rounded-lg"
             />
           </div>
           <div class="flex items-center gap-3">

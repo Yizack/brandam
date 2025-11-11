@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const brandStore = useBrandStore();
-const { domains } = storeToRefs(brandStore);
+const { domains, grants } = storeToRefs(brandStore);
 
 const { status } = await brandStore.fetchDomains();
 
@@ -22,8 +22,7 @@ const addDomain = async () => {
 
 const deleteDomain = async (hostname: string) => {
   isLoading.value = true;
-  brandStore.deleteDomain(hostname).then(() => {
-  }).catch(() => {}).finally(() => {
+  brandStore.deleteDomain(hostname).catch(() => {}).finally(() => {
     isLoading.value = false;
   });
 };
@@ -42,18 +41,18 @@ const isPending = computed(() => status.value === "pending");
       </USkeleton>
       <template v-else>
         <div v-for="domain in domains" :key="domain.id" class="flex items-center px-4 py-2 border border-accented bg-muted rounded-lg">
-          <span class="text-sm text-muted flex-1">{{ domain.hostname }}</span>
+          <span class="text-sm flex-1">{{ domain.hostname }}</span>
           <!-- active indicator -->
-          <UBadge :color="domain.active ? 'success' : 'error'" variant="subtle" class="me-1 flex items-center">
-            <span class="inline-block w-2 h-2 rounded-full bg-success me-1" />
-            Active
+          <UBadge :color="domain.active ? 'success' : 'error'" variant="soft" class="me-2">
+            <span class="inline-block size-1.5 rounded-full bg-success" />
+            <span>Active</span>
           </UBadge>
-          <UButton icon="lucide:x" color="error" variant="soft" size="xs" @click="deleteDomain(domain.hostname)" />
+          <UButton v-if="grants.admin" icon="lucide:x" color="error" variant="subtle" size="xs" class="rounded-lg" @click="deleteDomain(domain.hostname)" />
         </div>
       </template>
     </div>
 
-    <UFieldGroup class="w-full">
+    <UFieldGroup v-if="grants.admin" class="w-full">
       <UInput
         id="hostname"
         v-model.trim="domainForm.hostname"

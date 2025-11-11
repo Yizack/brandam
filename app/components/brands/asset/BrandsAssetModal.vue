@@ -32,13 +32,9 @@ watch(open, (value) => {
     <template v-if="asset.data.type !== 'color'" #actions>
       <div class="ms-auto me-8 flex gap-2">
         <BrandsShare :path="assetCardPath" :description="`Share asset.`">
-          <UButton icon="lucide:arrow-big-right-dash" variant="soft" color="neutral">
-            Share
-          </UButton>
+          <UButton label="Share" icon="lucide:arrow-big-right-dash" variant="subtle" color="neutral" class="rounded-lg" />
         </BrandsShare>
-        <UButton icon="lucide:download" variant="soft" @click="brandStore.downloadAsset(asset)">
-          Download
-        </UButton>
+        <UButton label="Download" icon="lucide:download" variant="subtle" class="rounded-lg" @click="brandStore.downloadAsset(asset)" />
       </div>
     </template>
     <template #body>

@@ -22,7 +22,7 @@ const removeColor = (index: number) => {
 <template>
   <div v-if="step === AssetStep.DETAILS">
     <p class="text-sm mb-4">Add your brand colors.</p>
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 mb-3">
       <TransitionGroup name="expand-200">
         <div v-for="(item, i) of model" :key="i" class="flex flex-col items-center gap-2">
           <UFieldGroup class="form-input-group w-full">
@@ -37,7 +37,7 @@ const removeColor = (index: number) => {
                 <UColorPicker v-model="item.content" class="p-2" />
               </template>
             </UPopover>
-            <UButton icon="lucide:trash" variant="subtle" color="error" class="px-3" :ui="{ base: 'rounded-lg' }" @click="removeColor(i)" />
+            <UButton icon="lucide:trash" variant="subtle" color="error" class="px-3" @click="removeColor(i)" />
           </UFieldGroup>
           <InputFloating id="name" v-model.trim="item.name" type="text" class="w-full" placeholder="Name" required />
           <InputFloating id="description" v-model.trim="item.description" type="text" class="w-full" placeholder="Description" />
@@ -45,7 +45,7 @@ const removeColor = (index: number) => {
         </div>
       </TransitionGroup>
     </div>
-    <UButton icon="lucide:plus" size="lg" variant="subtle" class="w-full justify-center rounded-lg mt-3" @click="addColor" />
+    <UButton icon="lucide:plus" size="xl" variant="subtle" class="rounded-lg" block @click="addColor" />
   </div>
   <div v-else-if="step === AssetStep.REVIEW">
     <p class="text-sm mb-4">Review your brand colors before submitting.</p>

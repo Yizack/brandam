@@ -68,7 +68,7 @@ const assetsData = computed(() =>
           </div>
           <div class="flex flex-wrap gap-3">
             <p>{{ assets.length }} Assets</p>
-            <USeparator color="neutral" orientation="vertical" class="h-6" />
+            <USeparator color="primary" orientation="vertical" class="h-6" />
             <ULink class="flex items-center gap-1 hover:underline text-primary!">
               <Icon name="lucide:arrow-big-right-dash" />
               <BrandsShare :path="`/${brand.slug}`" :description="`Share '${brand.name}' brand.`">

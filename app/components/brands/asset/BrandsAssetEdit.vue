@@ -32,9 +32,9 @@ const editAsset = () => {
         <InputFloating id="name" v-model.trim="form.name" type="text" class="w-full" placeholder="Name" required />
         <InputFloating id="description" v-model.trim="form.description" type="text" class="w-full" placeholder="Description" />
         <USeparator class="my-4" />
-        <div class="grid gap-2 grid-cols-2">
-          <UButton label="Cancel" color="error" size="xl" variant="subtle" class="justify-center rounded-lg" block @click="model = false" />
-          <UButton type="submit" size="xl" variant="subtle" class="justify-center rounded-lg" :loading="isLoading" block>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <UButton label="Cancel" color="error" size="xl" variant="subtle" class="rounded-lg" block @click="model = false" />
+          <UButton type="submit" size="xl" variant="subtle" class="rounded-lg" :loading="isLoading" block>
             <div v-if="!isLoading">Edit</div>
           </UButton>
         </div>

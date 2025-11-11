@@ -25,7 +25,7 @@ export default defineTask({
     description: "Run database seed task"
   },
   async run () {
-    await insertTestUsers(2);
+    await insertTestUsers(3);
     console.info("Database seeded");
     return { result: "success" };
   }

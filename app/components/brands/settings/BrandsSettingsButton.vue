@@ -36,28 +36,31 @@ const editBrand = async () => {
 
 <template>
   <UModal v-model:open="isBrandOpen" title="Edit Brand" description="Manage your brand settings." :close="{ variant: 'outline', class: 'rounded-full' }" :dismissible="false" @close:prevent="onCloseBrand">
-    <UButton icon="lucide:cog" color="neutral" variant="soft" label="Brand Settings" class="rounded-lg" />
+    <UButton icon="lucide:cog" color="neutral" variant="subtle" label="Brand Settings" class="rounded-lg" />
     <template #body>
-      <form @submit.prevent="editBrand">
-        <h3 class="text-highlighted text-sm font-semibold mb-1">Brand Information</h3>
-        <div class="space-y-3 mt-3">
-          <InputFloating v-model.trim="brandForm.name" type="text" placeholder="Brand name" required />
-          <InputFloating v-model.trim="brandForm.description" type="text" placeholder="Description" />
-          <UFieldGroup class="form-input-group mb-3">
-            <UBadge color="neutral" variant="outline" size="lg">{{ SITE.domain }}/</UBadge>
-            <InputFloating v-model.slug="brandForm.slug" type="text" placeholder="Slug" required />
+      <form class="space-y-3" @submit.prevent="editBrand">
+        <h3 class="text-highlighted text-sm font-semibold">Brand Information</h3>
+        <div class="space-y-3">
+          <InputFloating v-model.trim="brandForm.name" type="text" placeholder="Brand name" :readonly="!grants.admin" required />
+          <InputFloating v-model.trim="brandForm.description" type="text" placeholder="Description" :readonly="!grants.admin" />
+          <UFieldGroup class="form-input-group">
+            <UBadge color="neutral" variant="soft" size="lg">{{ SITE.domain }}/</UBadge>
+            <InputFloating v-model.slug="brandForm.slug" type="text" placeholder="Slug" :readonly="!grants.owner" required />
           </UFieldGroup>
           <div class="grid">
-            <UButton type="submit" variant="subtle" size="xl" class="justify-center rounded-lg font-bold" :disabled="isLoading">
-              Edit
-            </UButton>
+            <UButton
+              :label="grants.admin ? 'Edit' : 'View Only'"
+              type="submit"
+              variant="subtle"
+              size="xl"
+              class="justify-center rounded-lg font-bold"
+              :disabled="isLoading || !grants.admin"
+            />
           </div>
         </div>
       </form>
-      <template v-if="grants.admin">
-        <USeparator class="my-6" />
-        <BrandsSettingsDomains />
-      </template>
+      <USeparator class="my-6" />
+      <BrandsSettingsDomains />
     </template>
   </UModal>
 </template>

@@ -52,16 +52,14 @@ useHead({
           <p class="text-sm">Add a new brand to your workspace</p>
         </div>
         <template #body>
-          <form @submit.prevent="createBrand">
-            <InputFloating v-model.trim="form.name" type="text" class="mb-3" placeholder="Brand name" required />
-            <InputFloating v-model.trim="form.description" type="text" class="mb-3" placeholder="Description" />
+          <form class="space-y-3" @submit.prevent="createBrand">
+            <InputFloating v-model.trim="form.name" type="text" placeholder="Brand name" required />
+            <InputFloating v-model.trim="form.description" type="text" placeholder="Description" />
             <UFieldGroup class="form-input-group">
-              <UBadge color="neutral" variant="outline" size="lg">{{ SITE.domain }}/</UBadge>
+              <UBadge color="neutral" variant="soft" size="lg">{{ SITE.domain }}/</UBadge>
               <InputFloating id="slug" v-model.slug="form.slug" type="text" placeholder="Slug" required />
             </UFieldGroup>
-            <div class="grid mt-3">
-              <UButton type="submit" variant="subtle" size="xl" class="justify-center rounded-lg font-bold" :disabled="isLoading">Create</UButton>
-            </div>
+            <UButton type="submit" variant="subtle" size="xl" class="rounded-lg font-bold" :disabled="isLoading" block>Create</UButton>
           </form>
         </template>
       </UModal>

@@ -96,8 +96,8 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
           @update:open="dropdownAsset = $event ? asset.uuid : undefined"
         >
           <UButton
-            class="absolute end-0 top-0 text-white! border border-transparent hover:border-white m-2 py-1"
-            :class="{ 'border-white': isActive(asset.uuid) }"
+            class="absolute end-0 top-0 text-white! border border-transparent hover:border-white m-2 py-1 rounded-lg"
+            :class="{ 'border-white': dropdownAsset === asset.uuid }"
             variant="link"
             icon="lucide:ellipsis"
             @click.stop
@@ -110,7 +110,7 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
           <UBadge
             v-if="asset.data.type !== 'color' && asset.data.metadata?.mimetype"
             color="neutral"
-            class="uppercase"
+            class="uppercase rounded-lg"
             variant="subtle"
           >
             {{ mime.getExtension(asset.data.metadata?.mimetype) }}

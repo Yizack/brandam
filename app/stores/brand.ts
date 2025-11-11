@@ -128,6 +128,20 @@ export const useBrandStore = defineStore("brand", () => {
     return { status };
   };
 
+  const deleteMember = async (id: number) => {
+    if (!confirm("Are you sure you want to remove this member? This action cannot be undone.")) return;
+    return $fetch(`/api/brands/${brand.value.slug}/members/${id}`, {
+      method: "DELETE"
+    }).then(() => {
+      members.value = members.value.filter(member => member.id !== id);
+      useCachedData(`brands:${brand.value.slug}:members`, () => members.value);
+      toast.add({
+        description: "Member removed successfully",
+        color: "success"
+      });
+    });
+  };
+
   const fetchDomains = async () => {
     const { data, status } = await useFetch(`/api/brands/${brand.value.slug}/domains`, {
       key: `brands:${brand.value.slug}:domains`,
@@ -186,6 +200,7 @@ export const useBrandStore = defineStore("brand", () => {
     deleteAsset,
     downloadAsset,
     fetchMembers,
+    deleteMember,
     fetchDomains,
     addDomain,
     deleteDomain
