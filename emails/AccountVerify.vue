@@ -14,7 +14,6 @@ defineProps<{
       <title>Email verification</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="x-apple-disable-message-reformatting">
-      <EFont font-family="Arial" />
     </EHead>
     <EBody :style="{ margin: 0 }">
       <ESection :style="styles.container">
