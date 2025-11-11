@@ -1,6 +1,4 @@
-import { defineNuxtModule } from "nuxt/kit";
-
-const iconsList = [
+export default [
   "lucide:menu",
   "lucide:info",
   "lucide:house",
@@ -41,16 +39,3 @@ const iconsList = [
   "simple-icons:github",
   "logos:google-icon"
 ];
-
-export default defineNuxtModule({
-  meta: {
-    name: "bundle-icons"
-  },
-  hooks: {
-    "icon:clientBundleIcons": (icons: Set<string>) => {
-      for (const icon of iconsList) {
-        icons.add(icon);
-      }
-    }
-  }
-});

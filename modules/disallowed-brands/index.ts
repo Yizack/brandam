@@ -1,7 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import { join } from "pathe";
 import { loadFile } from "magicast";
-import { defineNuxtModule, extendPages } from "nuxt/kit";
+import { addServerImports, createResolver, defineNuxtModule, extendPages } from "nuxt/kit";
 
 export default defineNuxtModule({
   meta: {
@@ -18,7 +18,7 @@ export default defineNuxtModule({
 
       const disallowedBrands = new Set([...pageNames, ...reservedNames]);
 
-      const filePath = join("server", "utils", "constants.ts");
+      const filePath = join("modules", "disallowed-brands", "names.ts");
       const mod = await loadFile(filePath);
 
       mod.exports.DISALLOWED_BRANDS ||= [];
@@ -35,5 +35,12 @@ export default defineNuxtModule({
       const code = generated.code.endsWith(eol) ? generated.code : generated.code + eol;
       await writeFile(filePath, code, "utf-8");
     })
+  },
+  setup () {
+    const { resolve } = createResolver(import.meta.url);
+    addServerImports({
+      from: resolve("./names.ts"),
+      name: "DISALLOWED_BRANDS"
+    });
   }
 });
