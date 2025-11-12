@@ -1,8 +1,13 @@
 export const SITE = {
   name: "BrandAM",
+  author: "Yizack Rangel",
   rootDomain: "yizack.com",
   domain: "brandam.yizack.com",
-  url: import.meta.dev ? "http://localhost:5173" : "https://brandam.yizack.com",
+  host: import.meta.dev ? "http://localhost:5173" : "https://brandam.yizack.com",
   cdn: import.meta.dev ? "http://localhost:5173" : "https://brandam-cdn.yizack.com",
-  repository: "https://github.com/Yizack/brandam"
+  donate: "https://ko-fi.com/yizack",
+  github: {
+    author: "Yizack",
+    repo: "https://github.com/Yizack/brandam"
+  }
 };

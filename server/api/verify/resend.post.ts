@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
 
   const { html, text } = await renderEmail("AccountVerify", {
     lang: "en",
-    link: `${SITE.url}/verify/${toBase64URL(user.email)}/${token}`
+    link: `${SITE.host}/verify/${toBase64URL(user.email)}/${token}`
   });
 
   const mailchannels = useMailChannels(event);

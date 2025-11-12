@@ -28,10 +28,26 @@ const columns: FooterColumn[] = [
   {
     label: "Contribute",
     children: [
-      { label: "Donate" },
-      { label: "GitHub repository" },
-      { label: "Report a bug" },
-      { label: "Request a feature" }
+      {
+        label: "Donate",
+        to: SITE.donate,
+        target: "_blank"
+      },
+      {
+        label: "GitHub repository",
+        to: SITE.github.repo,
+        target: "_blank"
+      },
+      {
+        label: "Report a bug",
+        to: SITE.github.repo + `/issues/new?assignees=${SITE.github.author}&labels=bug&projects=&template=1-bug_report.yml`,
+        target: "_blank"
+      },
+      {
+        label: "Request a feature",
+        to: SITE.github.repo + `/issues/new?assignees=${SITE.github.author}&labels=enhancement&projects=&template=2-feature_request.yml`,
+        target: "_blank"
+      }
     ]
   }
 ];
@@ -58,7 +74,7 @@ const columns: FooterColumn[] = [
 
     <template #right>
       <UButton
-        to="https://github.com/Yizack/brandam"
+        :to="SITE.github.repo"
         target="_blank"
         icon="simple-icons:github"
         aria-label="BrandAM on GitHub"

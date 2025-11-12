@@ -96,7 +96,7 @@ export default defineNuxtConfig({
   },
 
   site: {
-    url: SITE.url
+    url: SITE.host
   },
 
   nitro: {
