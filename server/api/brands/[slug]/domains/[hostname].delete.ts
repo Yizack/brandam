@@ -21,7 +21,11 @@ export default defineEventHandler(async (event) => {
 
   const member = await DB.select().from(tables.members).where(and(
     eq(tables.members.brandId, brand.id),
-    eq(tables.members.userId, user.id)
+    eq(tables.members.userId, user.id),
+    or(
+      eq(tables.members.roleId, MemberRole.OWNER),
+      eq(tables.members.roleId, MemberRole.ADMIN)
+    )
   )).get();
 
   if (!member) {
