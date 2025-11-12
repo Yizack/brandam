@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   step: number;
   type: Exclude<BrandamAssetTypes, "color">;
 }>();
@@ -7,42 +7,66 @@ defineProps<{
 const model = defineModel<{
   name: string;
   description: string;
-  type: string;
   file?: File;
   height?: number;
   width?: number;
 }[]>({ required: true });
 
-const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, { accept: string, description: string }> = {
+const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, {
+  accept: string;
+  description: string;
+  regex: RegExp;
+}> = {
   image: {
+    regex: /\.(png|jfif|pjpeg|pjp|jpe?g|gif)$/i,
     description: "PNG, JPG or GIF",
     accept: "image/png, image/jpeg, image/gif"
   },
   vector: {
+    regex: /\.(svg|ai|eps)$/i,
     description: "SVG, AI, EPS",
     accept: "image/svg+xml, application/pdf, application/postscript"
   },
   document: {
+    regex: /\.(pdf|docx|txt)$/i,
     description: "PDF, DOCX, TXT",
     accept: "application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, text/plain"
   },
   font: {
+    regex: /\.(ttf|otf|woff|woff2)$/i,
     description: "TTF, OTF, WOFF",
-    accept: "font/ttf, font/otf, font/woff"
+    accept: ".ttf,.otf,.woff,.woff2"
   }
 };
 
-const setDimensions = (file: File | undefined, index: number) => {
+const setDimensions = (file: File, index: number) => {
   if (!file) return;
   getImageDimensions(file).then((dimensions) => {
-    const item = model.value[index];
-    if (item) {
-      item.width = dimensions.width;
-      item.height = dimensions.height;
-    }
+    if (!model.value[index]) return;
+    model.value[index].width = dimensions.width;
+    model.value[index].height = dimensions.height;
   }).catch(() => {
     // Ignore errors
   });
+};
+
+const isValidFile = (file: File) => {
+  const constraints = uploadConstraints[props.type];
+  return constraints.regex.test(file.name);
+};
+
+const processFile = (file: File | undefined, index: number) => {
+  if (!file) return;
+  if (!isValidFile(file)) {
+    if (!model.value[index]) return;
+    model.value[index].file = undefined;
+    useToast().add({
+      description: `Please upload a valid ${uploadConstraints[props.type].description} file`,
+      color: "error"
+    });
+    return;
+  }
+  setDimensions(file, index);
 };
 </script>
 
@@ -61,7 +85,7 @@ const setDimensions = (file: File | undefined, index: number) => {
             position="inside"
             layout="list"
             :accept="uploadConstraints[type].accept"
-            @change="setDimensions(item.file, i)"
+            @change="processFile(item.file, i)"
           />
           <InputFloating id="name" v-model.trim="item.name" type="text" class="w-full" placeholder="Name" autocomplete="off" required />
           <InputFloating id="description" v-model.trim="item.description" type="text" class="w-full" placeholder="Description" autocomplete="off" />
