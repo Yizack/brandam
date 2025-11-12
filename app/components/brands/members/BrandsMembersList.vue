@@ -4,7 +4,7 @@ import type { DropdownMenuItem, SelectItem } from "@nuxt/ui";
 const { user } = useUserSession();
 
 const brandStore = useBrandStore();
-const { members, grants } = storeToRefs(brandStore);
+const { members, grants, role } = storeToRefs(brandStore);
 
 const { status } = await brandStore.fetchMembers();
 
@@ -12,7 +12,12 @@ const getActions = (id: number): DropdownMenuItem[] => [
   {
     label: "Remove member",
     color: "error" as const,
-    onSelect: () => deleteMember(id)
+    onSelect: () => {
+      isLoading.value = true;
+      brandStore.deleteMember(id).catch(() => {}).finally(() => {
+        isLoading.value = false;
+      });
+    }
   }
 ];
 
@@ -34,9 +39,11 @@ const inviteMember = async () => {
   form.reset();
 };
 
-const deleteMember = async (id: number) => {
+const editMemberRole = async (memberId: number, roleId: MemberRole) => {
   isLoading.value = true;
-  brandStore.deleteMember(id).catch(() => {}).finally(() => {
+  brandStore.editMember(memberId, {
+    roleId
+  }).catch(() => {}).finally(() => {
     isLoading.value = false;
   });
 };
@@ -76,16 +83,17 @@ const deleteMember = async (id: number) => {
       </div>
       <div class="flex items-center gap-3">
         <USelect
-          v-model="member.roleId"
+          :model-value="member.roleId"
           :items="roles.filter(role => role.value !== MemberRole.OWNER || member.roleId === MemberRole.OWNER)"
           color="neutral"
           :ui="{ value: 'capitalize', item: 'capitalize' }"
-          :disabled="!grants.admin || member.user.id === user?.id || member.roleId === MemberRole.OWNER"
+          :disabled="!grants.admin || member.user.id === user?.id || member.roleId === MemberRole.OWNER || role.id === member.roleId"
+          @update:model-value="value => editMemberRole(member.id, value)"
         />
         <UDropdownMenu
           :items="getActions(member.id)"
           :content="{ align: 'end' }"
-          :disabled="!grants.admin || member.user.id === user?.id || member.roleId === MemberRole.OWNER"
+          :disabled="!grants.admin || member.user.id === user?.id || member.roleId === MemberRole.OWNER || role.id === member.roleId"
         >
           <UButton
             icon="lucide:ellipsis-vertical"

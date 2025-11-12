@@ -19,22 +19,44 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const member = await DB.delete(tables.members).where(and(
-    eq(tables.members.id, params.id),
+  const userMember = await DB.select({
+    roleId: tables.members.roleId
+  }).from(tables.members).where(and(
     eq(tables.members.brandId, brand.id),
-    exists(
-      DB.select().from(tables.members).where(and(
-        eq(tables.members.brandId, brand.id),
-        eq(tables.members.userId, user.id),
-        eq(tables.members.roleId, MemberRole.OWNER)
-      ))
+    eq(tables.members.userId, user.id),
+    or(
+      eq(tables.members.roleId, MemberRole.OWNER),
+      eq(tables.members.roleId, MemberRole.ADMIN)
     )
-  )).returning().get();
+  )).get();
 
-  if (!member) {
+  if (!userMember) {
     throw createError({
       statusCode: ErrorCode.FORBIDDEN,
       message: "You do not have access to this brand"
     });
   }
+
+  const targetMember = await DB.select({
+    roleId: tables.members.roleId
+  }).from(tables.members).where(and(
+    eq(tables.members.id, params.id),
+    eq(tables.members.brandId, brand.id)
+  )).get();
+
+  if (!targetMember) {
+    throw createError({
+      statusCode: ErrorCode.NOT_FOUND,
+      message: "Member not found"
+    });
+  }
+
+  ensureCanManageMember("delete", userMember, targetMember, {
+    message: "You do not have permission to delete this member"
+  });
+
+  await DB.delete(tables.members).where(and(
+    eq(tables.members.id, params.id),
+    eq(tables.members.brandId, brand.id)
+  )).run();
 });

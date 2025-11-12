@@ -79,10 +79,9 @@ export const useBrandStore = defineStore("brand", () => {
       body: data
     }).then((response) => {
       const asset = assets.value.find(a => a.uuid === uuid);
-      if (asset) {
-        asset.name = response.name;
-        asset.description = response.description;
-      }
+      if (!asset) return;
+      asset.name = response.name;
+      asset.description = response.description;
       toast.add({
         description: "Asset updated successfully",
         color: "success"
@@ -126,6 +125,21 @@ export const useBrandStore = defineStore("brand", () => {
     });
 
     return { status };
+  };
+
+  const editMember = async (memberId: number, data: Pick<BrandamMember, "roleId">) => {
+    return $fetch(`/api/brands/${brand.value.slug}/members/${memberId}`, {
+      method: "PATCH",
+      body: data
+    }).then(() => {
+      const member = members.value.find(m => m.id === memberId);
+      if (!member) return;
+      member.roleId = data.roleId;
+      toast.add({
+        description: "Member updated successfully",
+        color: "success"
+      });
+    });
   };
 
   const deleteMember = async (id: number) => {
@@ -200,6 +214,7 @@ export const useBrandStore = defineStore("brand", () => {
     deleteAsset,
     downloadAsset,
     fetchMembers,
+    editMember,
     deleteMember,
     fetchDomains,
     addDomain,

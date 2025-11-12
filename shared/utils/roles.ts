@@ -10,11 +10,13 @@ const roleGrants = {
   edit: [MemberRole.OWNER, MemberRole.ADMIN, MemberRole.EDITOR]
 };
 
-export const roleNames: Record<MemberRole, string> = {
+export const roleNames = {
   [MemberRole.OWNER]: "Owner",
   [MemberRole.ADMIN]: "Admin",
   [MemberRole.EDITOR]: "Editor"
-};
+} as const;
+
+export const roleKeys: MemberRole[] = Object.keys(roleNames).map(k => Number(k));
 
 export const getRoleGrants = (roleId?: MemberRole, conditional?: boolean): Record<keyof typeof roleGrants, boolean> => {
   const result: Record<string, boolean> = {};
