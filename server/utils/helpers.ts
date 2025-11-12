@@ -24,12 +24,12 @@ export const generateToken = async (event: H3Event, fields: (unknown)[]) => {
 
 export const ensureCanManageMember = (
   action: "delete" | "patch",
-  current: Pick<BrandamMember, "roleId">,
+  actor: Pick<BrandamMember, "roleId">,
   target: Pick<BrandamMember, "roleId">,
   options: { newRoleId?: number, message: string }
 ) => {
   // only owners and admins can manage members
-  const isAuthorized = current.roleId <= MemberRole.ADMIN;
+  const isAuthorized = actor.roleId <= MemberRole.ADMIN;
 
   // determine which role to check against (current or new role after patch)
   const effectiveTargetRole = action === "patch" && options.newRoleId !== undefined ? options.newRoleId : target.roleId;
@@ -44,7 +44,7 @@ export const ensureCanManageMember = (
 
   // can only manage members with lower privileges (higher roleId)
   // and cannot assign privileges equal to or higher than own role
-  const hasHigherPrivilege = current.roleId < target.roleId && current.roleId <= effectiveTargetRole;
+  const hasHigherPrivilege = actor.roleId < target.roleId && actor.roleId <= effectiveTargetRole;
 
   if (!isAuthorized || !hasHigherPrivilege) {
     throw createError({

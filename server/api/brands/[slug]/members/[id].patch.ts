@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const userMember = await DB.select({
+  const actor = await DB.select({
     roleId: tables.members.roleId
   }).from(tables.members).where(and(
     eq(tables.members.brandId, brand.id),
@@ -34,28 +34,28 @@ export default defineEventHandler(async (event) => {
     )
   )).get();
 
-  if (!userMember) {
+  if (!actor) {
     throw createError({
       statusCode: ErrorCode.FORBIDDEN,
       message: "You do not have access to this brand"
     });
   }
 
-  const targetMember = await DB.select({
+  const target = await DB.select({
     roleId: tables.members.roleId
   }).from(tables.members).where(and(
     eq(tables.members.id, params.id),
     eq(tables.members.brandId, brand.id)
   )).get();
 
-  if (!targetMember) {
+  if (!target) {
     throw createError({
       statusCode: ErrorCode.NOT_FOUND,
       message: "Member not found"
     });
   }
 
-  ensureCanManageMember("patch", userMember, targetMember, {
+  ensureCanManageMember("patch", actor, target, {
     newRoleId: body.roleId,
     message: "You do not have permission to update this member"
   });
