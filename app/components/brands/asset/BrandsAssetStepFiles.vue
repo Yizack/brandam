@@ -16,6 +16,7 @@ const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, {
   accept: string;
   description: string;
   regex: RegExp;
+  mimeMap?: Record<string, string>;
 }> = {
   image: {
     regex: /\.(png|jfif|pjpeg|pjp|jpe?g|gif)$/i,
@@ -35,7 +36,13 @@ const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, {
   font: {
     regex: /\.(ttf|otf|woff|woff2)$/i,
     description: "TTF, OTF, WOFF",
-    accept: ".ttf,.otf,.woff,.woff2"
+    accept: ".ttf,.otf,.woff,.woff2",
+    mimeMap: {
+      ttf: "font/ttf",
+      otf: "font/otf",
+      woff: "font/woff",
+      woff2: "font/woff2"
+    }
   }
 };
 
@@ -55,17 +62,37 @@ const isValidFile = (file: File) => {
   return constraints.regex.test(file.name);
 };
 
+const setFontMimeType = (file: File, index: number) => {
+  if (!file || !model.value[index] || !uploadConstraints.font.mimeMap) return;
+
+  const extension = file.name.split(".").pop()?.toLowerCase() || "";
+  const mappedMime = uploadConstraints.font.mimeMap[extension];
+
+  if (!mappedMime) return;
+
+  model.value[index].file = new File([file], file.name, { type: mappedMime });
+};
+
 const processFile = (file: File | undefined, index: number) => {
   if (!file) return;
+
   if (!isValidFile(file)) {
     if (!model.value[index]) return;
+
     model.value[index].file = undefined;
+
     useToast().add({
       description: `Please upload a valid ${uploadConstraints[props.type].description} file`,
       color: "error"
     });
+
     return;
   }
+
+  if (props.type === "font" && model.value[index]) {
+    setFontMimeType(file, index);
+  }
+
   setDimensions(file, index);
 };
 </script>
