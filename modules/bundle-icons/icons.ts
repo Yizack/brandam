@@ -7,6 +7,7 @@ export default [
   "lucide:sun",
   "lucide:arrow-left",
   "lucide:arrow-right",
+  "lucide:arrow-up-right",
   "lucide:chevron-down",
   "lucide:arrow-big-right-dash",
   "lucide:user",
