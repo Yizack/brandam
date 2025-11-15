@@ -75,8 +75,8 @@ if (props.asset.data.type === "font") {
       <div class="h-35 border-b border-muted relative bg-accented">
         <div class="size-full relative">
           <img
-            v-if="['image', 'vector'].includes(asset.data.type)"
-            :src="getAssetURL(asset.uuid)"
+            v-if="asset.data.type === 'image' || asset.data.type === 'vector'"
+            :src="asset.data.hasPreview ? getPreviewURL(asset.uuid) : getAssetURL(asset.uuid)"
             :alt="asset.name"
             class="mx-auto h-full object-contain"
           >

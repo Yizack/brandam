@@ -40,11 +40,11 @@ watch(open, (value) => {
     <template #body>
       <div class="space-y-6">
         <div
-          v-if="['image', 'vector'].includes(asset.data.type)"
+          v-if="asset.data.type === 'image' || asset.data.type === 'vector'"
           class="flex justify-center bg-accented rounded-lg p-4 shadow"
         >
           <img
-            :src="getAssetURL(asset.uuid)"
+            :src="asset.data.hasPreview ? getPreviewURL(asset.uuid) : getAssetURL(asset.uuid)"
             :alt="asset.name"
             class="max-h-98 object-contain"
             :class="{ 'h-98': asset.data.type === 'vector' }"

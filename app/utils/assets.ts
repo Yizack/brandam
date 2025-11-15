@@ -16,6 +16,10 @@ export const getAssetURL = (uuid: string) => {
   return `${SITE.cdn}/uploads/assets/${uuid}`;
 };
 
+export const getPreviewURL = (uuid: string) => {
+  return `${SITE.cdn}/uploads/assets/${uuid}-preview`;
+};
+
 const getFontFormat = (mimetype?: string) => {
   const formats: Record<string, string> = {
     "font/ttf": "truetype",

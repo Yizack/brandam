@@ -8,6 +8,7 @@ export default defineEventHandler(async (event) => {
   const formData = await readFormData(event);
 
   const files = formData.getAll("files") as File[];
+  const previewFiles = formData.getAll("previewFiles") as File[];
   const payload = formData.get("payload") as string;
 
   const validation = z.object({
@@ -70,7 +71,8 @@ export default defineEventHandler(async (event) => {
           mimetype: files[i].type,
           width: item.width,
           height: item.height
-        } : undefined
+        } : undefined,
+        hasPreview: !!previewFiles.length
       }) satisfies BrandamAsset["data"],
       brandId: brand.id,
       userId: user.id
@@ -94,6 +96,24 @@ export default defineEventHandler(async (event) => {
       if (file && asset) {
         await hubBlob().put(`/assets/${asset.uuid}`, file, {
           contentType: file.type,
+          prefix: "uploads",
+          customMetadata: {
+            brandId: brand.id.toString(),
+            userId: user.id.toString()
+          }
+        });
+      }
+    }
+  }
+
+  if (previewFiles && previewFiles.length > 0) {
+    for (let i = 0; i < previewFiles.length; i++) {
+      const previewFile = previewFiles[i];
+      const asset = assets[i];
+
+      if (previewFile && asset) {
+        await hubBlob().put(`/assets/${asset.uuid}-preview`, previewFile, {
+          contentType: previewFile.type,
           prefix: "uploads",
           customMetadata: {
             brandId: brand.id.toString(),

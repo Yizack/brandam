@@ -10,6 +10,7 @@ const model = defineModel<{
   file?: File;
   height?: number;
   width?: number;
+  previewFile?: File;
 }[]>({ required: true });
 
 const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, {
@@ -19,14 +20,14 @@ const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, {
   mimeMap?: Record<string, string>;
 }> = {
   image: {
-    regex: /\.(png|jfif|pjpeg|pjp|jpe?g|gif)$/i,
-    description: "PNG, JPG or GIF",
-    accept: "image/png, image/jpeg, image/gif"
+    regex: /\.(png|jfif|pjpeg|pjp|jpe?g|webp|gif)$/i,
+    description: "PNG, JPG, WEBP or GIF",
+    accept: "image/png, image/jpeg, image/webp, image/gif"
   },
   vector: {
     regex: /\.(svg|ai|eps)$/i,
     description: "SVG, AI, EPS",
-    accept: "image/svg+xml, application/pdf, application/postscript"
+    accept: "image/svg+xml, application/postscript"
   },
   document: {
     regex: /\.(pdf|docx|txt)$/i,
@@ -102,10 +103,10 @@ const processFile = (file: File | undefined, index: number) => {
     <p class="text-sm mb-4">Add your brand {{ type }}.</p>
     <div class="flex flex-col gap-2">
       <TransitionGroup name="expand-200">
-        <div v-for="(item, i) of model" :key="i" class="flex flex-col items-center gap-2">
+        <div v-for="(item, i) of model" :key="i" class="space-y-2">
           <UFileUpload
             v-model="item.file"
-            label="Drop your image here"
+            label="Drop your file here"
             :description="uploadConstraints[type].description"
             class="w-full rounded-lg border-2 border-dashed h-full hover:border-secondary transition-colors"
             :class="item.file ? 'border-secondary' : 'border-accented'"
@@ -114,8 +115,35 @@ const processFile = (file: File | undefined, index: number) => {
             :accept="uploadConstraints[type].accept"
             @change="processFile(item.file, i)"
           />
-          <InputFloating id="name" v-model.trim="item.name" type="text" class="w-full" placeholder="Name" autocomplete="off" required />
-          <InputFloating id="description" v-model.trim="item.description" type="text" class="w-full" placeholder="Description" autocomplete="off" />
+          <InputFloating
+            id="name"
+            v-model.trim="item.name"
+            type="text"
+            placeholder="Name"
+            autocomplete="off"
+            required
+          />
+          <InputFloating
+            id="description"
+            v-model.trim="item.description"
+            type="text"
+            placeholder="Description"
+            autocomplete="off"
+          />
+          <template v-if="type === 'vector'">
+            <h3 class="text-highlighted text-sm font-semibold mb-1">Preview Image</h3>
+            <p class="text-sm text-muted">Recommended for non-SVG files. SVG previews are optional as web browsers can render them directly.</p>
+            <UFileUpload
+              v-model="item.previewFile"
+              label="Drop your PREVIEW image here"
+              :description="uploadConstraints.image.description"
+              class="w-full rounded-lg border-2 border-dashed h-full hover:border-secondary transition-colors"
+              :class="item.file ? 'border-secondary' : 'border-accented'"
+              position="inside"
+              layout="list"
+              :accept="uploadConstraints.image.accept"
+            />
+          </template>
           <USeparator v-if="i < model.length - 1" class="my-2" />
         </div>
       </TransitionGroup>

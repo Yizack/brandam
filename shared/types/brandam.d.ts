@@ -50,6 +50,7 @@ declare global {
       {
         type: BrandamAssetTypes;
         content?: string;
+        hasPreview?: boolean;
         metadata?: {
           size: number;
           width?: number;

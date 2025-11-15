@@ -52,6 +52,7 @@ export const useBrandStore = defineStore("brand", () => {
     type: BrandamAssetTypes;
     content?: string;
     file?: File;
+    previewFile?: File;
   }[]) => {
     const payload = new FormData();
     const items = data.map(({ file, ...item }) => ({ ...item }));
@@ -59,6 +60,9 @@ export const useBrandStore = defineStore("brand", () => {
     for (const item of data) {
       if (!(item.file instanceof File)) continue;
       payload.append("files", item.file);
+      if (item.previewFile instanceof File) {
+        payload.append("previewFiles", item.previewFile);
+      }
     }
 
     return $fetch(`/api/brands/${brand.value.slug}/assets`, {

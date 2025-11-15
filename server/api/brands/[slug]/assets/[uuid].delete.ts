@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
 
   if (asset?.data.type !== "color") {
     event.waitUntil(
-      hubBlob().del(`uploads/assets/${params.uuid}`)
+      hubBlob().del([`uploads/assets/${params.uuid}`, `uploads/assets/${params.uuid}-preview`])
     );
   }
 });
