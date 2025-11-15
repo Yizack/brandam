@@ -44,22 +44,30 @@ watch(open, (value) => {
           class="flex justify-center bg-accented rounded-lg p-4 shadow"
         >
           <img
-            :src="getAssetImage(asset.uuid)"
+            :src="getAssetURL(asset.uuid)"
             :alt="asset.name"
             class="max-h-98 object-contain"
             :class="{ 'h-98': asset.data.type === 'vector' }"
           >
         </div>
         <div v-else-if="asset.data.type === 'document'">
-          <PDFNavigator :url="getAssetImage(asset.uuid)" class="bg-accented rounded-lg p-4" />
+          <PDFNavigator :url="getAssetURL(asset.uuid)" class="bg-accented rounded-lg p-4" />
           <UButton
             class="p-0 pt-2"
             label="Open document in new tab"
             icon="lucide:external-link"
-            :to="getAssetImage(asset.uuid)"
+            :to="getAssetURL(asset.uuid)"
             target="_blank"
             variant="link"
           />
+        </div>
+        <div v-else-if="asset.data.type === 'font'">
+          <div
+            class="flex items-center justify-center bg-accented rounded-lg p-8 shadow text-center"
+            :style="{ fontFamily: `'${asset.name}'` }"
+          >
+            <p class="text-6xl">Aa Bb Cc Dd Ee Ff Gg Hh Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz 0123456789</p>
+          </div>
         </div>
         <div v-else class="h-48 rounded-lg" :style="{ backgroundColor: asset.data.content }" />
         <div class="text-sm space-y-4">

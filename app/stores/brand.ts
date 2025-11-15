@@ -98,7 +98,7 @@ export const useBrandStore = defineStore("brand", () => {
 
     const link = document.createElement("a");
 
-    link.href = getAssetImage(asset.uuid);
+    link.href = getAssetURL(asset.uuid);
     link.download = [filename, extension].filter(Boolean).join(".");
 
     document.body.appendChild(link);

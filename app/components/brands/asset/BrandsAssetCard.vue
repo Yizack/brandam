@@ -2,7 +2,7 @@
 import mime from "mime";
 import type { DropdownMenuItem } from "@nuxt/ui";
 
-defineProps<{
+const props = defineProps<{
   asset: BrandamAsset;
 }>();
 
@@ -54,6 +54,14 @@ const getItems = (asset: BrandamAsset): DropdownMenuItem[][] => {
 const hoveredAsset = ref<string>();
 const dropdownAsset = ref<string>();
 const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.value === uuid;
+
+if (props.asset.data.type === "font") {
+  const assetFont = setAssetFont(props.asset);
+
+  watch(() => props.asset.name, () => {
+    assetFont.update();
+  });
+}
 </script>
 
 <template>
@@ -68,14 +76,21 @@ const isActive = (uuid: string) => hoveredAsset.value === uuid || dropdownAsset.
         <div class="size-full relative">
           <img
             v-if="['image', 'vector'].includes(asset.data.type)"
-            :src="getAssetImage(asset.uuid)"
+            :src="getAssetURL(asset.uuid)"
             :alt="asset.name"
             class="mx-auto h-full object-contain"
           >
           <PDFPreview
             v-else-if="asset.data.type === 'document'"
-            :url="getAssetImage(asset.uuid)"
+            :url="getAssetURL(asset.uuid)"
           />
+          <div
+            v-else-if="asset.data.type === 'font'"
+            class="size-full flex items-center justify-center text-6xl"
+            :style="{ fontFamily: `'${asset.name}'` }"
+          >
+            <span>Aa Zz</span>
+          </div>
           <div
             v-else
             :style="{ backgroundColor: asset.data.content }"
