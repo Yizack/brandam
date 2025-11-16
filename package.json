@@ -2,7 +2,7 @@
   "private": true,
   "name": "brandam",
   "version": "1.0.0",
-  "description": "Yizack nuxt template",
+  "description": "Simplified web app to manage, organize, and share your brand assets.",
   "type": "module",
   "license": "MIT",
   "author": {

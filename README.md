@@ -1,25 +1,17 @@
-# my-nuxt-starter
+# BrandAM
 
-My minimal Nuxt + Typescript + Bootstrap starter template for creating web apps.
+Simplified web app to manage, organize, and share your brand assets.
 
-## Features
-- PNPM package manager
-- Ready to go straight into coding
-- Typescript ready
-- My eslint configuration ([`.config/eslint.mjs`](.config/eslint.mjs))
-- Bootstrap custom client plugin ([`plugins/bootstrap.client.ts`](app/plugins/bootstrap.client.ts))
-- Scroll behavior
-- Some Vue transitions ([`app/assets/scss/_transitions.scss`](app/assets/scss/_transitions.scss))
-- Color modes (`@nuxtjs/color-mode`)
-- Icon component (`@nuxt/icon`)
-- Sitemap generator (`@nuxtjs/sitemap`)
+## Credits
 
-# Install
+- Special thanks to [Nuxt](https://nuxt.com/), the [Vue](https://vuejs.org/) framework for bringing the best development experience.
+- Serverless hosted on [Cloudflare Workers](https://workers.cloudflare.com/) with [NuxtHub](https://hub.nuxt.com/).
+- UI powered by [Nuxt UI](https://ui.nuxt.com/).
+- Mailing handled by [MailChannels](https://www.mailchannels.com/).
+- Rendering email templates with [nuxt-email-renderer](https://nuxtemail.com/).
 
-```sh
-# install dependencies
-pnpm i
+## License
 
-# run dev server (http://localhost:5173)
-pnpm dev
-```
+Made with ❤️
+
+Open Source app and published under [MIT License](https://github.com/Yizack/mappedlove/blob/main/LICENSE).
