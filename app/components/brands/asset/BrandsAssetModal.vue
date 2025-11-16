@@ -42,6 +42,7 @@ watch(open, (value) => {
         <div
           v-if="asset.data.type === 'image' || asset.data.type === 'vector'"
           class="flex justify-center bg-accented rounded-lg p-4 shadow"
+          :style="{ backgroundColor: asset.data.bgColor }"
         >
           <img
             :src="asset.data.hasPreview ? getPreviewURL(asset.uuid) : getAssetURL(asset.uuid)"

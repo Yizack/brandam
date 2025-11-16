@@ -11,6 +11,7 @@ const model = defineModel<{
   height?: number;
   width?: number;
   previewFile?: File;
+  bgColor?: string;
 }[]>({ required: true });
 
 const uploadConstraints: Record<Exclude<BrandamAssetTypes, "color">, {
@@ -96,6 +97,15 @@ const processFile = (file: File | undefined, index: number) => {
 
   setDimensions(file, index);
 };
+
+const addBgColor = (index: number) => {
+  if (!model.value[index]) return;
+  model.value[index].bgColor = "#FFFFFF";
+};
+
+const removeBgColor = (index: number) => {
+  delete model.value[index]?.bgColor;
+};
 </script>
 
 <template>
@@ -130,6 +140,7 @@ const processFile = (file: File | undefined, index: number) => {
             placeholder="Description"
             autocomplete="off"
           />
+          <USeparator v-if="type === 'image' || type === 'vector'" class="my-6" />
           <template v-if="type === 'vector'">
             <h3 class="text-highlighted text-sm font-semibold mb-1">Preview Image</h3>
             <p class="text-sm text-muted">Recommended for non-SVG files. SVG previews are optional as web browsers can render them directly.</p>
@@ -143,6 +154,28 @@ const processFile = (file: File | undefined, index: number) => {
               layout="list"
               :accept="uploadConstraints.image.accept"
             />
+          </template>
+          <template v-if="type === 'image' || type === 'vector'">
+            <h3 class="text-highlighted text-sm font-semibold mb-1 space-x-1">
+              <span>Background Color</span>
+              <span class="text-muted font-normal">(optional)</span>
+            </h3>
+            <p class="text-sm text-muted">Add a background color that best suits your asset for optimal visibility.</p>
+            <UFieldGroup v-if="item.bgColor" class="form-input-group w-full">
+              <InputFloating id="color" v-model="item.bgColor" type="text" class="w-full" placeholder="Color" required />
+              <UPopover>
+                <UButton color="neutral" variant="outline">
+                  <template #leading>
+                    <span :style="{ backgroundColor: item.bgColor }" class="w-11 h-full rounded border border-muted" />
+                  </template>
+                </UButton>
+                <template #content>
+                  <UColorPicker v-model="item.bgColor" class="p-2" />
+                </template>
+              </UPopover>
+              <UButton icon="lucide:trash" variant="subtle" color="error" class="px-3" @click="removeBgColor(i)" />
+            </UFieldGroup>
+            <UButton v-else icon="lucide:plus" size="xl" variant="subtle" class="rounded-lg" block @click="addBgColor(i)" />
           </template>
           <USeparator v-if="i < model.length - 1" class="my-2" />
         </div>

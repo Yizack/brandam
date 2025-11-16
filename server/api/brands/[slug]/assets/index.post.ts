@@ -18,7 +18,8 @@ export default defineEventHandler(async (event) => {
       type: z.enum(["image", "vector", "document", "font", "color"]),
       content: z.string().optional(),
       height: z.number().optional(),
-      width: z.number().optional()
+      width: z.number().optional(),
+      bgColor: z.string().optional()
     })).min(1)
   }).safeParse(JSON.parse(payload));
 
@@ -72,7 +73,8 @@ export default defineEventHandler(async (event) => {
           width: item.width,
           height: item.height
         } : undefined,
-        hasPreview: !!previewFiles.length
+        hasPreview: !!previewFiles[i] || undefined,
+        bgColor: item.bgColor
       }) satisfies BrandamAsset["data"],
       brandId: brand.id,
       userId: user.id

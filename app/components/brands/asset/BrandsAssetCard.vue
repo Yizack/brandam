@@ -79,6 +79,7 @@ if (props.asset.data.type === "font") {
             :src="asset.data.hasPreview ? getPreviewURL(asset.uuid) : getAssetURL(asset.uuid)"
             :alt="asset.name"
             class="mx-auto h-full object-contain"
+            :style="{ backgroundColor: asset.data.bgColor }"
           >
           <PDFPreview
             v-else-if="asset.data.type === 'document'"

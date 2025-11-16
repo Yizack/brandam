@@ -25,6 +25,7 @@ const form = useFormState({
     height?: number;
     width?: number;
     previewFile?: File;
+    bgColor?: string;
   }[]
 });
 

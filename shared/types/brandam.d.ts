@@ -51,6 +51,7 @@ declare global {
         type: BrandamAssetTypes;
         content?: string;
         hasPreview?: boolean;
+        bgColor?: string;
         metadata?: {
           size: number;
           width?: number;
