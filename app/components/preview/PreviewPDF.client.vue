@@ -6,7 +6,12 @@ const props = defineProps<{
   preview?: boolean;
 }>();
 
-const { pdf, pages } = usePDF({ url: getAssetURL(props.uuid), verbosity: 0 });
+const pdfState = useState(`pdf:${props.uuid}`, () => {
+  const { pdf, pages } = usePDF(getAssetURL(props.uuid));
+  return { pdf, pages };
+});
+
+const { pdf, pages } = toRefs(pdfState.value);
 
 const page = ref(1);
 const isLoaded = ref(false);
@@ -57,7 +62,9 @@ const nextPage = () => {
         :page="page"
         @loaded="isLoaded = true"
       >
-        <span>loading</span>
+        <div class="size-full bg-default flex items-center justify-center">
+          <Icon name="lucide:loader-circle" class="animate-spin" size="2rem" />
+        </div>
       </VuePDF>
     </div>
   </div>
