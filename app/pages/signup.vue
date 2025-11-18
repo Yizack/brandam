@@ -98,6 +98,7 @@ const signUp = () => {
           <UButton
             label="Sign in with Google"
             icon="logos:google-icon"
+            to="/auth/google/signup"
             variant="subtle"
             color="neutral"
             type="button"
@@ -105,6 +106,7 @@ const signUp = () => {
             class="rounded-lg font-bold"
             :disabled="isLoading"
             block
+            external
           />
         </div>
       </form>

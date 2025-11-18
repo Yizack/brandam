@@ -50,6 +50,26 @@ const resendVerification = async () => {
     isLoading.value = false;
   });
 };
+
+const googleState = computed(() => {
+  return form.value.remember ? "remember" : undefined;
+});
+
+onMounted(() => {
+  if (query.error) {
+    toast.add({
+      description: query.error.toString(),
+      color: "error"
+    });
+  }
+
+  if (!meta.email) return;
+
+  toast.add({
+    description: "You have signed up successfully, sign in to continue",
+    color: "success"
+  });
+});
 </script>
 
 <template>
@@ -90,6 +110,7 @@ const resendVerification = async () => {
           <UButton
             label="Sign in with Google"
             icon="logos:google-icon"
+            :to="{ path: '/auth/google', query: { state: googleState } }"
             variant="subtle"
             color="neutral"
             type="button"
@@ -97,6 +118,7 @@ const resendVerification = async () => {
             class="rounded-lg font-bold"
             :disabled="isLoading"
             block
+            external
           />
         </div>
       </form>

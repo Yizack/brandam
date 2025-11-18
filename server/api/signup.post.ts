@@ -36,9 +36,7 @@ export default defineEventHandler(async (event) => {
   const user = await DB.insert(tables.users).values({
     email: body.email,
     password: hash(body.password, secure.salt),
-    name: body.name,
-    createdAt: unixepoch({ mode: "ms" }),
-    updatedAt: unixepoch({ mode: "ms" })
+    name: body.name
   }).onConflictDoNothing().returning().get();
 
   if (!user) {
