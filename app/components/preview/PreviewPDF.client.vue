@@ -2,10 +2,11 @@
 import { VuePDF, usePDF } from "@tato30/vue-pdf";
 
 const props = defineProps<{
-  url: string;
+  uuid: string;
+  preview?: boolean;
 }>();
 
-const { pdf, pages } = usePDF({ url: props.url, verbosity: 0 });
+const { pdf, pages } = usePDF({ url: getAssetURL(props.uuid), verbosity: 0 });
 
 const page = ref(1);
 const isLoaded = ref(false);
@@ -20,7 +21,16 @@ const nextPage = () => {
 </script>
 
 <template>
-  <div>
+  <div v-if="preview" class="flex justify-center h-full">
+    <VuePDF
+      class="h-full [&_canvas]:w-auto! [&_canvas]:h-full! [&_canvas]:object-contain text-center"
+      :pdf="pdf"
+      :page="1"
+    >
+      <span>loading</span>
+    </VuePDF>
+  </div>
+  <div v-else>
     <div class="flex items-center justify-center mb-2">
       <UFieldGroup>
         <UButton

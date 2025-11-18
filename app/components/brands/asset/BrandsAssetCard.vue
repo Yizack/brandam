@@ -81,9 +81,15 @@ if (props.asset.data.type === "font") {
             class="mx-auto h-full object-contain"
             :style="{ backgroundColor: asset.data.bgColor }"
           >
-          <PDFPreview
-            v-else-if="asset.data.type === 'document'"
-            :url="getAssetURL(asset.uuid)"
+          <PreviewPDF
+            v-else-if="asset.data.type === 'document' && asset.data.metadata?.mimetype === 'application/pdf'"
+            :uuid="asset.uuid"
+            preview
+          />
+          <PreviewTXT
+            v-else-if="asset.data.type === 'document' && asset.data.metadata?.mimetype === 'text/plain'"
+            :uuid="asset.uuid"
+            preview
           />
           <div
             v-else-if="asset.data.type === 'font'"

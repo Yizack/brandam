@@ -52,7 +52,16 @@ watch(open, (value) => {
           >
         </div>
         <div v-else-if="asset.data.type === 'document'">
-          <PDFNavigator :url="getAssetURL(asset.uuid)" class="bg-accented rounded-lg p-4" />
+          <PreviewPDF
+            v-if="asset.data.metadata?.mimetype === 'application/pdf'"
+            :uuid="asset.uuid"
+            class="bg-accented rounded-lg p-4"
+          />
+          <PreviewTXT
+            v-else-if="asset.data.metadata?.mimetype === 'text/plain'"
+            :uuid="asset.uuid"
+            class="bg-accented rounded-lg p-4"
+          />
           <UButton
             class="p-0 pt-2"
             label="Open document in new tab"
