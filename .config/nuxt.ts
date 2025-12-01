@@ -2,6 +2,26 @@ import { SITE } from "../shared/utils/site";
 
 export default defineNuxtConfig({
   // future: { compatibilityVersion: 5 },
+
+  modules: [
+    "@nuxt/eslint",
+    "@nuxt/icon",
+    "@nuxtjs/sitemap",
+    "@nuxthub/core",
+    "@nuxt/ui",
+    "@nuxtjs/turnstile",
+    "nuxt-auth-utils",
+    "@pinia/nuxt",
+    "nuxt-mailchannels",
+    "nuxt-email-renderer"
+  ],
+
+  $env: {
+    test: {
+      hub: { dir: ".data/test" }
+    }
+  },
+
   devtools: { enabled: true },
 
   app: {
@@ -24,47 +44,27 @@ export default defineNuxtConfig({
     "~/assets/scss/app.scss"
   ],
 
-  modules: [
-    "@nuxt/eslint",
-    "@nuxt/icon",
-    "@nuxtjs/sitemap",
-    "@nuxthub/core",
-    "@nuxt/ui",
-    "@nuxtjs/turnstile",
-    "nuxt-auth-utils",
-    "@pinia/nuxt",
-    "nuxt-mailchannels",
-    "nuxt-email-renderer"
-  ],
+  site: {
+    url: SITE.host
+  },
 
-  hub: { database: true, blob: true, cache: true, workers: true },
+  colorMode: {
+    preference: "light",
+    fallback: "light",
+    storageKey: "nuxt-color-mode"
+  },
 
   ui: {
     colorMode: true,
     fonts: false
   },
 
-  icon: {
-    mode: "svg",
-    provider: "none"
-  },
-
-  turnstile: {
-    siteKey: "0x4AAAAAAB_7RZVN4AGQKW4Q",
-    addValidateEndpoint: false
-  },
-
-  eslint: {
-    config: {
-      autoInit: false,
-      stylistic: true
-    }
-  },
-
-  mailchannels: {
-    from: {
-      email: `brandam@${SITE.rootDomain}`,
-      name: `${SITE.name} Support`
+  appConfig: {
+    ui: {
+      colors: {
+        primary: "blue",
+        secondary: "green"
+      }
     }
   },
 
@@ -89,15 +89,19 @@ export default defineNuxtConfig({
     }
   },
 
-  colorMode: {
-    preference: "light",
-    fallback: "light",
-    storageKey: "nuxt-color-mode"
+  routeRules: {
+
   },
 
-  site: {
-    url: SITE.host
+  features: {
+    inlineStyles: false
   },
+
+  experimental: {
+    typedPages: true
+  },
+
+  compatibilityDate: "2025-11-03",
 
   nitro: {
     prerender: {
@@ -117,31 +121,7 @@ export default defineNuxtConfig({
     }
   },
 
-  sitemap: {
-    exclude: ["/app/**"],
-    discoverImages: false,
-    defaults: { priority: 0.8, lastmod: new Date().toISOString() },
-    urls: [
-      { loc: "/", priority: 1.0 }
-    ],
-    xslColumns: [
-      { label: "URL", width: "65%" },
-      { label: "Priority", select: "sitemap:priority", width: "12.5%" },
-      { label: "Last Modified", select: "sitemap:lastmod", width: "35%" }
-    ]
-  },
-
-  routeRules: {
-
-  },
-
-  features: {
-    inlineStyles: false
-  },
-
-  experimental: {
-    typedPages: true
-  },
+  hub: { database: true, blob: true, cache: true, workers: true },
 
   vite: {
     css: {
@@ -149,15 +129,6 @@ export default defineNuxtConfig({
         scss: {
           silenceDeprecations: ["color-functions", "import", "global-builtin"]
         }
-      }
-    }
-  },
-
-  appConfig: {
-    ui: {
-      colors: {
-        primary: "blue",
-        secondary: "green"
       }
     }
   },
@@ -176,11 +147,41 @@ export default defineNuxtConfig({
     }
   },
 
-  compatibilityDate: "2025-11-03",
-
-  $env: {
-    test: {
-      hub: { dir: ".data/test" }
+  eslint: {
+    config: {
+      autoInit: false,
+      stylistic: true
     }
+  },
+
+  icon: {
+    mode: "svg",
+    provider: "none"
+  },
+
+  mailchannels: {
+    from: {
+      email: `brandam@${SITE.rootDomain}`,
+      name: `${SITE.name} Support`
+    }
+  },
+
+  sitemap: {
+    exclude: ["/app/**"],
+    discoverImages: false,
+    defaults: { priority: 0.8, lastmod: new Date().toISOString() },
+    urls: [
+      { loc: "/", priority: 1.0 }
+    ],
+    xslColumns: [
+      { label: "URL", width: "65%" },
+      { label: "Priority", select: "sitemap:priority", width: "12.5%" },
+      { label: "Last Modified", select: "sitemap:lastmod", width: "35%" }
+    ]
+  },
+
+  turnstile: {
+    siteKey: "0x4AAAAAAB_7RZVN4AGQKW4Q",
+    addValidateEndpoint: false
   }
 });
