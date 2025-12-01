@@ -14,4 +14,4 @@ Simplified web app to manage, organize, and share your brand assets.
 
 Made with ❤️
 
-Open Source app and published under [MIT License](https://github.com/Yizack/mappedlove/blob/main/LICENSE).
+Open Source app and published under [MIT License](https://github.com/Yizack/brandam/blob/main/LICENSE).
