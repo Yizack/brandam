@@ -2,7 +2,7 @@ declare global {
   interface BrandamUser {
     id: number;
     email: string;
-    password: string | null;
+    password?: string | null;
     name: string;
     active: boolean;
     confirmed: boolean;

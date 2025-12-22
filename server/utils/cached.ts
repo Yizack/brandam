@@ -1,8 +1,7 @@
 import type { H3Event } from "h3";
 
 export const getSlugFromHostname = defineCachedFunction(async (event: H3Event, hostname: string) => {
-  const DB = useDB();
-  const brand = await DB.select({
+  const brand = await db.select({
     slug: tables.brands.slug
   }).from(tables.domains).where(and(
     eq(tables.domains.hostname, hostname),
@@ -13,7 +12,7 @@ export const getSlugFromHostname = defineCachedFunction(async (event: H3Event, h
 
   if (!brand || !brand.slug) {
     throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
+      status: ErrorCode.NOT_FOUND,
       message: "Domain not found or not linked to a brand"
     });
   }

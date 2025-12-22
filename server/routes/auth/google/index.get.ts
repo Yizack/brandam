@@ -3,14 +3,14 @@ export default defineOAuthGoogleEventHandler({
     scope: ["email"]
   },
   async onSuccess (event, { user: _user }) {
-    const DB = useDB();
-
-    const user = await DB.select({
+    const user = await db.select({
       id: tables.users.id,
       name: tables.users.name,
       email: tables.users.email,
       active: tables.users.active,
-      confirmed: tables.users.confirmed
+      confirmed: tables.users.confirmed,
+      createdAt: tables.users.createdAt,
+      updatedAt: tables.users.updatedAt
     }).from(tables.users).where(and(
       eq(tables.users.email, _user.email)
     )).get();

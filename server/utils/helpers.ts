@@ -37,7 +37,7 @@ export const ensureCanManageMember = (
   // protect owners from being managed
   if (target.roleId === MemberRole.OWNER || effectiveTargetRole === MemberRole.OWNER) {
     throw createError({
-      statusCode: ErrorCode.FORBIDDEN,
+      status: ErrorCode.FORBIDDEN,
       message: options.message
     });
   }
@@ -48,7 +48,7 @@ export const ensureCanManageMember = (
 
   if (!isAuthorized || !hasHigherPrivilege) {
     throw createError({
-      statusCode: ErrorCode.FORBIDDEN,
+      status: ErrorCode.FORBIDDEN,
       message: options.message
     });
   }

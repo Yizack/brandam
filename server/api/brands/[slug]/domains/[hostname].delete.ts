@@ -6,20 +6,18 @@ export default defineEventHandler(async (event) => {
     hostname: z.hostname()
   }).parse);
 
-  const DB = useDB();
-
-  const brand = await DB.select({
+  const brand = await db.select({
     id: tables.brands.id
   }).from(tables.brands).where(eq(tables.brands.slug, params.slug)).get();
 
   if (!brand) {
     throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
+      status: ErrorCode.NOT_FOUND,
       message: "Brand not found"
     });
   }
 
-  const member = await DB.select().from(tables.members).where(and(
+  const member = await db.select().from(tables.members).where(and(
     eq(tables.members.brandId, brand.id),
     eq(tables.members.userId, user.id),
     or(
@@ -30,22 +28,22 @@ export default defineEventHandler(async (event) => {
 
   if (!member) {
     throw createError({
-      statusCode: ErrorCode.FORBIDDEN,
+      status: ErrorCode.FORBIDDEN,
       message: "You do not have access to this brand"
     });
   }
 
-  const domain = await DB.select().from(tables.domains).where(and(
+  const domain = await db.select().from(tables.domains).where(and(
     eq(tables.domains.hostname, params.hostname),
     eq(tables.domains.brandId, brand.id)
   )).get();
 
   if (!domain) {
     throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
+      status: ErrorCode.NOT_FOUND,
       message: "Domain not found"
     });
   }
 
-  await DB.delete(tables.domains).where(eq(tables.domains.hostname, params.hostname));
+  await db.delete(tables.domains).where(eq(tables.domains.hostname, params.hostname));
 });

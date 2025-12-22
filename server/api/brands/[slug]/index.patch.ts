@@ -13,14 +13,12 @@ export default defineEventHandler(async (event) => {
 
   if (DISALLOWED_BRANDS.includes(body.slug)) {
     throw createError({
-      statusCode: ErrorCode.BAD_REQUEST,
+      status: ErrorCode.BAD_REQUEST,
       message: "Brand slug is not allowed"
     });
   }
 
-  const DB = useDB();
-
-  const member = await DB.select({
+  const member = await db.select({
     roleId: tables.members.roleId
   }).from(tables.members).innerJoin(tables.brands,
     eq(tables.brands.id, tables.members.brandId)
@@ -35,12 +33,12 @@ export default defineEventHandler(async (event) => {
 
   if (!member) {
     throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
+      status: ErrorCode.NOT_FOUND,
       message: "Brand not found or you don't have permission to update it"
     });
   }
 
-  const brand = await DB.update(tables.brands).set({
+  const brand = await db.update(tables.brands).set({
     name: body.name,
     description: body.description,
     slug: member.roleId === MemberRole.OWNER ? body.slug : undefined,
@@ -50,7 +48,7 @@ export default defineEventHandler(async (event) => {
 
     if (errorMessage.includes("UNIQUE constraint failed: brands.slug") || errorMessage.includes("SQLITE_CONSTRAINT")) {
       throw createError({
-        statusCode: ErrorCode.CONFLICT,
+        status: ErrorCode.CONFLICT,
         message: "Brand with this slug already exists"
       });
     }
@@ -60,7 +58,7 @@ export default defineEventHandler(async (event) => {
 
   if (!brand) {
     throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
+      status: ErrorCode.NOT_FOUND,
       message: "Brand not found or you don't have permission to update it"
     });
   }

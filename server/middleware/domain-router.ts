@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
 
   if (!host) {
     throw createError({
-      statusCode: ErrorCode.BAD_REQUEST,
+      status: ErrorCode.BAD_REQUEST,
       message: "Invalid Host"
     });
   }

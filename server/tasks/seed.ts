@@ -4,7 +4,7 @@ const testEmail = process.env.TEST_EMAIL;
 const insertTestUsers = async (c?: number) => {
   if (!testPassword) throw new Error("TEST_PASSWORD is not set");
   for (let i = 0; i < (c || 1); i++) {
-    await useDB().insert(tables.users).values({
+    await db.insert(tables.users).values({
       id: i + 1,
       name: `User ${i + 1}`,
       email: i === 0 && testEmail ? testEmail : `test${i + 1}@test.test`,

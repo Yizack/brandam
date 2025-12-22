@@ -1,8 +1,8 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "brandam",
-  "compatibility_date": "2025-11-06",
-  "main": "dist/server/index.mjs",
+  "compatibility_date": "2025-12-22",
+  "main": ".output/server/index.mjs",
   "compatibility_flags": ["nodejs_compat"],
   "routes": [
     {
@@ -12,14 +12,14 @@
   ],
   "assets": {
     "binding": "ASSETS",
-    "directory": "dist/public"
+    "directory": ".output/public"
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "brandam",
       "database_id": "f73c1d3a-dc8a-46f7-9c94-07fe8bbc6f5e",
-      "migrations_dir": "dist/database/migrations"
+      "migrations_dir": ".output/server/db/migrations"
     }
   ],
   "kv_namespaces": [

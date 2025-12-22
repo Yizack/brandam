@@ -22,6 +22,12 @@ export default defineNuxtConfig({
     }
   },
 
+  $production: {
+    nitro: {
+      preset: "cloudflare-module"
+    }
+  },
+
   devtools: { enabled: true },
 
   app: {
@@ -101,7 +107,7 @@ export default defineNuxtConfig({
     typedPages: true
   },
 
-  compatibilityDate: "2025-11-03",
+  compatibilityDate: "2025-12-22",
 
   nitro: {
     prerender: {
@@ -121,13 +127,20 @@ export default defineNuxtConfig({
     }
   },
 
-  hub: { database: true, blob: true, cache: true, workers: true },
+  hub: {
+    db: {
+      dialect: "sqlite",
+      casing: "snake_case"
+    },
+    blob: true,
+    cache: true
+  },
 
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          silenceDeprecations: ["color-functions", "import", "global-builtin"]
+          silenceDeprecations: ["color-functions", "import", "global-builtin", "if-function"]
         }
       }
     }

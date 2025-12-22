@@ -10,20 +10,18 @@ export default defineEventHandler(async (event) => {
     roleId: z.number().max(Math.max(...roleKeys)).min(Math.min(...roleKeys))
   }).parse);
 
-  const DB = useDB();
-
-  const brand = await DB.select({
+  const brand = await db.select({
     id: tables.brands.id
   }).from(tables.brands).where(eq(tables.brands.slug, params.slug)).get();
 
   if (!brand) {
     throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
+      status: ErrorCode.NOT_FOUND,
       message: "Brand not found"
     });
   }
 
-  const actor = await DB.select({
+  const actor = await db.select({
     roleId: tables.members.roleId
   }).from(tables.members).where(and(
     eq(tables.members.brandId, brand.id),
@@ -36,12 +34,12 @@ export default defineEventHandler(async (event) => {
 
   if (!actor) {
     throw createError({
-      statusCode: ErrorCode.FORBIDDEN,
+      status: ErrorCode.FORBIDDEN,
       message: "You do not have access to this brand"
     });
   }
 
-  const target = await DB.select({
+  const target = await db.select({
     roleId: tables.members.roleId
   }).from(tables.members).where(and(
     eq(tables.members.id, params.id),
@@ -50,7 +48,7 @@ export default defineEventHandler(async (event) => {
 
   if (!target) {
     throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
+      status: ErrorCode.NOT_FOUND,
       message: "Member not found"
     });
   }
@@ -60,7 +58,7 @@ export default defineEventHandler(async (event) => {
     message: "You do not have permission to update this member"
   });
 
-  const member = await DB.update(tables.members).set({
+  const member = await db.update(tables.members).set({
     roleId: body.roleId
   }).where(and(
     eq(tables.members.id, params.id),
