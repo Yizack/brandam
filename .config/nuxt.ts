@@ -107,7 +107,7 @@ export default defineNuxtConfig({
     typedPages: true
   },
 
-  compatibilityDate: "2025-12-22",
+  compatibilityDate: "2026-01-10",
 
   nitro: {
     prerender: {
