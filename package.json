@@ -35,6 +35,7 @@
     "@iconify-json/logos": "^1.2.10",
     "@iconify-json/lucide": "^1.2.83",
     "@iconify-json/simple-icons": "^1.2.65",
+    "@libsql/client": "^0.17.0",
     "@nuxt/eslint": "^1.12.1",
     "@nuxt/ui": "^4.3.0",
     "@nuxthub/core": "^0.10.4",
