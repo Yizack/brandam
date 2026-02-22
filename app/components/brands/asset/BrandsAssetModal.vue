@@ -63,6 +63,7 @@ watch(open, (value) => {
             class="bg-accented rounded-lg p-4"
           />
           <UButton
+            v-if="asset.data.metadata?.mimetype === 'application/pdf' || asset.data.metadata?.mimetype === 'text/plain'"
             class="p-0 pt-2"
             label="Open document in new tab"
             icon="lucide:external-link"
