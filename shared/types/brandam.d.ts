@@ -2,7 +2,7 @@ declare global {
   interface BrandamUser {
     id: number;
     email: string;
-    password: string | null;
+    password?: string | null;
     name: string;
     active: boolean;
     confirmed: boolean;
@@ -32,11 +32,12 @@ declare global {
     userId: number;
     brandId: number;
     roleId: MemberRole;
+    active: boolean;
     createdAt: number;
     updatedAt: number;
   }
 
-  interface BrandamMember extends Pick<BrandamMemberSchema, "id" | "roleId"> {
+  interface BrandamMember extends Pick<BrandamMemberSchema, "id" | "roleId" | "active"> {
     user: Omit<BrandamUser, "password" | "active" | "confirmed">;
   }
 

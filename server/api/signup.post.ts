@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   if (!body.turnstile) {
     throw createError({
-      statusCode: ErrorCode.BAD_REQUEST,
+      status: ErrorCode.BAD_REQUEST,
       message: "Turnstile validation is required"
     });
   }
@@ -17,23 +17,21 @@ export default defineEventHandler(async (event) => {
 
   if (!verify.success) {
     throw createError({
-      statusCode: ErrorCode.UNPROCESSABLE_ENTITY,
+      status: ErrorCode.UNPROCESSABLE_ENTITY,
       message: "Turnstile verification failed"
     });
   }
 
   if (!getPasswordStrength(body.password).isValid) {
     throw createError({
-      statusCode: ErrorCode.BAD_REQUEST,
+      status: ErrorCode.BAD_REQUEST,
       message: "Password is not valid"
     });
   }
 
   const { secure } = useRuntimeConfig(event);
 
-  const DB = useDB();
-
-  const user = await DB.insert(tables.users).values({
+  const user = await db.insert(tables.users).values({
     email: body.email,
     password: hash(body.password, secure.salt),
     name: body.name
@@ -41,7 +39,7 @@ export default defineEventHandler(async (event) => {
 
   if (!user) {
     throw createError({
-      statusCode: ErrorCode.CONFLICT,
+      status: ErrorCode.CONFLICT,
       message: "An account with that email already exists"
     });
   }

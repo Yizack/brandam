@@ -25,34 +25,24 @@ export default defineEventHandler(async (event) => {
 
   if (!validation.success) {
     throw createError({
-      statusCode: ErrorCode.BAD_REQUEST,
+      status: ErrorCode.BAD_REQUEST,
       message: `Invalid payload. ${validation.error.issues.map(i => i.message).join(", ")}`
     });
   }
 
   const { items } = validation.data;
 
-  const DB = useDB();
+  const brandId = await getBrandIdBySlug(event, params.slug);
 
-  const brand = await DB.select({
-    id: tables.brands.id
-  }).from(tables.brands).where(eq(tables.brands.slug, params.slug)).get();
-
-  if (!brand) {
-    throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
-      message: "Brand not found"
-    });
-  }
-
-  const member = await DB.select().from(tables.members).where(and(
-    eq(tables.members.brandId, brand.id),
-    eq(tables.members.userId, user.id)
+  const member = await db.select().from(tables.members).where(and(
+    eq(tables.members.brandId, brandId),
+    eq(tables.members.userId, user.id),
+    eq(tables.members.active, true)
   )).get();
 
   if (!member) {
     throw createError({
-      statusCode: ErrorCode.FORBIDDEN,
+      status: ErrorCode.FORBIDDEN,
       message: "You do not have access to this brand"
     });
   }
@@ -76,16 +66,16 @@ export default defineEventHandler(async (event) => {
         hasPreview: !!previewFiles[i] || undefined,
         bgColor: item.bgColor
       }) satisfies BrandamAsset["data"],
-      brandId: brand.id,
+      brandId,
       userId: user.id
     };
   });
 
-  const assets = await DB.insert(tables.assets).values(values).onConflictDoNothing().returning().all();
+  const assets = await db.insert(tables.assets).values(values).onConflictDoNothing().returning().all();
 
   if (!assets) {
     throw createError({
-      statusCode: ErrorCode.INTERNAL_SERVER_ERROR,
+      status: ErrorCode.INTERNAL_SERVER_ERROR,
       message: "Failed to create assets"
     });
   }
@@ -96,11 +86,11 @@ export default defineEventHandler(async (event) => {
       const asset = assets[i];
 
       if (file && asset) {
-        await hubBlob().put(`/assets/${asset.uuid}`, file, {
+        await blob.put(`/assets/${asset.uuid}`, file, {
           contentType: file.type,
           prefix: "uploads",
           customMetadata: {
-            brandId: brand.id.toString(),
+            brandId: brandId.toString(),
             userId: user.id.toString()
           }
         });
@@ -114,11 +104,11 @@ export default defineEventHandler(async (event) => {
       const asset = assets[i];
 
       if (previewFile && asset) {
-        await hubBlob().put(`/assets/${asset.uuid}-preview`, previewFile, {
+        await blob.put(`/assets/${asset.uuid}-preview`, previewFile, {
           contentType: previewFile.type,
           prefix: "uploads",
           customMetadata: {
-            brandId: brand.id.toString(),
+            brandId: brandId.toString(),
             userId: user.id.toString()
           }
         });

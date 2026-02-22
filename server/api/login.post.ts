@@ -7,14 +7,14 @@ export default defineEventHandler(async (event) => {
     remember: z.boolean()
   }).parse);
 
-  const DB = useDB();
-
-  const user = await DB.select({
+  const user = await db.select({
     id: tables.users.id,
     name: tables.users.name,
     email: tables.users.email,
     active: tables.users.active,
-    confirmed: tables.users.confirmed
+    confirmed: tables.users.confirmed,
+    updatedAt: tables.users.updatedAt,
+    createdAt: tables.users.createdAt
   }).from(tables.users).where(and(
     eq(tables.users.email, body.email),
     eq(tables.users.password, body.password)
@@ -22,21 +22,21 @@ export default defineEventHandler(async (event) => {
 
   if (!user) {
     throw createError({
-      statusCode: ErrorCode.UNAUTHORIZED,
+      status: ErrorCode.UNAUTHORIZED,
       message: "Invalid email or password"
     });
   }
 
   if (!user.confirmed) {
     throw createError({
-      statusCode: ErrorCode.FORBIDDEN,
+      status: ErrorCode.FORBIDDEN,
       message: "Account is not verified"
     });
   }
 
   if (!user.active) {
     throw createError({
-      statusCode: ErrorCode.FORBIDDEN,
+      status: ErrorCode.FORBIDDEN,
       message: "Account is deactivated"
     });
   }

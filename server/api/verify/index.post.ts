@@ -4,8 +4,7 @@ export default defineEventHandler(async (event) => {
     token: z.base64url()
   }).parse);
 
-  const DB = useDB();
-  const user = await DB.select({
+  const user = await db.select({
     id: tables.users.id,
     email: tables.users.email,
     confirmed: tables.users.confirmed,
@@ -14,7 +13,7 @@ export default defineEventHandler(async (event) => {
 
   if (!user) {
     throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
+      status: ErrorCode.NOT_FOUND,
       message: "User not found"
     });
   }
@@ -25,12 +24,12 @@ export default defineEventHandler(async (event) => {
 
   if (token !== body.token) {
     throw createError({
-      statusCode: ErrorCode.UNAUTHORIZED,
+      status: ErrorCode.UNAUTHORIZED,
       message: "Invalid or expired token"
     });
   }
 
-  await DB.update(tables.users).set({
+  await db.update(tables.users).set({
     confirmed: true,
     updatedAt: unixepoch({ mode: "ms" })
   }).where(eq(tables.users.id, user.id)).run();

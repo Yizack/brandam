@@ -204,6 +204,18 @@ export const useBrandStore = defineStore("brand", () => {
     });
   };
 
+  const inviteMember = async (email: string) => {
+    return $fetch(`/api/brands/${brand.value.slug}/members`, {
+      method: "POST",
+      body: { email }
+    }).then(() => {
+      toast.add({
+        description: "Invitation request sent successfully",
+        color: "success"
+      });
+    });
+  };
+
   return {
     brand,
     assets,
@@ -222,6 +234,7 @@ export const useBrandStore = defineStore("brand", () => {
     deleteMember,
     fetchDomains,
     addDomain,
-    deleteDomain
+    deleteDomain,
+    inviteMember
   };
 });

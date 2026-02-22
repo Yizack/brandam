@@ -5,9 +5,7 @@ export default defineOAuthGoogleEventHandler({
   async onSuccess (event, { user: google }) {
     const email = google.email.toLowerCase();
 
-    const DB = useDB();
-
-    const user = await DB.insert(tables.users).values({
+    const user = await db.insert(tables.users).values({
       email,
       password: null,
       name: google.given_name

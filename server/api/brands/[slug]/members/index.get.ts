@@ -5,11 +5,10 @@ export default defineEventHandler(async (event) => {
     slug: z.string().min(1).transform(v => v.toLowerCase().trim())
   }).parse);
 
-  const DB = useDB();
-
-  const membersList = await DB.select({
+  const membersList = await db.select({
     id: tables.members.id,
     roleId: tables.members.roleId,
+    active: tables.members.active,
     user: {
       id: tables.users.id,
       name: tables.users.name,
@@ -26,14 +25,14 @@ export default defineEventHandler(async (event) => {
 
   if (!membersList.length) {
     throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
+      status: ErrorCode.NOT_FOUND,
       message: "Brand not found"
     });
   }
 
   if (!membersList.some(m => m.user.id === user.id)) {
     throw createError({
-      statusCode: ErrorCode.FORBIDDEN,
+      status: ErrorCode.FORBIDDEN,
       message: "You do not have access to this brand"
     });
   }

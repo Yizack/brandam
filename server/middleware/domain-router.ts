@@ -5,12 +5,12 @@ export default defineEventHandler(async (event) => {
 
   if (!host) {
     throw createError({
-      statusCode: ErrorCode.BAD_REQUEST,
+      status: ErrorCode.BAD_REQUEST,
       message: "Invalid Host"
     });
   }
 
-  const hostname = host.split(":")[0];
+  const hostname = host.split(":")[0]!;
 
   if (DISALLOWED_HOSTNAMES.includes(hostname)) return;
 

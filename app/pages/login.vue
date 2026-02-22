@@ -27,7 +27,7 @@ const signIn = () => {
     const isInternalPath = redirect && redirect.startsWith("/"); // Make sure redirect is an internal path
     navigateTo(isInternalPath ? redirect : "/app", { external: true, replace: true });
   }).catch((response) => {
-    needsConfirm.value = response.data.statusCode === ErrorCode.FORBIDDEN;
+    needsConfirm.value = response.data.statusCode === ErrorCode.FORBIDDEN || response.data.status === ErrorCode.FORBIDDEN;
   }).finally(() => {
     isLoading.value = false;
   });

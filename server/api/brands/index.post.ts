@@ -9,14 +9,12 @@ export default defineEventHandler(async (event) => {
 
   if (DISALLOWED_BRANDS.includes(body.slug)) {
     throw createError({
-      statusCode: ErrorCode.BAD_REQUEST,
+      status: ErrorCode.BAD_REQUEST,
       message: "Brand slug is not allowed"
     });
   }
 
-  const DB = useDB();
-
-  const brand = await DB.insert(tables.brands).values({
+  const brand = await db.insert(tables.brands).values({
     name: body.name,
     description: body.description,
     slug: body.slug
@@ -24,15 +22,16 @@ export default defineEventHandler(async (event) => {
 
   if (!brand) {
     throw createError({
-      statusCode: ErrorCode.CONFLICT,
+      status: ErrorCode.CONFLICT,
       message: "Brand with this slug already exists"
     });
   }
 
-  await DB.insert(tables.members).values({
+  await db.insert(tables.members).values({
     userId: user.id,
     brandId: brand.id,
-    roleId: MemberRole.OWNER
+    roleId: MemberRole.OWNER,
+    active: true
   }).run();
 
   return {

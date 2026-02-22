@@ -9,7 +9,7 @@ const { data } = await useFetch(`/api/brands/${route.params.brand}`, {
 
 if (!data.value) {
   throw createError({
-    statusCode: 404,
+    status: ErrorCode.NOT_FOUND,
     message: "The requested brand does not exist."
   });
 }

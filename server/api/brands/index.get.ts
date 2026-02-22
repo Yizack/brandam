@@ -1,11 +1,10 @@
 export default defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event);
 
-  const DB = useDB();
-  const members = DB.select({ value: count() }).from(tables.members).where(eq(tables.members.brandId, tables.brands.id));
-  const assets = DB.select({ value: count() }).from(tables.assets).where(eq(tables.assets.brandId, tables.brands.id));
+  const members = db.select({ value: count() }).from(tables.members).where(and(eq(tables.members.brandId, tables.brands.id), eq(tables.members.active, true)));
+  const assets = db.select({ value: count() }).from(tables.assets).where(eq(tables.assets.brandId, tables.brands.id));
 
-  const brands = await DB.select({
+  const brands = await db.select({
     id: tables.brands.id,
     name: tables.brands.name,
     slug: tables.brands.slug,
@@ -19,7 +18,7 @@ export default defineEventHandler(async (event) => {
     }
   }).from(tables.brands)
     .innerJoin(tables.members, eq(tables.members.brandId, tables.brands.id))
-    .where(eq(tables.members.userId, user.id)).all();
+    .where(and(eq(tables.members.userId, user.id), eq(tables.members.active, true))).all();
 
   return brands;
 });

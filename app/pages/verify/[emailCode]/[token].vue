@@ -20,7 +20,7 @@ try {
 catch (e) {
   console.warn(e);
   throw createError({
-    statusCode: ErrorCode.BAD_REQUEST,
+    status: ErrorCode.BAD_REQUEST,
     message: "Invalid email code"
   });
 }

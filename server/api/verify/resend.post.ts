@@ -3,8 +3,7 @@ export default defineEventHandler(async (event) => {
     email: z.email().transform(v => v.toLowerCase().trim())
   }).parse);
 
-  const DB = useDB();
-  const user = await DB.select({
+  const user = await db.select({
     id: tables.users.id,
     name: tables.users.name,
     email: tables.users.email,
@@ -14,14 +13,14 @@ export default defineEventHandler(async (event) => {
 
   if (!user) {
     throw createError({
-      statusCode: ErrorCode.NOT_FOUND,
+      status: ErrorCode.NOT_FOUND,
       message: "User not found"
     });
   }
 
   if (user.confirmed) {
     throw createError({
-      statusCode: ErrorCode.CONFLICT,
+      status: ErrorCode.CONFLICT,
       message: "Account is already verified"
     });
   }
