@@ -28,7 +28,7 @@ const nextPage = () => {
 <template>
   <div v-if="preview" class="flex justify-center h-full">
     <VuePDF
-      class="h-full [&_canvas]:w-auto! [&_canvas]:h-full! [&_canvas]:object-contain text-center"
+      class="h-full **:w-auto! **:h-full! **:object-contain text-center"
       :pdf="pdf"
       :page="1"
     >

@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const hostname = host.split(":")[0];
+  const hostname = host.split(":")[0]!;
 
   if (DISALLOWED_HOSTNAMES.includes(hostname)) return;
 
