@@ -25,6 +25,7 @@ export default defineEventHandler(async (event) => {
   ).where(and(
     eq(tables.members.brandId, tables.brands.id),
     eq(tables.members.userId, user.id),
+    eq(tables.members.active, true),
     or(
       eq(tables.members.roleId, MemberRole.OWNER),
       eq(tables.members.roleId, MemberRole.ADMIN)

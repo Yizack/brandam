@@ -34,8 +34,10 @@ const form = useFormState({
 const isLoading = ref(false);
 
 const inviteMember = async () => {
-  // TODO: Implement invite member functionality via email
-  useToast().add({ description: "Not implemented yet", color: "error" });
+  isLoading.value = true;
+  brandStore.inviteMember(form.value.email).catch(() => {}).finally(() => {
+    isLoading.value = false;
+  });
   form.reset();
 };
 
@@ -66,7 +68,7 @@ const editMemberRole = async (memberId: number, roleId: MemberRole) => {
     </li>
   </ul>
   <ul v-else role="list" class="divide-y divide-default">
-    <li v-for="member in members" :key="member.id" class="flex items-center justify-between gap-3 py-3 px-4 sm:px-6">
+    <li v-for="member in members" :key="member.id" class="flex items-center justify-between gap-3 py-3 px-0 sm:px-0">
       <div class="flex items-center gap-3 min-w-0">
         <UAvatar
           :alt="member.user.name"
@@ -82,6 +84,8 @@ const editMemberRole = async (memberId: number, roleId: MemberRole) => {
         </div>
       </div>
       <div class="flex items-center gap-3">
+        <UBadge v-if="!member.active" color="warning" label="Pending" variant="subtle" />
+
         <USelect
           :model-value="member.roleId"
           :items="roles.filter(role => role.value !== MemberRole.OWNER || member.roleId === MemberRole.OWNER)"
@@ -90,6 +94,7 @@ const editMemberRole = async (memberId: number, roleId: MemberRole) => {
           :disabled="!grants.admin || member.user.id === user?.id || member.roleId === MemberRole.OWNER || role.id === member.roleId"
           @update:model-value="value => editMemberRole(member.id, value)"
         />
+
         <UDropdownMenu
           :items="getActions(member.id)"
           :content="{ align: 'end' }"

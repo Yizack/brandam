@@ -30,7 +30,8 @@ export default defineEventHandler(async (event) => {
   await db.insert(tables.members).values({
     userId: user.id,
     brandId: brand.id,
-    roleId: MemberRole.OWNER
+    roleId: MemberRole.OWNER,
+    active: true
   }).run();
 
   return {

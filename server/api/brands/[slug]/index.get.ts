@@ -25,7 +25,8 @@ export default defineEventHandler(async (event) => {
       roleId: tables.members.roleId
     }).from(tables.members).where(and(
       eq(tables.members.brandId, brand.id),
-      eq(tables.members.userId, user.id)
+      eq(tables.members.userId, user.id),
+      eq(tables.members.active, true)
     )).get();
 
     roleId = member?.roleId;

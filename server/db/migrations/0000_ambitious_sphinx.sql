@@ -40,6 +40,7 @@ CREATE TABLE `members` (
 	`user_id` integer NOT NULL,
 	`brand_id` integer NOT NULL,
 	`role_id` integer NOT NULL,
+	`active` integer DEFAULT false NOT NULL,
 	`created_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
 	`updated_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
