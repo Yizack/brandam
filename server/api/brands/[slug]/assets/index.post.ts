@@ -32,19 +32,10 @@ export default defineEventHandler(async (event) => {
 
   const { items } = validation.data;
 
-  const brand = await db.select({
-    id: tables.brands.id
-  }).from(tables.brands).where(eq(tables.brands.slug, params.slug)).get();
-
-  if (!brand) {
-    throw createError({
-      status: ErrorCode.NOT_FOUND,
-      message: "Brand not found"
-    });
-  }
+  const brandId = await getBrandIdBySlug(event, params.slug);
 
   const member = await db.select().from(tables.members).where(and(
-    eq(tables.members.brandId, brand.id),
+    eq(tables.members.brandId, brandId),
     eq(tables.members.userId, user.id)
   )).get();
 
@@ -74,7 +65,7 @@ export default defineEventHandler(async (event) => {
         hasPreview: !!previewFiles[i] || undefined,
         bgColor: item.bgColor
       }) satisfies BrandamAsset["data"],
-      brandId: brand.id,
+      brandId,
       userId: user.id
     };
   });
@@ -98,7 +89,7 @@ export default defineEventHandler(async (event) => {
           contentType: file.type,
           prefix: "uploads",
           customMetadata: {
-            brandId: brand.id.toString(),
+            brandId: brandId.toString(),
             userId: user.id.toString()
           }
         });
@@ -116,7 +107,7 @@ export default defineEventHandler(async (event) => {
           contentType: previewFile.type,
           prefix: "uploads",
           customMetadata: {
-            brandId: brand.id.toString(),
+            brandId: brandId.toString(),
             userId: user.id.toString()
           }
         });

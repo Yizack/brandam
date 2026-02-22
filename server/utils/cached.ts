@@ -25,3 +25,24 @@ export const getSlugFromHostname = defineCachedFunction(async (event: H3Event, h
   swr: false,
   getKey: (event: H3Event, hostname: string) => hostname
 });
+
+export const getBrandIdBySlug = defineCachedFunction(async (event: H3Event, slug: string) => {
+  const brand = await db.select().from(tables.brands).where(
+    eq(tables.brands.slug, slug)
+  ).get();
+
+  if (!brand) {
+    throw createError({
+      status: ErrorCode.NOT_FOUND,
+      message: "Brand not found"
+    });
+  }
+
+  return brand.id;
+}, {
+  maxAge: 60 * 60 * 24, // 1 day
+  group: "functions",
+  name: "getBrandIdBySlug",
+  swr: false,
+  getKey: (event: H3Event, slug: string) => slug
+});

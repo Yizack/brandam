@@ -6,21 +6,12 @@ export default defineEventHandler(async (event) => {
     id: z.coerce.number().min(1)
   }).parse);
 
-  const brand = await db.select({
-    id: tables.brands.id
-  }).from(tables.brands).where(eq(tables.brands.slug, params.slug)).get();
-
-  if (!brand) {
-    throw createError({
-      status: ErrorCode.NOT_FOUND,
-      message: "Brand not found"
-    });
-  }
+  const brandId = await getBrandIdBySlug(event, params.slug);
 
   const actor = await db.select({
     roleId: tables.members.roleId
   }).from(tables.members).where(and(
-    eq(tables.members.brandId, brand.id),
+    eq(tables.members.brandId, brandId),
     eq(tables.members.userId, user.id),
     or(
       eq(tables.members.roleId, MemberRole.OWNER),
@@ -39,7 +30,7 @@ export default defineEventHandler(async (event) => {
     roleId: tables.members.roleId
   }).from(tables.members).where(and(
     eq(tables.members.id, params.id),
-    eq(tables.members.brandId, brand.id)
+    eq(tables.members.brandId, brandId)
   )).get();
 
   if (!target) {
@@ -55,6 +46,6 @@ export default defineEventHandler(async (event) => {
 
   await db.delete(tables.members).where(and(
     eq(tables.members.id, params.id),
-    eq(tables.members.brandId, brand.id)
+    eq(tables.members.brandId, brandId)
   )).run();
 });

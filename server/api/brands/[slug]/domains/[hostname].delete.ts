@@ -6,19 +6,10 @@ export default defineEventHandler(async (event) => {
     hostname: z.hostname()
   }).parse);
 
-  const brand = await db.select({
-    id: tables.brands.id
-  }).from(tables.brands).where(eq(tables.brands.slug, params.slug)).get();
-
-  if (!brand) {
-    throw createError({
-      status: ErrorCode.NOT_FOUND,
-      message: "Brand not found"
-    });
-  }
+  const brandId = await getBrandIdBySlug(event, params.slug);
 
   const member = await db.select().from(tables.members).where(and(
-    eq(tables.members.brandId, brand.id),
+    eq(tables.members.brandId, brandId),
     eq(tables.members.userId, user.id),
     or(
       eq(tables.members.roleId, MemberRole.OWNER),
@@ -35,7 +26,7 @@ export default defineEventHandler(async (event) => {
 
   const domain = await db.select().from(tables.domains).where(and(
     eq(tables.domains.hostname, params.hostname),
-    eq(tables.domains.brandId, brand.id)
+    eq(tables.domains.brandId, brandId)
   )).get();
 
   if (!domain) {

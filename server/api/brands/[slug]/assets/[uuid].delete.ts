@@ -6,19 +6,10 @@ export default defineEventHandler(async (event) => {
     uuid: z.uuidv4()
   }).parse);
 
-  const brand = await db.select({
-    id: tables.brands.id
-  }).from(tables.brands).where(eq(tables.brands.slug, params.slug)).get();
-
-  if (!brand) {
-    throw createError({
-      status: ErrorCode.NOT_FOUND,
-      message: "Brand not found"
-    });
-  }
+  const brandId = await getBrandIdBySlug(event, params.slug);
 
   const member = await db.select().from(tables.members).where(and(
-    eq(tables.members.brandId, brand.id),
+    eq(tables.members.brandId, brandId),
     eq(tables.members.userId, user.id)
   )).get();
 
@@ -31,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
   const asset = await db.delete(tables.assets).where(and(
     eq(tables.assets.uuid, params.uuid),
-    eq(tables.assets.brandId, brand.id)
+    eq(tables.assets.brandId, brandId)
   )).returning().get();
 
   if (asset?.data.type !== "color") {
