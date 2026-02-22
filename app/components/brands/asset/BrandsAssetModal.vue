@@ -51,18 +51,23 @@ watch(open, (value) => {
             :class="{ 'h-98': asset.data.type === 'vector' }"
           >
         </div>
-        <div v-else-if="asset.data.type === 'document'">
-          <PreviewPDF
-            v-if="asset.data.metadata?.mimetype === 'application/pdf'"
-            :uuid="asset.uuid"
-            class="bg-accented rounded-lg p-4"
-          />
-          <PreviewTXT
-            v-else-if="asset.data.metadata?.mimetype === 'text/plain'"
-            :uuid="asset.uuid"
-            class="bg-accented rounded-lg p-4"
-          />
+        <div v-else-if="asset.data.type === 'document' && asset.data.metadata">
+          <div class="bg-accented rounded-lg p-4">
+            <PreviewPDF
+              v-if="mime.getExtension(asset.data.metadata.mimetype) === 'pdf'"
+              :uuid="asset.uuid"
+            />
+            <PreviewTXT
+              v-else-if="mime.getExtension(asset.data.metadata.mimetype) === 'txt'"
+              :uuid="asset.uuid"
+            />
+            <PreviewDOCX
+              v-else-if="mime.getExtension(asset.data.metadata.mimetype) === 'docx'"
+              :uuid="asset.uuid"
+            />
+          </div>
           <UButton
+            v-if="mime.getExtension(asset.data.metadata.mimetype) !== 'docx'"
             class="p-0 pt-2"
             label="Open document in new tab"
             icon="lucide:external-link"

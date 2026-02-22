@@ -81,16 +81,23 @@ if (props.asset.data.type === "font") {
             class="mx-auto h-full object-contain"
             :style="{ backgroundColor: asset.data.bgColor }"
           >
-          <PreviewPDF
-            v-else-if="asset.data.type === 'document' && asset.data.metadata?.mimetype === 'application/pdf'"
-            :uuid="asset.uuid"
-            preview
-          />
-          <PreviewTXT
-            v-else-if="asset.data.type === 'document' && asset.data.metadata?.mimetype === 'text/plain'"
-            :uuid="asset.uuid"
-            preview
-          />
+          <template v-else-if="asset.data.type === 'document' && asset.data.metadata">
+            <PreviewPDF
+              v-if="mime.getExtension(asset.data.metadata.mimetype) === 'pdf'"
+              :uuid="asset.uuid"
+              preview
+            />
+            <PreviewTXT
+              v-else-if="mime.getExtension(asset.data.metadata?.mimetype) === 'txt'"
+              :uuid="asset.uuid"
+              preview
+            />
+            <PreviewDOCX
+              v-else-if="mime.getExtension(asset.data.metadata.mimetype) === 'docx'"
+              :uuid="asset.uuid"
+              preview
+            />
+          </template>
           <div
             v-else-if="asset.data.type === 'font'"
             class="size-full flex items-center justify-center text-6xl"
