@@ -13,8 +13,12 @@ const columns = [
     header: "Brand"
   },
   {
-    id: "date",
-    header: "Date"
+    id: "created",
+    header: "Created"
+  },
+  {
+    id: "updated",
+    header: "Last updated"
   },
   {
     accessorKey: "role",
@@ -26,31 +30,37 @@ const columns = [
   }
 ];
 
-const data = invites.value?.map(invite => ({
+const data = ref(invites.value?.map(invite => ({
   brand: invite.brand,
-  date: invite.createdAt,
-  role: roleNames[invite.roleId]
-})) || [];
+  created: invite.createdAt,
+  createdAgo: useTimeAgo(invite.createdAt),
+  updated: invite.updatedAt,
+  updatedAgo: useTimeAgo(invite.updatedAt),
+  role: roleNames[invite.roleId],
+  active: invite.active
+})) || []);
 
-const meta: TableMeta<typeof data[0]> = {
+const meta: TableMeta<typeof data.value[0]> = {
   class: {
-    tr: (row: Row<typeof data[0]>) => {
+    tr: (row: Row<typeof data.value[0]>) => {
       if (row.index % 2 === 0) return "bg-muted/50";
       return "";
     }
   }
 };
+
+const pendingCount = computed(() => invites.value?.filter(invite => !invite.active).length || 0);
 </script>
 
 <template>
   <section class="space-y-4">
     <div>
-      <h2 class="text-xl font-semibold">Pending brand invites <UBadge :label="data.length" variant="outline" class="tabular-nums px-2" /></h2>
+      <h2 class="text-xl font-semibold">Brand invites <UBadge :label="`${pendingCount} pending`" color="warning" variant="outline" class="tabular-nums px-2" /></h2>
       <p class="text-muted">Accepting an invite will give you access to the brand's dashboard and resources.</p>
     </div>
     <UTable :columns="columns" :data="data" class="border border-muted rounded-md" :meta="meta" empty="No pending invites">
       <template #brand-cell="{ row }">
-        <div class="flex items-center space-x-3">
+        <div class="flex items-center">
           <UUser :description="row.original.brand.description || ''">
             <template #name>
               <ULink :to="`/${row.original.brand.slug}`" class="underline text-lg">{{ row.original.brand.name }}</ULink>
@@ -58,11 +68,23 @@ const meta: TableMeta<typeof data[0]> = {
           </UUser>
         </div>
       </template>
-      <template #date-cell="{ row }">
-        <NuxtTime :datetime="row.original.date" />
+      <template #created-cell="{ row }">
+        <NuxtTime :datetime="row.original.created" :title="row.original.createdAgo" />
       </template>
-      <template #action-cell>
-        <UButton label="Accept" variant="subtle" color="success" />
+      <template #updated-cell="{ row }">
+        <NuxtTime :datetime="row.original.updated" :title="row.original.updatedAgo" />
+      </template>
+      <template #action-cell="{ row }">
+        <div class="flex gap-2">
+          <template v-if="row.original.active">
+            <UButton icon="lucide:x" variant="subtle" color="error" title="Decline invite" />
+            <UButton icon="lucide:check" variant="subtle" color="success" title="Accept invite" />
+          </template>
+          <template v-else>
+            <UBadge icon="lucide:check" label="Accepted" variant="subtle" color="success" />
+            <UButton icon="lucide:trash" variant="subtle" color="neutral" title="Leave brand" />
+          </template>
+        </div>
       </template>
     </UTable>
   </section>

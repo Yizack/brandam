@@ -13,6 +13,11 @@
   &:focus {
     border-color: var(--ui-primary);
   }
+
+  &:disabled,
+  &:read-only {
+    background-color: var(--ui-bg-muted);
+  }
 }
 
 .form-input-icon,

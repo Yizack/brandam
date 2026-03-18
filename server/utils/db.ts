@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import * as schema from "../db/schema";
 
-export { sql, eq, and, or, desc, count, inArray, exists } from "drizzle-orm";
+export { sql, eq, and, or, desc, count, inArray, exists, not } from "drizzle-orm";
 export const tables = schema;
 
 export function unixepoch ({ mode }: { mode?: "ms" | "s" }) {

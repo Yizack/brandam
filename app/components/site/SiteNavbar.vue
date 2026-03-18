@@ -106,7 +106,7 @@ const userMenu: DropdownMenuItem[][] = [
       </template>
       <UDropdownMenu v-else :items="userMenu" :content="{ align: 'end', side: 'bottom', sideOffset: 8 }">
         <UButton
-          :label="user.email"
+          :label="user.name"
           icon="lucide:user"
           trailing-icon="lucide:chevron-down"
           variant="subtle"

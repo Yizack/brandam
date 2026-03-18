@@ -4,6 +4,8 @@ export default defineEventHandler(async (event) => {
   const invites = await db.select({
     id: tables.members.id,
     roleId: tables.members.roleId,
+    active: tables.members.active,
+    updatedAt: tables.members.updatedAt,
     createdAt: tables.members.createdAt,
     brand: {
       id: tables.brands.id,
@@ -14,7 +16,7 @@ export default defineEventHandler(async (event) => {
   })
     .from(tables.members).where(and(
       eq(tables.members.userId, user.id),
-      eq(tables.members.active, false)
+      not(eq(tables.members.roleId, MemberRole.OWNER))
     )).innerJoin(tables.brands, eq(tables.brands.id, tables.members.brandId)).all();
 
   return invites;
