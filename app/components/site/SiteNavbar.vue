@@ -24,12 +24,14 @@ const pages = computed<NavigationMenuItem[]>(() => {
       label: "Home",
       icon: "lucide:house",
       to: "/"
-    },
+    }
+    /*
     {
       label: "About",
       icon: "lucide:info",
       to: "/about"
     }
+    */
   ];
 
   const app: NavigationMenuItem[] = [
