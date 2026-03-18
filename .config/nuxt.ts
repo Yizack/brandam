@@ -4,11 +4,11 @@ export default defineNuxtConfig({
   // future: { compatibilityVersion: 5 },
 
   modules: [
-    "@nuxt/eslint",
     "@nuxt/icon",
     "@nuxtjs/sitemap",
     "@nuxthub/core",
     "@nuxt/ui",
+    "nuxt-ui-colors-no-inline",
     "@nuxtjs/turnstile",
     "nuxt-auth-utils",
     "@pinia/nuxt",
@@ -157,13 +157,6 @@ export default defineNuxtConfig({
         "../test/**/*",
         "../shared/**/*.d.ts"
       ]
-    }
-  },
-
-  eslint: {
-    config: {
-      autoInit: false,
-      stylistic: true
     }
   },
 

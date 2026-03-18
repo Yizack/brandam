@@ -84,7 +84,11 @@ const assetsData = computed(() =>
             :items="items"
             color="neutral"
             size="xl"
-            :ui="{ list: 'border border-accented shadow', label: 'hidden md:inline' }"
+            :ui="{
+              list: 'border border-accented shadow gap-1',
+              label: 'hidden md:inline',
+              trigger: 'hover:data-[state=inactive]:bg-accented data-[state=active]:bg-inverted',
+            }"
           />
         </div>
         <InputFloating

@@ -1,16 +1,3 @@
-<script setup lang="ts">
-const toast = useToast();
-
-onBeforeMount(() => {
-  globalThis.$fetch = $fetch.create({
-    onResponseError: ({ response }) => {
-      const description = response.status === 500 ? "error_any" : response._data.message;
-      toast.add({ title: SITE.name, description, color: "error" });
-    }
-  });
-});
-</script>
-
 <template>
   <div>
     <NuxtLoadingIndicator :throttle="0" />
