@@ -118,7 +118,7 @@ if (props.asset.data.type === "font") {
           @update:open="dropdownAsset = $event ? asset.uuid : undefined"
         >
           <UButton
-            class="absolute end-0 top-0 text-white! border border-transparent hover:border-white m-2 py-1 rounded-lg"
+            class="absolute right-0 top-0 text-white! border border-transparent hover:border-white m-2 py-1 rounded-lg"
             :class="{ 'border-white': dropdownAsset === asset.uuid }"
             variant="link"
             icon="lucide:ellipsis"

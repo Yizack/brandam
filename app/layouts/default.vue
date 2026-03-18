@@ -2,6 +2,6 @@
   <div id="layout">
     <SiteNavbar />
     <slot />
-    <LazySiteFooter hydrate-on-visible />
+    <!-- <LazySiteFooter hydrate-on-visible /> -->
   </div>
 </template>
