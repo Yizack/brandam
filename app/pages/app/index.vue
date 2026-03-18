@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: "app", middleware: "session" });
+definePageMeta({ layout: "app", middleware: "authenticated" });
 
 const { data } = await useFetch("/api/brands", {
   key: "brands"
