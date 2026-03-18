@@ -1,6 +1,8 @@
 <script setup lang="ts">
 definePageMeta({ layout: false, middleware: "authenticated" });
 
+const toast = useToast();
+
 const isLoading = ref(false);
 const isValidPassword = ref(false);
 const isFocusedPassword = ref(false);
@@ -23,7 +25,6 @@ const signUp = () => {
     body: form.value
   }).then(() => {
     form.reset();
-    const toast = useToast();
     toast.add({
       description: "Successfully signed up! You can now log in.",
       color: "success"

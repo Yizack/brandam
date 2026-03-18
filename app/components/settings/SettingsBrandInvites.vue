@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Row, TableMeta } from "@tanstack/vue-table";
 
-const { data: invites } = await useFetch("/api/invites", {
+const { data: invites } = await useFetch("/api/user/invites", {
   key: "invites",
   lazy: true,
   getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key]
@@ -55,10 +55,12 @@ const pendingCount = computed(() => invites.value?.filter(invite => !invite.acti
 <template>
   <section class="space-y-4">
     <div>
-      <h2 class="text-xl font-semibold">Brand invites <UBadge :label="`${pendingCount} pending`" color="warning" variant="outline" class="tabular-nums px-2" /></h2>
+      <h2 class="text-xl font-semibold">
+        Brand invites <UBadge v-if="pendingCount > 0" :label="`${pendingCount} pending`" color="warning" variant="outline" class="tabular-nums px-2" />
+      </h2>
       <p class="text-muted">Accepting an invite will give you access to the brand's dashboard and resources.</p>
     </div>
-    <UTable :columns="columns" :data="data" class="border border-muted rounded-md" :meta="meta" empty="No pending invites">
+    <UTable :columns="columns" :data="data" class="border border-muted rounded-lg" :meta="meta" empty="No pending invites">
       <template #brand-cell="{ row }">
         <div class="flex items-center">
           <UUser :description="row.original.brand.description || ''">

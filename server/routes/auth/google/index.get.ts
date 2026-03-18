@@ -1,3 +1,5 @@
+import type { UserSession } from "#auth-utils";
+
 export default defineOAuthGoogleEventHandler({
   config: {
     scope: ["email"]
@@ -7,6 +9,7 @@ export default defineOAuthGoogleEventHandler({
       id: tables.users.id,
       name: tables.users.name,
       email: tables.users.email,
+      password: tables.users.password,
       active: tables.users.active,
       confirmed: tables.users.confirmed,
       createdAt: tables.users.createdAt,
@@ -22,7 +25,16 @@ export default defineOAuthGoogleEventHandler({
     const remember = getQuery(event).state === "remember";
     const maxAge = remember ? 7 * 24 * 60 * 60 : 0; // if remember is true, maxAge is 7 days
 
-    const session = { user };
+    const { password, ...userWithoutPassword } = user;
+
+    const session: Omit<UserSession, "id"> = {
+      user: {
+        ...userWithoutPassword,
+        remember: remember || undefined,
+        passwordless: password !== null || undefined
+      }
+    };
+
     await setUserSession(event, session, { maxAge });
 
     return sendRedirect(event, "/app");

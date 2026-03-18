@@ -1,3 +1,5 @@
+import type { UserSession } from "#auth-utils";
+
 export default defineEventHandler(async (event) => {
   const { secure } = useRuntimeConfig(event);
 
@@ -43,6 +45,12 @@ export default defineEventHandler(async (event) => {
 
   const maxAge = body.remember ? 7 * 24 * 60 * 60 : 0; // if remember is true, maxAge is 7 days
 
-  const session = { user };
+  const session: Omit<UserSession, "id"> = {
+    user: {
+      ...user,
+      remember: body.remember || undefined
+    }
+  };
+
   await setUserSession(event, session, { maxAge });
 });
