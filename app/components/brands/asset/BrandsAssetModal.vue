@@ -15,8 +15,7 @@ const open = ref(route.query.asset === props.asset.uuid);
 
 watch(open, (value) => {
   if (value) return;
-  const router = useRouter();
-  router.replace({ query: undefined });
+  history.replaceState(history.state, "", window.location.pathname);
 });
 </script>
 
