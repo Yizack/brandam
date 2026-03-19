@@ -97,7 +97,7 @@ const signUp = () => {
           />
           <p class="text-center font-bold">or</p>
           <UButton
-            label="Sign in with Google"
+            label="Sign up with Google"
             icon="logos:google-icon"
             to="/auth/google/signup"
             variant="subtle"
