@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const { user } = useUserSession();
 
+const toast = useToast();
+
 const isLoading = ref(false);
 const isValidPassword = ref(false);
 const isFocusedPassword = ref(false);
@@ -10,6 +12,25 @@ const form = useFormState({
   password: "",
   passwordCheck: ""
 });
+
+const changePassword = async () => {
+  isLoading.value = true;
+  $fetch("/api/user/password", {
+    method: "POST",
+    body: {
+      passwordCurrent: form.value.passwordCurrent,
+      password: form.value.password
+    }
+  }).then(() => {
+    form.reset();
+    toast.add({
+      description: "Password changed successfully!",
+      color: "success"
+    });
+  }).catch(() => {}).finally(() => {
+    isLoading.value = false;
+  });
+};
 </script>
 
 <template>
@@ -18,7 +39,7 @@ const form = useFormState({
       <h2 class="text-xl font-semibold">Change Password</h2>
       <p class="text-muted">Update your password to keep your account secure.</p>
     </div>
-    <form class="space-y-2">
+    <form class="space-y-2" @submit.prevent="changePassword">
       <input type="text" autocomplete="email" hidden :value="user?.email">
       <InputFloating
         v-if="!user?.passwordless"
