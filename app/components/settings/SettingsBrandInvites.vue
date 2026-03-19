@@ -4,40 +4,26 @@ import type { Row, TableMeta } from "@tanstack/vue-table";
 const { data: invites } = await useFetch("/api/user/invites", {
   key: "invites",
   lazy: true,
-  getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key]
+  deep: true
 });
 
 const columns = [
-  {
-    id: "brand",
-    header: "Brand"
-  },
-  {
-    id: "created",
-    header: "Created"
-  },
-  {
-    id: "updated",
-    header: "Last updated"
-  },
-  {
-    accessorKey: "role",
-    header: "Role"
-  },
-  {
-    id: "action",
-    header: "Action"
-  }
+  { id: "brand", header: "Brand" },
+  { id: "created", header: "Created" },
+  { id: "updated", header: "Last updated" },
+  { id: "role", header: "Role" },
+  { id: "action", header: "Action" }
 ];
 
-const data = ref(invites.value?.map(invite => ({
-  brand: invite.brand,
-  created: invite.createdAt,
-  createdAgo: useTimeAgo(invite.createdAt),
-  updated: invite.updatedAt,
-  updatedAgo: useTimeAgo(invite.updatedAt),
-  role: roleNames[invite.roleId],
-  active: invite.active
+const data = computed(() => invites.value?.map(member => ({
+  id: member.id,
+  brand: member.brand,
+  created: member.createdAt,
+  createdAgo: useTimeAgo(member.createdAt).value,
+  updated: member.updatedAt,
+  updatedAgo: useTimeAgo(member.updatedAt).value,
+  role: roleNames[member.roleId],
+  active: member.active
 })) || []);
 
 const meta: TableMeta<typeof data.value[0]> = {
@@ -50,6 +36,37 @@ const meta: TableMeta<typeof data.value[0]> = {
 };
 
 const pendingCount = computed(() => invites.value?.filter(invite => !invite.active).length || 0);
+
+const loading = ref({
+  accept: {} as Record<number, boolean>,
+  decline: {} as Record<number, boolean>
+});
+
+const acceptInvite = (id: number) => {
+  loading.value.accept[id] = true;
+  $fetch(`/api/user/invites/${id}`, {
+    method: "PATCH"
+  }).then(() => {
+    const invite = invites.value?.find(invite => invite.id === id);
+    if (invite) {
+      invite.active = true;
+    }
+  }).catch(() => {}).finally(() => {
+    loading.value.accept[id] = false;
+  });
+};
+
+const deleteInvite = (id: number) => {
+  if (!confirm("Are you sure you want to decline this invite? This action cannot be undone.")) return;
+  loading.value.decline[id] = true;
+  $fetch(`/api/user/invites/${id}`, {
+    method: "DELETE"
+  }).then(() => {
+    invites.value = invites.value?.filter(invite => invite.id !== id) || [];
+  }).catch(() => {}).finally(() => {
+    loading.value.decline[id] = false;
+  });
+};
 </script>
 
 <template>
@@ -78,13 +95,34 @@ const pendingCount = computed(() => invites.value?.filter(invite => !invite.acti
       </template>
       <template #action-cell="{ row }">
         <div class="flex gap-2">
-          <template v-if="row.original.active">
-            <UButton icon="lucide:x" variant="subtle" color="error" title="Decline invite" />
-            <UButton icon="lucide:check" variant="subtle" color="success" title="Accept invite" />
+          <template v-if="!row.original.active">
+            <UButton
+              icon="lucide:check"
+              variant="subtle"
+              color="success"
+              title="Accept invite"
+              :loading="loading.accept[row.original.id]"
+              @click="acceptInvite(row.original.id)"
+            />
+            <UButton
+              icon="lucide:x"
+              variant="subtle"
+              color="error"
+              title="Decline invite"
+              :loading="loading.decline[row.original.id]"
+              @click="deleteInvite(row.original.id)"
+            />
           </template>
           <template v-else>
             <UBadge icon="lucide:check" label="Accepted" variant="subtle" color="success" />
-            <UButton icon="lucide:trash" variant="subtle" color="neutral" title="Leave brand" />
+            <UButton
+              icon="lucide:trash"
+              variant="subtle"
+              color="neutral"
+              title="Leave brand"
+              :loading="loading.decline[row.original.id]"
+              @click="deleteInvite(row.original.id)"
+            />
           </template>
         </div>
       </template>
