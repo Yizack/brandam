@@ -1,3 +1,5 @@
+import { withQuery } from "ufo";
+
 export default defineNuxtPlugin({
   name: "domain-brand",
   enforce: "pre",
@@ -10,7 +12,7 @@ export default defineNuxtPlugin({
       if (!slug.value) return;
       addRouteMiddleware("domain-router-middleware", (to) => {
         if (to.path === `/${slug.value}`) return;
-        return navigateTo(`/${slug.value}`, { replace: true });
+        return navigateTo({ path: `/${slug.value}`, query: to.query }, { replace: true });
       }, { global: true });
     }
 
@@ -18,7 +20,7 @@ export default defineNuxtPlugin({
       const router = useRouter();
       const stopAfterEach = router.afterEach((to) => {
         if (to.path === `/${slug.value}`) {
-          history.replaceState(history.state, "", "/");
+          history.replaceState(history.state, "", withQuery("/", to.query));
           stopAfterEach();
         }
       });
