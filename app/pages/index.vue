@@ -1,3 +1,11 @@
+<script setup lang="ts">
+const renderBg = ref(false);
+
+onMounted(() => {
+  renderBg.value = true;
+});
+</script>
+
 <template>
   <main>
     <UPageHero
@@ -10,8 +18,12 @@
       }"
     >
       <template #top>
-        <BackgroundHero gradient />
-        <BackgroundStars />
+        <Transition name="fade">
+          <div v-if="renderBg">
+            <BackgroundHero gradient />
+            <BackgroundStars />
+          </div>
+        </Transition>
       </template>
     </UPageHero>
   </main>

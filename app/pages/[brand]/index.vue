@@ -55,6 +55,12 @@ const assetsData = computed(() =>
     values: brandAssets.value.filter(asset => asset.data.type === type.value)
   }))
 );
+
+const renderBg = ref(false);
+
+onMounted(() => {
+  renderBg.value = true;
+});
 </script>
 
 <template>
@@ -101,8 +107,12 @@ const assetsData = computed(() =>
         />
       </div>
       <template #top>
-        <BackgroundHero />
-        <BackgroundStars radial-gradient />
+        <Transition name="fade">
+          <div v-if="renderBg">
+            <BackgroundHero />
+            <BackgroundStars radial-gradient />
+          </div>
+        </Transition>
       </template>
     </UPageHero>
     <div class="py-10 px-4 sm:px-6 lg:px-8 flex flex-col gap-10">
