@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   if (import.meta.dev) return;
 
-  const host = getRequestHeader(event, "host");
+  const host = getRequestHost(event, { xForwardedHost: true }) || getRequestHeader(event, "host");
 
   if (!host) {
     throw createError({
