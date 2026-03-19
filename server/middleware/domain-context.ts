@@ -1,6 +1,4 @@
 export default defineEventHandler(async (event) => {
-  if (import.meta.dev) return;
-
   const host = getRequestHost(event, { xForwardedHost: true }) || getRequestHeader(event, "host");
 
   if (!host) {
@@ -16,5 +14,5 @@ export default defineEventHandler(async (event) => {
 
   const slug = await getSlugFromHostname(event, hostname);
 
-  return sendRedirect(event, `/${slug}`, 302);
+  event.context.brandSlug = slug;
 });
