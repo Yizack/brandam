@@ -79,6 +79,7 @@ if (props.asset.data.type === "font") {
             :src="asset.data.hasPreview ? getPreviewURL(asset.uuid) : getAssetURL(asset.uuid)"
             :alt="asset.name"
             class="mx-auto size-full object-contain"
+            :class="{ 'p-2': asset.data.type === 'vector' }"
             :style="{ backgroundColor: asset.data.bgColor }"
           >
           <PreviewPDF
