@@ -8,6 +8,7 @@ const isAppPath = computed(() => route.path.startsWith("/app"));
 
 const isScrolled = ref(false);
 const maxScroll = 50;
+const brandSlug = useState("brandSlug");
 
 const getScrolled = () => (document.body.scrollTop > maxScroll || document.documentElement.scrollTop > maxScroll);
 
@@ -23,7 +24,7 @@ const pages = computed<NavigationMenuItem[]>(() => {
     {
       label: "Home",
       icon: "lucide:house",
-      to: "/"
+      to: brandSlug.value ? `${SITE.host}/` : "/"
     }
     /*
     {
@@ -73,7 +74,7 @@ const userMenu: DropdownMenuItem[][] = [
     class="w-full top-0 py-1 z-50 border-0 backdrop-blur-sm border-b border-default"
   >
     <template #left>
-      <ULink raw :to="isAppPath ? '/app' : '/'" class="text-xl font-bold hover:underline me-4">
+      <ULink raw :to="brandSlug ? SITE.host + (isAppPath ? '/app' : '/') : (isAppPath ? '/app' : '/')" class="text-xl font-bold hover:underline me-4">
         {{ SITE.name }}
       </ULink>
     </template>
@@ -92,15 +93,15 @@ const userMenu: DropdownMenuItem[][] = [
           label="Sign in"
           color="neutral"
           variant="outline"
-          to="/login"
+          :to="brandSlug ? `${SITE.host}/login` : '/login'"
           class="hidden lg:inline-flex rounded-lg"
           size="xl"
         />
 
         <UButton
+          v-if="!brandSlug"
           label="Sign up"
           color="neutral"
-          trailing-icon="lucide:arrow-right"
           to="/signup"
           class="hidden lg:inline-flex rounded-lg"
           size="xl"
