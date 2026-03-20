@@ -65,7 +65,7 @@ onMounted(() => {
 
 <template>
   <main v-if="brand">
-    <UPageHero class="border-b border-b-default" :ui="{ container: 'flex flex-col gap-3 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8' }">
+    <UPageHero class="border-b border-b-default bg-primary/5" :ui="{ container: 'flex flex-col gap-3 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8' }">
       <div>
         <div class="flex flex-wrap gap-3 items-center justify-between">
           <div class="sm:max-w-2/3 lg:max-w-3/4">
