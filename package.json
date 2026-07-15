@@ -49,7 +49,7 @@
     "nuxt-auth-utils": "^0.5.29",
     "nuxt-email-renderer": "^2.8.0",
     "nuxt-mailchannels": "^0.4.4",
-    "pinia": "^4.0.1",
+    "pinia": "^4.0.2",
     "sass-embedded": "^1.100.0",
     "zod": "^4.4.3"
   },
@@ -63,7 +63,7 @@
     "typescript": "^6.0.3",
     "vitest": "^4.1.10",
     "vue-tsc": "^3.3.7",
-    "wrangler": "^4.110.0"
+    "wrangler": "^4.111.0"
   },
   "packageManager": "pnpm@11.13.0"
 }

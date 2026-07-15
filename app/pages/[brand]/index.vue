@@ -38,13 +38,11 @@ const brandAssets = computed(() => {
   let assetsList = assets.value;
 
   if (filters.value.section !== "all") {
-    // @ts-expect-error pinia types are broken
     assetsList = assetsList.filter(asset => asset.data.type === filters.value.section);
   }
 
   if (filters.value.search) {
     const searchLower = filters.value.search.toLowerCase();
-    // @ts-expect-error pinia types are broken
     assetsList = assetsList.filter(asset => asset.name.toLowerCase().includes(searchLower));
   }
 
@@ -54,7 +52,6 @@ const brandAssets = computed(() => {
 const assetsData = computed(() =>
   assetTypes.map(type => ({
     type: type.name.plural,
-    // @ts-expect-error pinia types are broken
     values: brandAssets.value.filter(asset => asset.data.type === type.value)
   }))
 );
