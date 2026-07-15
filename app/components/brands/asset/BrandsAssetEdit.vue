@@ -22,6 +22,10 @@ const editAsset = () => {
     isLoading.value = false;
   });
 };
+
+const setModel = (value: boolean) => {
+  model.value = value;
+};
 </script>
 
 <template>
@@ -33,7 +37,7 @@ const editAsset = () => {
         <InputFloating id="description" v-model.trim="form.description" type="text" class="w-full" placeholder="Description" />
         <USeparator class="my-4" />
         <div class="flex flex-col sm:flex-row gap-2">
-          <UButton label="Cancel" color="error" size="xl" variant="subtle" class="rounded-lg" block @click="model = false" />
+          <UButton label="Cancel" color="error" size="xl" variant="subtle" class="rounded-lg" block @click="setModel(false)" />
           <UButton type="submit" size="xl" variant="subtle" class="rounded-lg" :loading="isLoading" block>
             <div v-if="!isLoading">Edit</div>
           </UButton>
